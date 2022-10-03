@@ -33,7 +33,7 @@ impl Settlement {
         for population in self.populations.clone() {
             match population {
                 Population::Hunter => {
-                    self.resources.meat += if time.is_winter_season() { 2 } else { 5 };
+                    self.resources.meat += if time.is_winter_season() { 2 } else { 7 };
                 }
                 Population::Farmer => {
                     if time.is_harvest_season() {
@@ -49,7 +49,7 @@ impl Settlement {
                         livestock_allocation -= 5;
 
                         self.resources.meat += if time.is_harvest_season() {
-                            3
+                            2
                         } else if time.is_growth_season() {
                             0
                         } else {
