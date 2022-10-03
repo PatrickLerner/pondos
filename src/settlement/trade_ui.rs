@@ -1,4 +1,4 @@
-use super::{Population, Resource, SelectedSettlement, Settlement};
+use super::{Population, ResourceType, Resources, SelectedSettlement, Settlement};
 use crate::{GameState, Player};
 use bevy::prelude::*;
 use bevy_egui::{
@@ -8,7 +8,7 @@ use bevy_egui::{
 
 struct TradeRow<'a> {
     ui: &'a mut Ui,
-    resource: Resource,
+    resource: String,
     settlement: &'a mut Settlement,
     player: &'a mut Player,
     sell_price: u32,
@@ -17,7 +17,7 @@ struct TradeRow<'a> {
 
 impl<'a> TradeRow<'a> {
     fn render(&mut self) {
-        self.ui.label(format!("{:?}", self.resource));
+        self.ui.label(format!("{}", self.resource));
         let player_count = *self.player.resources.get(&self.resource).unwrap_or(&0);
         let settlement_count = *self.settlement.resources.get(&self.resource).unwrap_or(&0);
 
@@ -33,11 +33,19 @@ impl<'a> TradeRow<'a> {
             && player_count > 0
             && self.settlement.gold >= self.sell_price
         {
-            *self.settlement.resources.entry(self.resource).or_default() += 1;
-            *self.player.resources.entry(self.resource).or_default() -= 1;
+            *self
+                .settlement
+                .resources
+                .entry(self.resource.clone())
+                .or_default() += 1;
+            *self
+                .player
+                .resources
+                .entry(self.resource.clone())
+                .or_default() -= 1;
             self.player.gold += self.sell_price;
             self.settlement.gold -= self.sell_price;
-            log::info!("sell {:?} for {}", self.resource, self.sell_price);
+            log::info!("sell {} for {}", self.resource, self.sell_price);
         }
 
         self.ui
@@ -52,11 +60,19 @@ impl<'a> TradeRow<'a> {
             && settlement_count > 0
             && self.player.gold >= self.buy_price
         {
-            *self.settlement.resources.entry(self.resource).or_default() -= 1;
-            *self.player.resources.entry(self.resource).or_default() += 1;
+            *self
+                .settlement
+                .resources
+                .entry(self.resource.clone())
+                .or_default() -= 1;
+            *self
+                .player
+                .resources
+                .entry(self.resource.clone())
+                .or_default() += 1;
             self.player.gold -= self.buy_price;
             self.settlement.gold += self.buy_price;
-            log::info!("buy {:?} for {}", self.resource, self.buy_price);
+            log::info!("buy {} for {}", self.resource, self.buy_price);
         }
     }
 }
@@ -109,6 +125,7 @@ pub fn trade_ui(
     mut settlements: Query<&mut Settlement>,
     mut player: ResMut<Player>,
     mut game_state: ResMut<State<GameState>>,
+    resources: Res<Resources>,
 ) {
     if let Some(entity) = selected_settlement.as_ref() {
         let mut settlement = settlements
@@ -157,23 +174,21 @@ pub fn trade_ui(
                 }
 
                 // TODO: demand_food more dynamic
-                let food_base_price = demand_food(pop_count);
-                for (resource, demand) in &[
-                    (Resource::Grain, food_base_price),
-                    (Resource::Dairy, food_base_price),
-                    (Resource::Meat, food_base_price),
-                    (Resource::Fish, food_base_price),
-                    (Resource::Livestock, demand_livestock(farmer_count)),
-                ] {
+                for resource in resources.0.iter() {
+                    let demand = match resource.resource_type {
+                        ResourceType::Food => demand_food(pop_count),
+                        ResourceType::Livestock => demand_livestock(farmer_count),
+                    };
+
                     let prices = PriceCalculator {
-                        base_price: resource.base_price(),
-                        demand: *demand,
-                        supply: *settlement.resources.get(resource).unwrap_or(&0),
+                        base_price: resource.base_price,
+                        demand,
+                        supply: *settlement.resources.get(&resource.name).unwrap_or(&0),
                     };
 
                     TradeRow {
                         ui,
-                        resource: *resource,
+                        resource: resource.name.clone(),
                         player: &mut player,
                         settlement: &mut settlement,
                         sell_price: prices.sell_price(),

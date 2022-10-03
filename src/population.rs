@@ -1,6 +1,6 @@
 use crate::{
     game_time::{GameTime, GameTimeAdvancedEvent},
-    settlement::{Population, Resource, Settlement},
+    settlement::{Population, Settlement},
 };
 use bevy::prelude::*;
 
@@ -15,30 +15,37 @@ pub fn population_production(
     }
 }
 
+// TODO: production
+const LIVESTOCK: &str = "Livestock";
+const MEAT: &str = "Meat";
+const GRAIN: &str = "Grain";
+const DAIRY: &str = "Dairy";
+const FISH: &str = "Fish";
+
 impl Settlement {
     pub fn production_tick(&mut self, time: &GameTime) {
-        let mut livestock_allocation = *self.resources.get(&Resource::Livestock).unwrap_or(&0);
+        let mut livestock_allocation = *self.resources.get(&LIVESTOCK.to_owned()).unwrap_or(&0);
 
         for population in self.populations.clone() {
             match population {
                 Population::Hunter => {
-                    *self.resources.entry(Resource::Meat).or_default() +=
+                    *self.resources.entry(MEAT.to_owned()).or_default() +=
                         if time.is_winter_season() { 2 } else { 7 };
                 }
                 Population::Farmer => {
                     if time.is_harvest_season() {
-                        *self.resources.entry(Resource::Grain).or_default() += 10;
+                        *self.resources.entry(GRAIN.to_owned()).or_default() += 10;
                     }
                     if time.is_summer_season() {
-                        *self.resources.entry(Resource::Grain).or_default() += 3;
+                        *self.resources.entry(GRAIN.to_owned()).or_default() += 3;
                     }
                     if time.is_growth_season() {
-                        *self.resources.entry(Resource::Livestock).or_default() += 1;
+                        *self.resources.entry(LIVESTOCK.to_owned()).or_default() += 1;
                     }
                     if livestock_allocation >= 5 {
                         livestock_allocation -= 5;
 
-                        *self.resources.entry(Resource::Meat).or_default() +=
+                        *self.resources.entry(MEAT.to_owned()).or_default() +=
                             if time.is_harvest_season() {
                                 2
                             } else if time.is_growth_season() {
@@ -46,19 +53,19 @@ impl Settlement {
                             } else {
                                 1
                             };
-                        *self.resources.entry(Resource::Dairy).or_default() +=
+                        *self.resources.entry(DAIRY.to_owned()).or_default() +=
                             if time.is_growth_season() { 0 } else { 2 };
                     }
                 }
                 Population::Fisher => {
-                    *self.resources.entry(Resource::Fish).or_default() += if time.is_winter_season()
-                    {
-                        0
-                    } else if time.is_summer_season() {
-                        2
-                    } else {
-                        4
-                    };
+                    *self.resources.entry(FISH.to_owned()).or_default() +=
+                        if time.is_winter_season() {
+                            0
+                        } else if time.is_summer_season() {
+                            2
+                        } else {
+                            4
+                        };
                 }
                 Population::Merchant => {
                     self.gold += if time.is_winter_season() { 10 } else { 35 };

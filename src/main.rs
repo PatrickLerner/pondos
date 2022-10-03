@@ -7,7 +7,6 @@ use bevy_egui::{egui, EguiContext, EguiPlugin};
 use dotenv::dotenv;
 use egui::{FontFamily, FontId, TextStyle};
 use game_time::GameTimeAdvanceEvent;
-use settlement::Resource;
 
 mod game_time;
 mod helpers;
@@ -57,7 +56,7 @@ pub struct Player {
     location_marker_texture_atlas_handle: Option<Handle<TextureAtlas>>,
     location_marker_need_update: bool,
     gold: u32,
-    resources: HashMap<Resource, u32>,
+    resources: HashMap<String, u32>,
 }
 
 pub struct PlayerTravelEvent {
@@ -127,7 +126,12 @@ fn main() {
     .init_resource::<Player>()
     .init_resource::<Option<settlement::SelectedSettlement>>()
     .add_plugins(DefaultPlugins)
-    .add_plugin(YamlAssetPlugin::<loading::Settlements>::new(&["yml"]))
+    .add_plugin(YamlAssetPlugin::<loading::Settlements>::new(&[
+        "settlements",
+    ]))
+    .add_plugin(YamlAssetPlugin::<settlement::Resources>::new(&[
+        "resources",
+    ]))
     .add_plugin(TilemapPlugin)
     .add_plugin(EguiPlugin)
     .add_plugin(loading::LoadingPlugin)

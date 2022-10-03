@@ -58,7 +58,7 @@ pub fn settlement_ui(
                         ui.label(format!("Gold: {}", settlement.gold));
 
                         for (resource, amount) in resources.iter() {
-                            ui.label(format!("{:?}: {}", resource, amount));
+                            ui.label(format!("{}: {}", resource, amount));
                         }
 
                         ui.horizontal(|ui| {

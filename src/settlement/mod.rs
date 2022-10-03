@@ -1,7 +1,7 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use crate::GameState;
-use bevy::prelude::*;
+use bevy::{prelude::*, reflect::TypeUuid};
 use serde::Deserialize;
 
 mod cap_resources;
@@ -19,7 +19,7 @@ pub struct Settlement {
     #[serde(default)]
     pub gold: u32,
     #[serde(default)]
-    pub resources: HashMap<Resource, u32>,
+    pub resources: HashMap<String, u32>,
     pub populations: Vec<Population>,
 }
 
@@ -41,24 +41,24 @@ pub enum Population {
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Deserialize)]
 #[serde(rename_all = "lowercase")]
-pub enum Resource {
-    Grain,
-    Dairy,
-    Meat,
-    Fish,
+pub enum ResourceType {
+    Food,
     Livestock,
 }
 
-impl Resource {
-    pub fn base_price(&self) -> u32 {
-        match self {
-            Resource::Grain => 3,
-            Resource::Dairy => 8,
-            Resource::Meat => 15,
-            Resource::Fish => 10,
-            Resource::Livestock => 25,
-        }
-    }
+#[derive(Debug, Deserialize, TypeUuid)]
+#[uuid = "b8c204ad-f39e-4358-a88b-24d2c342140f"]
+pub struct Resources(HashSet<Resource>);
+
+#[derive(Debug, Deserialize, Hash, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub struct Resource {
+    name: String,
+    base_price: u32,
+    #[serde(rename = "type")]
+    resource_type: ResourceType,
+    max_pop_mod: u32,
+    max_farmer_mod: u32,
 }
 
 pub struct CloseSettlementUIEvent;

@@ -1,16 +1,21 @@
 use crate::{
     game_time::{GameTime, GameTimeAdvancedEvent},
-    settlement::{Population, Resource, Settlement},
+    settlement::{Population, Settlement},
 };
 use bevy::prelude::*;
+
+use super::Resources;
 
 pub fn cap_resources(
     mut settlements: Query<&mut Settlement>,
     mut events: EventReader<GameTimeAdvancedEvent>,
+    resources: Option<Res<Resources>>,
 ) {
-    for event in events.iter() {
-        for mut settlement in settlements.iter_mut() {
-            settlement.resource_cap_tick(&event.time);
+    if let Some(resources) = resources {
+        for event in events.iter() {
+            for mut settlement in settlements.iter_mut() {
+                settlement.resource_cap_tick(&event.time, &resources);
+            }
         }
     }
 }
@@ -22,7 +27,7 @@ fn cap_resource(amount: &mut u32, multiplier: f32, max: u32) {
 }
 
 impl Settlement {
-    pub fn resource_cap_tick(&mut self, time: &GameTime) {
+    pub fn resource_cap_tick(&mut self, time: &GameTime, resources: &Resources) {
         let multiplier = if time.is_winter_season() {
             0.2
         } else if time.is_harvest_season() {
@@ -48,23 +53,13 @@ impl Settlement {
         let max_gold = merchants * 90 + pops * 10;
         cap_resource(&mut self.gold, multiplier, max_gold);
 
-        let max_grain = farmers * 3 + pops;
-        let max_dairy = pops * 2;
-        let max_meat = pops * 2;
-        let max_fish = pops * 2;
-        let max_livestock = farmers * 8 + pops;
+        for resource in resources.0.iter() {
+            let max = farmers * resource.max_farmer_mod + pops * resource.max_pop_mod;
 
-        for (resource, max) in &[
-            (Resource::Grain, max_grain),
-            (Resource::Dairy, max_dairy),
-            (Resource::Meat, max_meat),
-            (Resource::Fish, max_fish),
-            (Resource::Livestock, max_livestock),
-        ] {
             cap_resource(
-                self.resources.entry(*resource).or_default(),
+                self.resources.entry(resource.name.clone()).or_default(),
                 multiplier,
-                *max,
+                max,
             );
         }
     }
