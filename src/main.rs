@@ -11,6 +11,7 @@ use settlement::Resource;
 
 mod game_time;
 mod helpers;
+mod loading;
 mod map;
 mod population;
 mod settlement;
@@ -41,7 +42,7 @@ pub fn player_start(mut player: ResMut<Player>) {
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub enum GameState {
-    LoadingMap,
+    Loading,
     Map,
     Settlement,
     TravelToSettlement,
@@ -119,16 +120,17 @@ fn main() {
     .add_event::<game_time::GameTimeAdvancedEvent>()
     .add_event::<game_time::GameTimeAdvanceEvent>()
     .add_event::<settlement::CloseSettlementUIEvent>()
-    .add_state(GameState::LoadingMap)
+    .add_state(GameState::Loading)
     .insert_resource(ImageSettings::default_nearest())
     .init_resource::<game_time::GameTime>()
     .init_resource::<helpers::camera::GameCamera>()
     .init_resource::<Player>()
     .init_resource::<Option<settlement::SelectedSettlement>>()
     .add_plugins(DefaultPlugins)
-    .add_plugin(YamlAssetPlugin::<map::on_enter::Settlements>::new(&["yml"]))
+    .add_plugin(YamlAssetPlugin::<loading::Settlements>::new(&["yml"]))
     .add_plugin(TilemapPlugin)
     .add_plugin(EguiPlugin)
+    .add_plugin(loading::LoadingPlugin)
     .add_plugin(map::MapPlugin)
     .add_plugin(settlement::SettlementPlugin)
     .add_plugin(game_time::GameTimePlugin)
