@@ -20,7 +20,7 @@ pub struct Settlement {
     pub gold: u32,
     #[serde(default)]
     pub resources: HashMap<String, u32>,
-    pub populations: Vec<Population>,
+    pub populations: Vec<String>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -28,15 +28,6 @@ pub struct Settlement {
 pub struct Position {
     pub x: u32,
     pub y: u32,
-}
-
-#[derive(Deserialize, Copy, Debug, Clone, PartialEq, Eq)]
-#[serde(rename_all = "lowercase")]
-pub enum Population {
-    Hunter,
-    Farmer,
-    Fisher,
-    Merchant,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Deserialize)]

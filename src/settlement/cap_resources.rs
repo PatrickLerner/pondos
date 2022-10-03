@@ -1,6 +1,6 @@
 use crate::{
     game_time::{GameTime, GameTimeAdvancedEvent},
-    settlement::{Population, Settlement},
+    settlement::Settlement,
 };
 use bevy::prelude::*;
 
@@ -41,13 +41,15 @@ impl Settlement {
             .populations
             .clone()
             .into_iter()
-            .filter(|p| *p == Population::Farmer)
+            // TODO:
+            .filter(|p| *p == "Farmer")
             .count() as u32;
         let merchants = self
             .populations
             .clone()
             .into_iter()
-            .filter(|p| *p == Population::Merchant)
+            // TODO:
+            .filter(|p| *p == "Merchant")
             .count() as u32;
 
         let max_gold = merchants * 90 + pops * 10;

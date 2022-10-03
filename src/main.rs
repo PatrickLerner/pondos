@@ -128,6 +128,9 @@ fn main() {
     .add_plugin(YamlAssetPlugin::<settlement::Resources>::new(&[
         "resources",
     ]))
+    .add_plugin(YamlAssetPlugin::<population::Populations>::new(&[
+        "populations",
+    ]))
     .add_plugin(TilemapPlugin)
     .add_plugin(EguiPlugin)
     .add_plugin(loading::LoadingPlugin)

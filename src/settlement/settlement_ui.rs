@@ -44,7 +44,7 @@ pub fn settlement_ui(
                         ui.add_space(5.);
 
                         for population in settlement.populations.iter() {
-                            ui.label(format!("{:?}", population));
+                            ui.label(population);
                         }
                     });
 

@@ -1,4 +1,4 @@
-use super::{Population, ResourceType, Resources, SelectedSettlement, Settlement};
+use super::{ResourceType, Resources, SelectedSettlement, Settlement};
 use crate::{GameState, Player};
 use bevy::prelude::*;
 use bevy_egui::{
@@ -157,7 +157,8 @@ pub fn trade_ui(
                     .populations
                     .clone()
                     .into_iter()
-                    .filter(|p| *p == Population::Farmer)
+                    // TODO:
+                    .filter(|p| *p == "Farmer")
                     .count() as u32;
 
                 {

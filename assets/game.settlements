@@ -3,180 +3,180 @@
     x: 41
     y: 29
   populations:
-    - hunter
-    - hunter
-    - farmer
-    - farmer
-    - fisher
-    - fisher
-    - fisher
-    - merchant
-    - merchant
-    - merchant
+    - Hunter
+    - Hunter
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Fisher
+    - Merchant
+    - Merchant
+    - Merchant
 
 - name: Theodosie
   position:
     x: 48
     y: 27
   populations:
-    - hunter
-    - hunter
-    - farmer
-    - farmer
-    - farmer
-    - farmer
-    - fisher
-    - fisher
-    - fisher
-    - merchant
-    - merchant
+    - Hunter
+    - Hunter
+    - Farmer
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Fisher
+    - Merchant
+    - Merchant
 
 - name: Pityos
   position:
     x: 82
     y: 28
   populations:
-    - hunter
-    - hunter
-    - hunter
-    - farmer
-    - fisher
+    - Hunter
+    - Hunter
+    - Hunter
+    - Farmer
+    - Fisher
 
 - name: Byzance
   position:
     x: 24
     y: 62
   populations:
-    - farmer
-    - farmer
-    - farmer
-    - fisher
-    - fisher
-    - fisher
-    - merchant
-    - merchant
-    - merchant
-    - merchant
-    - merchant
-    - merchant
-    - merchant
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Fisher
+    - Merchant
+    - Merchant
+    - Merchant
+    - Merchant
+    - Merchant
+    - Merchant
+    - Merchant
 
 - name: Apollonia
   position:
     x: 16
     y: 53
   populations:
-    - hunter
-    - farmer
-    - farmer
-    - farmer
-    - fisher
-    - fisher
-    - fisher
-    - merchant
+    - Hunter
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Fisher
+    - Merchant
 
 - name: Kallatis
   position:
     x: 20
     y: 36
   populations:
-    - hunter
-    - farmer
-    - farmer
-    - farmer
-    - fisher
-    - fisher
-    - merchant
-    - merchant
+    - Hunter
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Merchant
+    - Merchant
 
 - name: Tanais
   position:
     x: 62
     y: 4
   populations:
-    - hunter
-    - hunter
-    - hunter
-    - hunter
-    - hunter
-    - hunter
-    - farmer
-    - fisher
-    - fisher
-    - merchant
+    - Hunter
+    - Hunter
+    - Hunter
+    - Hunter
+    - Hunter
+    - Hunter
+    - Farmer
+    - Fisher
+    - Fisher
+    - Merchant
 
 - name: Nikonion
   position:
     x: 24
     y: 21
   populations:
-    - hunter
-    - hunter
-    - hunter
-    - farmer
-    - farmer
-    - farmer
-    - fisher
-    - fisher
-    - merchant
+    - Hunter
+    - Hunter
+    - Hunter
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Merchant
 
 - name: Kerkinitis
   position:
     x: 37
     y: 24
   populations:
-    - hunter
-    - farmer
-    - farmer
-    - farmer
-    - farmer
-    - fisher
-    - fisher
-    - fisher
-    - merchant
-    - merchant
+    - Hunter
+    - Farmer
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Fisher
+    - Merchant
+    - Merchant
 
 - name: Hermonassa
   position:
     x: 55
     y: 21
   populations:
-    - farmer
-    - fisher
-    - fisher
-    - fisher
-    - merchant
-    - merchant
+    - Farmer
+    - Fisher
+    - Fisher
+    - Fisher
+    - Merchant
+    - Merchant
 
 - name: Gorgippia
   position:
     x: 61
     y: 23
   populations:
-    - hunter
-    - hunter
-    - farmer
-    - fisher
+    - Hunter
+    - Hunter
+    - Farmer
+    - Fisher
 
 - name: Phasis
   position:
     x: 86
     y: 40
   populations:
-    - hunter
-    - hunter
-    - hunter
-    - farmer
-    - merchant
-    - merchant
+    - Hunter
+    - Hunter
+    - Hunter
+    - Farmer
+    - Merchant
+    - Merchant
 
 - name: Sinope
   position:
     x: 60
     y: 47
   populations:
-    - hunter
-    - farmer
-    - fisher
-    - fisher
-    - merchant
+    - Hunter
+    - Farmer
+    - Fisher
+    - Fisher
+    - Merchant

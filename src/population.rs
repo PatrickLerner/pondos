@@ -1,75 +1,83 @@
 use crate::{
     game_time::{GameTime, GameTimeAdvancedEvent},
-    settlement::{Population, Settlement},
+    settlement::Settlement,
 };
-use bevy::prelude::*;
+use bevy::{prelude::*, reflect::TypeUuid};
+use serde::Deserialize;
+use std::collections::HashSet;
 
 pub fn population_production(
     mut settlements: Query<&mut Settlement>,
     mut events: EventReader<GameTimeAdvancedEvent>,
+    populations: Option<Res<Populations>>,
 ) {
-    for event in events.iter() {
-        for mut settlement in settlements.iter_mut() {
-            settlement.production_tick(&event.time);
+    if let Some(populations) = populations {
+        for event in events.iter() {
+            for mut settlement in settlements.iter_mut() {
+                settlement.production_tick(&event.time, &populations);
+            }
         }
     }
 }
 
-// TODO: production
-const LIVESTOCK: &str = "Livestock";
-const MEAT: &str = "Meat";
-const GRAIN: &str = "Grain";
-const DAIRY: &str = "Dairy";
-const FISH: &str = "Fish";
+#[derive(Deserialize, Component, Debug, Hash, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
+pub struct Population {
+    pub name: String,
+    pub production: Vec<Production>,
+}
+
+#[derive(Deserialize, Component, Debug, Hash, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
+pub struct Production {
+    pub resource: String,
+    pub amount: ProductionAmount,
+}
+
+#[derive(Deserialize, Component, Debug, Hash, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
+pub struct ProductionAmount {
+    #[serde(default)]
+    pub growth: u32,
+    #[serde(default)]
+    pub summer: u32,
+    #[serde(default)]
+    pub harvest: u32,
+    #[serde(default)]
+    pub winter: u32,
+}
+
+#[derive(Debug, Deserialize, TypeUuid)]
+#[uuid = "e7ac1c59-c2ac-4a77-9ace-532038a44758"]
+pub struct Populations(HashSet<Population>);
 
 impl Settlement {
-    pub fn production_tick(&mut self, time: &GameTime) {
-        let mut livestock_allocation = *self.resources.get(&LIVESTOCK.to_owned()).unwrap_or(&0);
-
+    pub fn production_tick(&mut self, time: &GameTime, populations: &Populations) {
         for population in self.populations.clone() {
-            match population {
-                Population::Hunter => {
-                    *self.resources.entry(MEAT.to_owned()).or_default() +=
-                        if time.is_winter_season() { 2 } else { 7 };
-                }
-                Population::Farmer => {
-                    if time.is_harvest_season() {
-                        *self.resources.entry(GRAIN.to_owned()).or_default() += 10;
-                    }
-                    if time.is_summer_season() {
-                        *self.resources.entry(GRAIN.to_owned()).or_default() += 3;
-                    }
-                    if time.is_growth_season() {
-                        *self.resources.entry(LIVESTOCK.to_owned()).or_default() += 1;
-                    }
-                    if livestock_allocation >= 5 {
-                        livestock_allocation -= 5;
+            let population = populations.0.iter().find(|i| i.name == population).unwrap();
 
-                        *self.resources.entry(MEAT.to_owned()).or_default() +=
-                            if time.is_harvest_season() {
-                                2
-                            } else if time.is_growth_season() {
-                                0
-                            } else {
-                                1
-                            };
-                        *self.resources.entry(DAIRY.to_owned()).or_default() +=
-                            if time.is_growth_season() { 0 } else { 2 };
-                    }
-                }
-                Population::Fisher => {
-                    *self.resources.entry(FISH.to_owned()).or_default() +=
-                        if time.is_winter_season() {
-                            0
-                        } else if time.is_summer_season() {
-                            2
-                        } else {
-                            4
-                        };
-                }
-                Population::Merchant => {
-                    self.gold += if time.is_winter_season() { 10 } else { 35 };
-                }
+            for production in population.production.iter() {
+                let amount = if time.is_growth_season() {
+                    production.amount.growth
+                } else if time.is_summer_season() {
+                    production.amount.summer
+                } else if time.is_harvest_season() {
+                    production.amount.harvest
+                } else if time.is_winter_season() {
+                    production.amount.winter
+                } else {
+                    unreachable!("unknown season")
+                };
+
+                let resource = if production.resource == "Gold" {
+                    &mut self.gold
+                } else {
+                    self.resources
+                        .entry(production.resource.clone())
+                        .or_default()
+                };
+
+                *resource += amount;
             }
         }
     }
