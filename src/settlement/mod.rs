@@ -51,14 +51,22 @@ pub enum ResourceType {
 pub struct Resources(HashSet<Resource>);
 
 #[derive(Debug, Deserialize, Hash, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
+pub struct ResourceMax {
+    #[serde(default)]
+    per_farmer: u32,
+    #[serde(default)]
+    per_population: u32,
+}
+
+#[derive(Debug, Deserialize, Hash, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub struct Resource {
     name: String,
     base_price: u32,
     #[serde(rename = "type")]
     resource_type: ResourceType,
-    max_pop_mod: u32,
-    max_farmer_mod: u32,
+    max: ResourceMax,
 }
 
 pub struct CloseSettlementUIEvent;

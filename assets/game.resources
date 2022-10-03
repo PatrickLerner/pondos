@@ -2,29 +2,31 @@
   base_price: 3
   # TODO: not
   type: food
-  max_pop_mod: 1
-  max_farmer_mod: 3
+  max:
+    per_population: 1
+    per_farmer: 3
 
 - name: Dairy
   base_price: 8
   type: food
-  max_pop_mod: 2
-  max_farmer_mod: 0
+  max:
+    per_population: 2
 
 - name: Meat
   base_price: 15
   type: food
-  max_pop_mod: 2
-  max_farmer_mod: 0
+  max:
+    per_population: 2
 
 - name: Fish
   base_price: 10
   type: food
-  max_pop_mod: 2
-  max_farmer_mod: 0
+  max:
+    per_population: 2
 
 - name: Livestock
   base_price: 25
   type: livestock
-  max_pop_mod: 1
-  max_farmer_mod: 8
+  max:
+    per_population: 1
+    per_farmer: 8

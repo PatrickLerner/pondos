@@ -54,7 +54,7 @@ impl Settlement {
         cap_resource(&mut self.gold, multiplier, max_gold);
 
         for resource in resources.0.iter() {
-            let max = farmers * resource.max_farmer_mod + pops * resource.max_pop_mod;
+            let max = farmers * resource.max.per_farmer + pops * resource.max.per_population;
 
             cap_resource(
                 self.resources.entry(resource.name.clone()).or_default(),
