@@ -17,7 +17,7 @@ struct TradeRow<'a> {
 
 impl<'a> TradeRow<'a> {
     fn render(&mut self) {
-        self.ui.label(format!("{}", self.resource));
+        self.ui.label(&self.resource);
         let player_count = *self.player.resources.get(&self.resource).unwrap_or(&0);
         let settlement_count = *self.settlement.resources.get(&self.resource).unwrap_or(&0);
 

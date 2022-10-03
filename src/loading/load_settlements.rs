@@ -3,14 +3,12 @@ use crate::{
     game_time::GameTime,
     map::{constants::SETTLEMENT, MapSize},
     settlement::Resources,
-    Player,
 };
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
 
 pub fn load_settlements(
     mut commands: Commands,
-    mut player: ResMut<Player>,
     settlement_handle: Option<Res<Handle<Settlements>>>,
     mut settlements: ResMut<Assets<Settlements>>,
     map_size: Option<Res<MapSize>>,
@@ -32,12 +30,6 @@ pub fn load_settlements(
                                 y: map_size.height - 1 - settlement.position.y,
                             };
 
-                            player.position = Vec2::new(
-                                settlement.position.x as f32,
-                                settlement.position.y as f32,
-                            );
-                            player.location_marker_need_update = true;
-
                             let mut time = GameTime { year: 0, season: 0 };
                             for _ in 0..20 {
                                 settlement.production_tick(&time);
@@ -55,8 +47,6 @@ pub fn load_settlements(
                                 })
                                 .insert(settlement)
                                 .id();
-
-                            player.location = Some(tile_entity);
 
                             let mut features_tile_storage =
                                 tilemap_query.get_mut(features_tilemap_id.0 .0).unwrap();

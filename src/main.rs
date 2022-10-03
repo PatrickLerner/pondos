@@ -35,10 +35,6 @@ pub fn color_mode(mut egui_context: ResMut<EguiContext>) {
     egui_context.ctx_mut().set_visuals(egui::Visuals::light());
 }
 
-pub fn player_start(mut player: ResMut<Player>) {
-    player.gold = 350;
-}
-
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub enum GameState {
     Loading,
@@ -140,7 +136,6 @@ fn main() {
     .add_plugin(game_time::GameTimePlugin)
     .add_system(handle_travel)
     .add_system(population::population_production)
-    .add_startup_system(player_start)
     .add_startup_system(color_mode)
     .add_startup_system(helpers::camera::spawn_camera)
     .run();

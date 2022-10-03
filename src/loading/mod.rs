@@ -1,12 +1,14 @@
 use crate::{
     settlement::{Resources, Settlement},
-    GameState,
+    GameState, Player,
 };
 use bevy::{prelude::*, reflect::TypeUuid};
 use bevy_ecs_tilemap::prelude::*;
 use serde::Deserialize;
 
 mod load_map;
+mod load_player;
+mod load_resources;
 mod load_settlements;
 
 #[derive(Default)]
@@ -36,24 +38,15 @@ pub fn transition(
     settlement_handle: Option<Res<Handle<Settlements>>>,
     resources_handle: Option<Res<Handle<Resources>>>,
     map_image_handle: Option<Res<MapImage>>,
+    player: Option<Res<Player>>,
 ) {
-    if settlement_handle.is_none() && map_image_handle.is_none() && resources_handle.is_none() {
+    if settlement_handle.is_none()
+        && map_image_handle.is_none()
+        && resources_handle.is_none()
+        && player.is_some()
+    {
         log::info!("all resources fully loaded");
         game_state.set(GameState::Map).unwrap();
-    }
-}
-
-pub fn load_resources(
-    mut commands: Commands,
-    resources_handle: Option<Res<Handle<Resources>>>,
-    mut resources: ResMut<Assets<Resources>>,
-) {
-    if let Some(resources_handle) = resources_handle {
-        if let Some(resources) = resources.remove(resources_handle.id) {
-            log::debug!("loading resources data");
-            commands.insert_resource(resources);
-            commands.remove_resource::<Handle<Resources>>()
-        }
     }
 }
 
@@ -67,7 +60,8 @@ impl Plugin for LoadingPlugin {
                     .with_system(transition)
                     .with_system(load_map::load_map)
                     .with_system(load_settlements::load_settlements)
-                    .with_system(load_resources),
+                    .with_system(load_resources::load_resources)
+                    .with_system(load_player::load_player),
             );
     }
 }
