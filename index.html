@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8"/>
-        <title>pondos</title>
-        <link data-trunk rel="copy-dir" href="assets"/>
-        <link data-trunk rel="copy-file" href="build/windows/icon.ico"/>
-        <link rel="icon" href="icon.ico">
-        <link data-trunk rel="inline" href="build/web/styles.css"/>
-    </head>
-    <body>
-        <link data-trunk rel="inline" href="build/web/sound.js"/>
-    </body>
+  <head>
+    <meta charset="utf-8"/>
+    <title>pondos</title>
+    <link data-trunk rel="copy-dir" href="assets"/>
+    <link data-trunk rel="copy-file" href="build/windows/icon.ico"/>
+    <link rel="icon" href="icon.ico">
+    <link data-trunk rel="inline" href="build/web/styles.css"/>
+  </head>
+  <body>
+    <link data-trunk rel="inline" href="build/web/sound.js"/>
+
+    <script>
+      document.body.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      });
+    </script>
+  </body>
 </html>
