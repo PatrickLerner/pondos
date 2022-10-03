@@ -168,7 +168,7 @@ pub fn trade_ui(
                     let prices = PriceCalculator {
                         base_price: resource.base_price(),
                         demand: *demand,
-                        supply: *settlement.resources.get(&resource).unwrap_or(&0),
+                        supply: *settlement.resources.get(resource).unwrap_or(&0),
                     };
 
                     TradeRow {
