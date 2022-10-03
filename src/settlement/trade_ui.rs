@@ -1,4 +1,4 @@
-use super::{Population, SelectedSettlement, Settlement};
+use super::{Population, Resource, SelectedSettlement, Settlement};
 use crate::{GameState, Player};
 use bevy::prelude::*;
 use bevy_egui::{
@@ -8,54 +8,55 @@ use bevy_egui::{
 
 struct TradeRow<'a> {
     ui: &'a mut Ui,
-    name: &'a str,
-    player_count: &'a mut u32,
-    settlement_count: &'a mut u32,
-    player_gold: &'a mut u32,
-    settlement_gold: &'a mut u32,
-    sell_price: Option<u32>,
-    buy_price: Option<u32>,
+    resource: Resource,
+    settlement: &'a mut Settlement,
+    player: &'a mut Player,
+    sell_price: u32,
+    buy_price: u32,
 }
 
 impl<'a> TradeRow<'a> {
     fn render(&mut self) {
-        self.ui.label(self.name);
+        self.ui.label(format!("{:?}", self.resource));
+        let player_count = *self.player.resources.get(&self.resource).unwrap_or(&0);
+        let settlement_count = *self.settlement.resources.get(&self.resource).unwrap_or(&0);
+
         self.ui
             .with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
-                ui.label(format!("{}", self.player_count));
+                ui.label(format!("{}", player_count));
             });
 
-        if let Some(price) = self.sell_price {
-            if self.ui.small_button(format!("sell ({})", price)).clicked()
-                && *self.player_count > 0
-                && *self.settlement_gold >= price
-            {
-                *self.settlement_count += 1;
-                *self.player_count -= 1;
-                *self.player_gold += price;
-                *self.settlement_gold -= price;
-                log::info!("sell {} for {}", self.name, price);
-            }
-        } else {
-            self.ui.label("");
+        if self
+            .ui
+            .small_button(format!("sell ({})", self.sell_price))
+            .clicked()
+            && player_count > 0
+            && self.settlement.gold >= self.sell_price
+        {
+            *self.settlement.resources.entry(self.resource).or_default() += 1;
+            *self.player.resources.entry(self.resource).or_default() -= 1;
+            self.player.gold += self.sell_price;
+            self.settlement.gold -= self.sell_price;
+            log::info!("sell {:?} for {}", self.resource, self.sell_price);
         }
+
         self.ui
             .with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
-                ui.label(format!("{}", self.settlement_count));
+                ui.label(format!("{}", settlement_count));
             });
-        if let Some(price) = self.buy_price {
-            if self.ui.small_button(format!("buy ({})", price)).clicked()
-                && *self.settlement_count > 0
-                && *self.player_gold >= price
-            {
-                *self.settlement_count -= 1;
-                *self.player_count += 1;
-                *self.player_gold -= price;
-                *self.settlement_gold += price;
-                log::info!("buy {} for {}", self.name, price);
-            }
-        } else {
-            self.ui.label("");
+
+        if self
+            .ui
+            .small_button(format!("buy ({})", self.buy_price))
+            .clicked()
+            && settlement_count > 0
+            && self.player.gold >= self.buy_price
+        {
+            *self.settlement.resources.entry(self.resource).or_default() -= 1;
+            *self.player.resources.entry(self.resource).or_default() += 1;
+            self.player.gold -= self.buy_price;
+            self.settlement.gold += self.buy_price;
+            log::info!("buy {:?} for {}", self.resource, self.buy_price);
         }
     }
 }
@@ -102,12 +103,6 @@ fn demand_livestock(farmer_count: u32) -> u32 {
     6 * farmer_count
 }
 
-const BASE_PRICE_GRAIN: u32 = 3;
-const BASE_PRICE_DAIRY: u32 = 8;
-const BASE_PRICE_MEAT: u32 = 15;
-const BASE_PRICE_FISH: u32 = 10;
-const BASE_PRICE_LIVESTOCK: u32 = 25;
-
 pub fn trade_ui(
     mut egui_context: ResMut<EguiContext>,
     selected_settlement: Res<Option<SelectedSettlement>>,
@@ -148,116 +143,45 @@ pub fn trade_ui(
                     .filter(|p| *p == Population::Farmer)
                     .count() as u32;
 
-                let player = &mut player.resources;
-                let settlement = &mut settlement.resources;
-
-                TradeRow {
-                    ui,
-                    name: "Gold",
-                    player_count: &mut player.gold,
-                    settlement_count: &mut settlement.gold,
-                    player_gold: &mut 0,
-                    settlement_gold: &mut 0,
-                    sell_price: None,
-                    buy_price: None,
+                {
+                    ui.label("Gold");
+                    ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
+                        ui.label(format!("{}", player.gold));
+                    });
+                    ui.label("");
+                    ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
+                        ui.label(format!("{}", settlement.gold));
+                    });
+                    ui.label("");
+                    ui.end_row();
                 }
-                .render();
-                ui.end_row();
 
-                let prices = PriceCalculator {
-                    base_price: BASE_PRICE_GRAIN,
-                    demand: demand_food(pop_count),
-                    supply: settlement.grain,
-                };
+                // TODO: demand_food more dynamic
+                let food_base_price = demand_food(pop_count);
+                for (resource, demand) in &[
+                    (Resource::Grain, food_base_price),
+                    (Resource::Dairy, food_base_price),
+                    (Resource::Meat, food_base_price),
+                    (Resource::Fish, food_base_price),
+                    (Resource::Livestock, demand_livestock(farmer_count)),
+                ] {
+                    let prices = PriceCalculator {
+                        base_price: resource.base_price(),
+                        demand: *demand,
+                        supply: *settlement.resources.get(&resource).unwrap_or(&0),
+                    };
 
-                TradeRow {
-                    ui,
-                    name: "Grain",
-                    player_count: &mut player.grain,
-                    settlement_count: &mut settlement.grain,
-                    player_gold: &mut player.gold,
-                    settlement_gold: &mut settlement.gold,
-                    sell_price: Some(prices.sell_price()),
-                    buy_price: Some(prices.buy_price()),
+                    TradeRow {
+                        ui,
+                        resource: *resource,
+                        player: &mut player,
+                        settlement: &mut settlement,
+                        sell_price: prices.sell_price(),
+                        buy_price: prices.buy_price(),
+                    }
+                    .render();
+                    ui.end_row();
                 }
-                .render();
-                ui.end_row();
-
-                let prices = PriceCalculator {
-                    base_price: BASE_PRICE_DAIRY,
-                    demand: demand_food(pop_count),
-                    supply: settlement.dairy,
-                };
-
-                TradeRow {
-                    ui,
-                    name: "Dairy",
-                    player_count: &mut player.dairy,
-                    settlement_count: &mut settlement.dairy,
-                    player_gold: &mut player.gold,
-                    settlement_gold: &mut settlement.gold,
-                    sell_price: Some(prices.sell_price()),
-                    buy_price: Some(prices.buy_price()),
-                }
-                .render();
-                ui.end_row();
-
-                let prices = PriceCalculator {
-                    base_price: BASE_PRICE_MEAT,
-                    demand: demand_food(pop_count),
-                    supply: settlement.meat,
-                };
-
-                TradeRow {
-                    ui,
-                    name: "Meat",
-                    player_count: &mut player.meat,
-                    settlement_count: &mut settlement.meat,
-                    player_gold: &mut player.gold,
-                    settlement_gold: &mut settlement.gold,
-                    sell_price: Some(prices.sell_price()),
-                    buy_price: Some(prices.buy_price()),
-                }
-                .render();
-                ui.end_row();
-
-                let prices = PriceCalculator {
-                    base_price: BASE_PRICE_FISH,
-                    demand: demand_food(pop_count),
-                    supply: settlement.fish,
-                };
-
-                TradeRow {
-                    ui,
-                    name: "Fish",
-                    player_count: &mut player.fish,
-                    settlement_count: &mut settlement.fish,
-                    player_gold: &mut player.gold,
-                    settlement_gold: &mut settlement.gold,
-                    sell_price: Some(prices.sell_price()),
-                    buy_price: Some(prices.buy_price()),
-                }
-                .render();
-                ui.end_row();
-
-                let prices = PriceCalculator {
-                    base_price: BASE_PRICE_LIVESTOCK,
-                    demand: demand_livestock(farmer_count),
-                    supply: settlement.livestock,
-                };
-
-                TradeRow {
-                    ui,
-                    name: "Livestock",
-                    player_count: &mut player.livestock,
-                    settlement_count: &mut settlement.livestock,
-                    player_gold: &mut player.gold,
-                    settlement_gold: &mut settlement.gold,
-                    sell_price: Some(prices.sell_price()),
-                    buy_price: Some(prices.buy_price()),
-                }
-                .render();
-                ui.end_row();
             });
         });
     }

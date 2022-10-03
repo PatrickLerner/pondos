@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::game_time::GameTime;
 
 use super::GameState;
@@ -16,7 +18,9 @@ pub struct Settlement {
     pub name: String,
     pub position: Position,
     #[serde(default)]
-    pub resources: Resources,
+    pub gold: u32,
+    #[serde(default)]
+    pub resources: HashMap<Resource, u32>,
     pub populations: Vec<Population>,
 }
 
@@ -28,38 +32,42 @@ fn cap_resource(amount: &mut u32, multiplier: f32, max: u32) {
 
 impl Settlement {
     pub fn production_tick(&mut self, time: &GameTime) {
-        let mut livestock_allocation = self.resources.livestock;
+        let mut livestock_allocation = *self.resources.get(&Resource::Livestock).unwrap_or(&0);
 
         for population in self.populations.clone() {
             match population {
                 Population::Hunter => {
-                    self.resources.meat += if time.is_winter_season() { 2 } else { 7 };
+                    *self.resources.entry(Resource::Meat).or_default() +=
+                        if time.is_winter_season() { 2 } else { 7 };
                 }
                 Population::Farmer => {
                     if time.is_harvest_season() {
-                        self.resources.grain += 10;
+                        *self.resources.entry(Resource::Grain).or_default() += 10;
                     }
                     if time.is_summer_season() {
-                        self.resources.grain += 3;
+                        *self.resources.entry(Resource::Grain).or_default() += 3;
                     }
                     if time.is_growth_season() {
-                        self.resources.livestock += 1;
+                        *self.resources.entry(Resource::Livestock).or_default() += 1;
                     }
                     if livestock_allocation >= 5 {
                         livestock_allocation -= 5;
 
-                        self.resources.meat += if time.is_harvest_season() {
-                            2
-                        } else if time.is_growth_season() {
-                            0
-                        } else {
-                            1
-                        };
-                        self.resources.dairy += if time.is_growth_season() { 0 } else { 2 };
+                        *self.resources.entry(Resource::Meat).or_default() +=
+                            if time.is_harvest_season() {
+                                2
+                            } else if time.is_growth_season() {
+                                0
+                            } else {
+                                1
+                            };
+                        *self.resources.entry(Resource::Dairy).or_default() +=
+                            if time.is_growth_season() { 0 } else { 2 };
                     }
                 }
                 Population::Fisher => {
-                    self.resources.fish += if time.is_winter_season() {
+                    *self.resources.entry(Resource::Fish).or_default() += if time.is_winter_season()
+                    {
                         0
                     } else if time.is_summer_season() {
                         2
@@ -68,7 +76,7 @@ impl Settlement {
                     };
                 }
                 Population::Merchant => {
-                    self.resources.gold += if time.is_winter_season() { 10 } else { 35 };
+                    self.gold += if time.is_winter_season() { 10 } else { 35 };
                 }
             }
         }
@@ -98,22 +106,27 @@ impl Settlement {
             .count() as u32;
 
         let max_gold = merchants * 90 + pops * 10;
-        cap_resource(&mut self.resources.gold, multiplier, max_gold);
+        cap_resource(&mut self.gold, multiplier, max_gold);
 
         let max_grain = farmers * 3 + pops;
-        cap_resource(&mut self.resources.grain, multiplier, max_grain);
-
         let max_dairy = pops * 2;
-        cap_resource(&mut self.resources.dairy, multiplier, max_dairy);
-
         let max_meat = pops * 2;
-        cap_resource(&mut self.resources.meat, multiplier, max_meat);
-
         let max_fish = pops * 2;
-        cap_resource(&mut self.resources.fish, multiplier, max_fish);
-
         let max_livestock = farmers * 8 + pops;
-        cap_resource(&mut self.resources.livestock, multiplier, max_livestock);
+
+        for (resource, max) in &[
+            (Resource::Grain, max_grain),
+            (Resource::Dairy, max_dairy),
+            (Resource::Meat, max_meat),
+            (Resource::Fish, max_fish),
+            (Resource::Livestock, max_livestock),
+        ] {
+            cap_resource(
+                self.resources.entry(*resource).or_default(),
+                multiplier,
+                *max,
+            );
+        }
     }
 }
 
@@ -124,7 +137,7 @@ pub struct Position {
     pub y: u32,
 }
 
-#[derive(Deserialize, Debug, Clone, PartialEq, Eq)]
+#[derive(Deserialize, Copy, Debug, Clone, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum Population {
     Hunter,
@@ -133,15 +146,26 @@ pub enum Population {
     Merchant,
 }
 
-#[derive(Deserialize, Debug, Default)]
-#[serde(deny_unknown_fields)]
-pub struct Resources {
-    pub gold: u32,
-    pub grain: u32,
-    pub dairy: u32,
-    pub meat: u32,
-    pub fish: u32,
-    pub livestock: u32,
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum Resource {
+    Grain,
+    Dairy,
+    Meat,
+    Fish,
+    Livestock,
+}
+
+impl Resource {
+    pub fn base_price(&self) -> u32 {
+        match self {
+            Resource::Grain => 3,
+            Resource::Dairy => 8,
+            Resource::Meat => 15,
+            Resource::Fish => 10,
+            Resource::Livestock => 25,
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, Eq)]

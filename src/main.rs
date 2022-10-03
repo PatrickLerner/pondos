@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use bevy::{prelude::*, render::texture::ImageSettings};
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_ecs_tilemap::prelude::*;
@@ -5,7 +7,7 @@ use bevy_egui::{egui, EguiContext, EguiPlugin};
 use dotenv::dotenv;
 use egui::{FontFamily, FontId, TextStyle};
 use game_time::GameTimeAdvanceEvent;
-use settlement::Resources;
+use settlement::Resource;
 
 mod game_time;
 mod helpers;
@@ -34,7 +36,7 @@ pub fn color_mode(mut egui_context: ResMut<EguiContext>) {
 }
 
 pub fn player_start(mut player: ResMut<Player>) {
-    player.resources.gold = 350;
+    player.gold = 350;
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
@@ -53,7 +55,8 @@ pub struct Player {
     location_marker: Option<Entity>,
     location_marker_texture_atlas_handle: Option<Handle<TextureAtlas>>,
     location_marker_need_update: bool,
-    resources: Resources,
+    gold: u32,
+    resources: HashMap<Resource, u32>,
 }
 
 pub struct PlayerTravelEvent {

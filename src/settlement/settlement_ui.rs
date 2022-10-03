@@ -55,12 +55,11 @@ pub fn settlement_ui(
                         ui.add_space(5.);
 
                         let resources = &settlement.resources;
-                        ui.label(format!("Gold: {}", resources.gold));
-                        ui.label(format!("Grain: {}", resources.grain));
-                        ui.label(format!("Dairy: {}", resources.dairy));
-                        ui.label(format!("Meat: {}", resources.meat));
-                        ui.label(format!("Fish: {}", resources.fish));
-                        ui.label(format!("Livestock: {}", resources.livestock));
+                        ui.label(format!("Gold: {}", settlement.gold));
+
+                        for (resource, amount) in resources.iter() {
+                            ui.label(format!("{:?}: {}", resource, amount));
+                        }
 
                         ui.horizontal(|ui| {
                             if ui.button("Trade").clicked() {
