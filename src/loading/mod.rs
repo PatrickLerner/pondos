@@ -46,7 +46,7 @@ pub fn setup(mut commands: Commands, server: Res<AssetServer>) {
 
 pub fn transition(
     mut game_state: ResMut<State<GameState>>,
-    resources: (
+    res: (
         Option<Res<Handle<Settlements>>>,
         Option<Res<Handle<Populations>>>,
         Option<Res<MapImage>>,
@@ -55,6 +55,8 @@ pub fn transition(
     ),
     player: Option<Res<Player>>,
     uninitialized_settlements: Query<(), (With<Settlement>, With<RequiresInitialization>)>,
+    resources: Option<Res<Resources>>,
+    populations: Option<Res<Populations>>,
 ) {
     let (
         settlement_handle,
@@ -62,7 +64,7 @@ pub fn transition(
         map_image_handle,
         resources_handle,
         settings_handle,
-    ) = resources;
+    ) = res;
 
     if settlement_handle.is_none()
         && populations_handle.is_none()
@@ -72,6 +74,35 @@ pub fn transition(
         && player.is_some()
         && uninitialized_settlements.iter().any(|_| true)
     {
+        let resources = resources.unwrap();
+        let populations = populations.unwrap();
+
+        for population in populations.0.iter() {
+            let mut output = 0;
+
+            for production in population.production.iter() {
+                let yearly = 2 * production.amount.growth
+                    + production.amount.summer
+                    + production.amount.harvest
+                    + 2 * production.amount.winter;
+
+                let base_price = if production.resource == "Gold" {
+                    1
+                } else {
+                    resources
+                        .0
+                        .iter()
+                        .find(|i| i.name == production.resource)
+                        .unwrap()
+                        .base_price
+                };
+
+                output += yearly * base_price;
+            }
+
+            log::info!("{} {}", population.name, output);
+        }
+
         log::info!("all resources fully loaded");
         game_state.set(GameState::Map).unwrap();
     }

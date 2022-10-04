@@ -75,7 +75,7 @@
   max:
     Population: 1
 
-- name: Sprices
+- name: Spices
   base_price: 50
   demand:
     Population: 1

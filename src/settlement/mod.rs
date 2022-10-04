@@ -32,13 +32,13 @@ pub struct Position {
 
 #[derive(Debug, Deserialize, TypeUuid)]
 #[uuid = "b8c204ad-f39e-4358-a88b-24d2c342140f"]
-pub struct Resources(Vec<Resource>);
+pub struct Resources(pub Vec<Resource>);
 
 #[derive(Debug, Deserialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub struct Resource {
-    name: String,
-    base_price: u32,
+    pub name: String,
+    pub base_price: u32,
     demand: CalculatedPopulationValue,
     max: CalculatedPopulationValue,
 }

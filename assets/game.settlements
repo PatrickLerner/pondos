@@ -19,6 +19,7 @@
     x: 48
     y: 27
   populations:
+    - Blacksmith
     - Beekeeper
     - Farmer
     - Farmer
@@ -40,6 +41,7 @@
     - Farmer
     - Fisher
     - Hunter
+    - Pitch Worker
     - Salt Worker
 
 - name: Byzance
@@ -47,10 +49,11 @@
     x: 24
     y: 62
   populations:
+    - Blacksmith
+    - Brewer
+    - Brewer
     - Farmer
     - Farmer
-    - Farmer
-    - Fisher
     - Fisher
     - Fisher
     - Fisher
@@ -60,19 +63,24 @@
     - Merchant
     - Shepherd
     - Winemaker
+    - Tailor
+    - Tailor
 
 - name: Apollonia
   position:
     x: 16
     y: 53
   populations:
-    - Farmer
+    - Brewer
+    - Cheesemaker
+    - Clothmaker
     - Farmer
     - Farmer
     - Fisher
     - Fisher
     - Hunter
     - Merchant
+    - Tailor
     - Winemaker
 
 - name: Kallatis
@@ -80,6 +88,8 @@
     x: 20
     y: 36
   populations:
+    - Blacksmith
+    - Clothmaker
     - Farmer
     - Farmer
     - Farmer
@@ -94,6 +104,7 @@
     x: 62
     y: 4
   populations:
+    - Blacksmith
     - Farmer
     - Fisher
     - Fisher
@@ -103,6 +114,7 @@
     - Hunter
     - Miner
     - Miner
+    - Pitch Worker
     - Salt Worker
 
 - name: Nikonion
@@ -110,6 +122,8 @@
     x: 24
     y: 21
   populations:
+    - Blacksmith
+    - Clothmaker
     - Farmer
     - Farmer
     - Fisher
@@ -125,6 +139,7 @@
     x: 37
     y: 24
   populations:
+    - Brewer
     - Beekeeper
     - Beekeeper
     - Farmer
@@ -141,11 +156,12 @@
     x: 55
     y: 21
   populations:
-    - Fisher
+    - Cheesemaker
     - Fisher
     - Fisher
     - Fisher
     - Miner
+    - Pitch Worker
     - Salt Worker
 
 - name: Gorgippia
@@ -153,28 +169,32 @@
     x: 61
     y: 23
   populations:
+    - Fisher
+    - Fisher
     - Hunter
+    - Pitch Worker
     - Salt Worker
-    - Fisher
-    - Fisher
 
 - name: Phasis
   position:
     x: 86
     y: 40
   populations:
+    - Blacksmith
     - Fisher
     - Fisher
     - Miner
     - Miner
     - Salt Worker
-    - Sprice Grower
+    - Spice Grower
 
 - name: Sinope
   position:
     x: 60
     y: 47
   populations:
+    - Brewer
+    - Cheesemaker
     - Fisher
     - Lumberjack
     - Lumberjack

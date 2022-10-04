@@ -37,7 +37,7 @@ pub struct Production {
 
 #[derive(Debug, Deserialize, TypeUuid)]
 #[uuid = "e7ac1c59-c2ac-4a77-9ace-532038a44758"]
-pub struct Populations(HashSet<Population>);
+pub struct Populations(pub HashSet<Population>);
 
 impl Settlement {
     pub fn production_tick(&mut self, time: &GameTime, populations: &Populations) {
