@@ -1,4 +1,4 @@
-use super::{ResourceType, Resources, SelectedSettlement, Settlement};
+use super::{Resources, SelectedSettlement, Settlement};
 use crate::{GameState, Player};
 use bevy::prelude::*;
 use bevy_egui::{
@@ -111,14 +111,6 @@ impl PriceCalculator {
     }
 }
 
-fn demand_food(pop_count: u32) -> u32 {
-    (1.5 * pop_count as f32).ceil() as u32
-}
-
-fn demand_livestock(farmer_count: u32) -> u32 {
-    6 * farmer_count
-}
-
 pub fn trade_ui(
     mut egui_context: ResMut<EguiContext>,
     selected_settlement: Res<Option<SelectedSettlement>>,
@@ -152,15 +144,6 @@ pub fn trade_ui(
             egui::Grid::new("resources").show(ui, |ui| {
                 ui.set_width(500.);
 
-                let pop_count = settlement.populations.len() as u32;
-                let farmer_count = settlement
-                    .populations
-                    .clone()
-                    .into_iter()
-                    // TODO:
-                    .filter(|p| *p == "Farmer")
-                    .count() as u32;
-
                 {
                     ui.label("Gold");
                     ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
@@ -174,12 +157,8 @@ pub fn trade_ui(
                     ui.end_row();
                 }
 
-                // TODO: demand_food more dynamic
                 for resource in resources.0.iter() {
-                    let demand = match resource.resource_type {
-                        ResourceType::Food => demand_food(pop_count),
-                        ResourceType::Livestock => demand_livestock(farmer_count),
-                    };
+                    let demand = resource.demand.value(&settlement.populations).ceil() as u32;
 
                     let prices = PriceCalculator {
                         base_price: resource.base_price,

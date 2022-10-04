@@ -1,6 +1,7 @@
 use crate::{
     game_time::{GameTime, GameTimeAdvancedEvent},
     settlement::Settlement,
+    Settings,
 };
 use bevy::prelude::*;
 
@@ -10,11 +11,14 @@ pub fn cap_resources(
     mut settlements: Query<&mut Settlement>,
     mut events: EventReader<GameTimeAdvancedEvent>,
     resources: Option<Res<Resources>>,
+    settings: Option<Res<Settings>>,
 ) {
     if let Some(resources) = resources {
-        for event in events.iter() {
-            for mut settlement in settlements.iter_mut() {
-                settlement.resource_cap_tick(&event.time, &resources);
+        if let Some(settings) = settings {
+            for event in events.iter() {
+                for mut settlement in settlements.iter_mut() {
+                    settlement.resource_cap_tick(&event.time, &resources, &settings);
+                }
             }
         }
     }
@@ -27,36 +31,19 @@ fn cap_resource(amount: &mut u32, multiplier: f32, max: u32) {
 }
 
 impl Settlement {
-    pub fn resource_cap_tick(&mut self, time: &GameTime, resources: &Resources) {
-        let multiplier = if time.is_winter_season() {
-            0.2
-        } else if time.is_harvest_season() {
-            1.5
-        } else {
-            1.0
-        };
+    pub fn resource_cap_tick(
+        &mut self,
+        time: &GameTime,
+        resources: &Resources,
+        settings: &Settings,
+    ) {
+        let multiplier = settings.max_multipliers.value(time);
 
-        let pops = self.populations.len() as u32;
-        let farmers = self
-            .populations
-            .clone()
-            .into_iter()
-            // TODO:
-            .filter(|p| *p == "Farmer")
-            .count() as u32;
-        let merchants = self
-            .populations
-            .clone()
-            .into_iter()
-            // TODO:
-            .filter(|p| *p == "Merchant")
-            .count() as u32;
-
-        let max_gold = merchants * 90 + pops * 10;
+        let max_gold = settings.max_gold.value(&self.populations).ceil() as u32;
         cap_resource(&mut self.gold, multiplier, max_gold);
 
         for resource in resources.0.iter() {
-            let max = farmers * resource.max.per_farmer + pops * resource.max.per_population;
+            let max = resource.max.value(&self.populations).ceil() as u32;
 
             cap_resource(
                 self.resources.entry(resource.name.clone()).or_default(),

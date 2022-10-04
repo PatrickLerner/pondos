@@ -1,6 +1,6 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
-use crate::GameState;
+use crate::{CalculatedPopulationValue, GameState};
 use bevy::{prelude::*, reflect::TypeUuid};
 use serde::Deserialize;
 
@@ -30,34 +30,17 @@ pub struct Position {
     pub y: u32,
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum ResourceType {
-    Food,
-    Livestock,
-}
-
 #[derive(Debug, Deserialize, TypeUuid)]
 #[uuid = "b8c204ad-f39e-4358-a88b-24d2c342140f"]
-pub struct Resources(HashSet<Resource>);
+pub struct Resources(Vec<Resource>);
 
-#[derive(Debug, Deserialize, Hash, PartialEq, Eq)]
-#[serde(deny_unknown_fields)]
-pub struct ResourceMax {
-    #[serde(default)]
-    per_farmer: u32,
-    #[serde(default)]
-    per_population: u32,
-}
-
-#[derive(Debug, Deserialize, Hash, PartialEq, Eq)]
+#[derive(Debug, Deserialize, PartialEq)]
 #[serde(rename_all = "lowercase")]
 pub struct Resource {
     name: String,
     base_price: u32,
-    #[serde(rename = "type")]
-    resource_type: ResourceType,
-    max: ResourceMax,
+    demand: CalculatedPopulationValue,
+    max: CalculatedPopulationValue,
 }
 
 pub struct CloseSettlementUIEvent;

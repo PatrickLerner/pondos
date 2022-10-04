@@ -1,6 +1,7 @@
 use crate::{
     game_time::{GameTime, GameTimeAdvancedEvent},
     settlement::Settlement,
+    SeasonalAmount,
 };
 use bevy::{prelude::*, reflect::TypeUuid};
 use serde::Deserialize;
@@ -31,20 +32,7 @@ pub struct Population {
 #[serde(deny_unknown_fields)]
 pub struct Production {
     pub resource: String,
-    pub amount: ProductionAmount,
-}
-
-#[derive(Deserialize, Component, Debug, Hash, PartialEq, Eq)]
-#[serde(deny_unknown_fields)]
-pub struct ProductionAmount {
-    #[serde(default)]
-    pub growth: u32,
-    #[serde(default)]
-    pub summer: u32,
-    #[serde(default)]
-    pub harvest: u32,
-    #[serde(default)]
-    pub winter: u32,
+    pub amount: SeasonalAmount<u32>,
 }
 
 #[derive(Debug, Deserialize, TypeUuid)]
@@ -57,17 +45,7 @@ impl Settlement {
             let population = populations.0.iter().find(|i| i.name == population).unwrap();
 
             for production in population.production.iter() {
-                let amount = if time.is_growth_season() {
-                    production.amount.growth
-                } else if time.is_summer_season() {
-                    production.amount.summer
-                } else if time.is_harvest_season() {
-                    production.amount.harvest
-                } else if time.is_winter_season() {
-                    production.amount.winter
-                } else {
-                    unreachable!("unknown season")
-                };
+                let amount = production.amount.value(&time);
 
                 let resource = if production.resource == "Gold" {
                     &mut self.gold

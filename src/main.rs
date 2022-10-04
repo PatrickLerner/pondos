@@ -1,12 +1,12 @@
-use std::collections::HashMap;
-
-use bevy::{prelude::*, render::texture::ImageSettings};
+use bevy::{prelude::*, reflect::TypeUuid, render::texture::ImageSettings};
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_ecs_tilemap::prelude::*;
 use bevy_egui::{egui, EguiContext, EguiPlugin};
 use dotenv::dotenv;
 use egui::{FontFamily, FontId, TextStyle};
-use game_time::GameTimeAdvanceEvent;
+use game_time::{GameTime, GameTimeAdvanceEvent};
+use serde::Deserialize;
+use std::collections::HashMap;
 
 mod game_time;
 mod helpers;
@@ -53,6 +53,64 @@ pub struct Player {
     location_marker_need_update: bool,
     gold: u32,
     resources: HashMap<String, u32>,
+}
+
+#[derive(Debug, Deserialize, PartialEq)]
+// TODO: validate entries here when loading data
+pub struct CalculatedPopulationValue(HashMap<String, f32>);
+
+impl CalculatedPopulationValue {
+    pub fn value(&self, populations: &Vec<String>) -> f32 {
+        self.0.iter().fold(0.0, |acc, (pop, modifier)| {
+            let count = if pop == "Population" {
+                populations.len()
+            } else {
+                populations.iter().filter(|i| i == &pop).count()
+            } as f32;
+
+            acc + modifier * count
+        })
+    }
+}
+
+#[derive(Debug, Deserialize, PartialEq, TypeUuid)]
+#[serde(rename_all = "lowercase")]
+#[uuid = "bafb929f-a7b1-45c3-b907-f71720724940"]
+pub struct Settings {
+    max_gold: CalculatedPopulationValue,
+    max_multipliers: SeasonalAmount<f32>,
+}
+
+#[derive(Deserialize, Component, Debug, Hash, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
+pub struct SeasonalAmount<T> {
+    #[serde(default)]
+    pub growth: T,
+    #[serde(default)]
+    pub summer: T,
+    #[serde(default)]
+    pub harvest: T,
+    #[serde(default)]
+    pub winter: T,
+}
+
+impl<T> SeasonalAmount<T>
+where
+    T: Copy,
+{
+    pub fn value(&self, time: &GameTime) -> T {
+        if time.is_growth_season() {
+            self.growth
+        } else if time.is_summer_season() {
+            self.summer
+        } else if time.is_harvest_season() {
+            self.harvest
+        } else if time.is_winter_season() {
+            self.winter
+        } else {
+            unreachable!("unknown season");
+        }
+    }
 }
 
 pub struct PlayerTravelEvent {
@@ -131,6 +189,7 @@ fn main() {
     .add_plugin(YamlAssetPlugin::<population::Populations>::new(&[
         "populations",
     ]))
+    .add_plugin(YamlAssetPlugin::<Settings>::new(&["settings"]))
     .add_plugin(TilemapPlugin)
     .add_plugin(EguiPlugin)
     .add_plugin(loading::LoadingPlugin)

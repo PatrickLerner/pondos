@@ -14,23 +14,11 @@
         summer: 3
         harvest: 10
 
-    - resource: Meat
-      amount:
-        summer: 1
-        harvest: 2
-        winter: 1
-      #condition:
-      #  - resource: Livestock
-      #    amount: 5
-
     - resource: Dairy
       amount:
         summer: 2
         harvest: 2
         winter: 2
-      #condition:
-      #  - resource: Livestock
-      #    amount: 5
 
 - name: Fisher
   production:
