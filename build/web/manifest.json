@@ -1,0 +1,18 @@
+{
+  "short_name": "Pondos",
+  "name": "Pondos",
+  "icons": [
+    {
+      "src": "/icon_1024x1024.png",
+      "type": "image/png",
+      "sizes": "1024x1024"
+    }
+  ],
+  "id": "/?source=pwa",
+  "start_url": "/?source=pwa",
+  "background_color": "#3367D6",
+  "display": "fullscreen",
+  "scope": "/",
+  "theme_color": "#3367D6",
+  "description": "Trading game"
+}

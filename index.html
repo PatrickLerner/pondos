@@ -5,18 +5,25 @@
     <title>pondos</title>
     <link data-trunk rel="copy-dir" href="assets"/>
     <link data-trunk rel="copy-file" href="build/windows/icon.ico"/>
+    <link data-trunk rel="copy-file" href="build/macos/icon_1024x1024.png"/>
+    <link data-trunk rel="copy-file" href="build/web/manifest.json"/>
+    <link data-trunk rel="copy-file" href="build/web/service-worker-pwa.js"/>
     <link rel="icon" href="icon.ico">
     <link data-trunk rel="inline" href="build/web/styles.css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="manifest" href="/manifest.json">
   </head>
   <body>
     <link data-trunk rel="inline" href="build/web/sound.js"/>
 
     <script>
       document.body.addEventListener("contextmenu", (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
       });
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker-pwa.js');
+      }
     </script>
   </body>
 </html>

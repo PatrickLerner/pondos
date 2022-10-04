@@ -1,5 +1,10 @@
-use super::{MapSize, MARKER, TILEMAP_COLUMNS, TILEMAP_ROWS, TILEMAP_SIZE, Z_MARKER};
-use crate::Player;
+use crate::{
+    map::{
+        constants::{MARKER, TILEMAP_COLUMNS, TILEMAP_ROWS, TILEMAP_SIZE, Z_MARKER},
+        MapSize,
+    },
+    Player,
+};
 use bevy::prelude::*;
 
 pub fn update_player_position(

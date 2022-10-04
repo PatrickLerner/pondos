@@ -1,0 +1,38 @@
+- name: Hunter
+  production:
+    - resource: Meat
+      amount:
+        growth: 7
+        summer: 7
+        harvest: 7
+        winter: 2
+
+- name: Farmer
+  production:
+    - resource: Grain
+      amount:
+        summer: 3
+        harvest: 10
+
+    - resource: Dairy
+      amount:
+        summer: 2
+        harvest: 2
+        winter: 2
+
+- name: Fisher
+  production:
+    - resource: Fish
+      amount:
+        growth: 4
+        summer: 2
+        harvest: 4
+
+- name: Merchant
+  production:
+    - resource: Gold
+      amount:
+        growth: 35
+        summer: 35
+        harvest: 35
+        winter: 10

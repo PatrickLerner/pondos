@@ -1,0 +1,182 @@
+- name: Chersonesus
+  position:
+    x: 41
+    y: 29
+  populations:
+    - Hunter
+    - Hunter
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Fisher
+    - Merchant
+    - Merchant
+    - Merchant
+
+- name: Theodosie
+  position:
+    x: 48
+    y: 27
+  populations:
+    - Hunter
+    - Hunter
+    - Farmer
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Fisher
+    - Merchant
+    - Merchant
+
+- name: Pityos
+  position:
+    x: 82
+    y: 28
+  populations:
+    - Hunter
+    - Hunter
+    - Hunter
+    - Farmer
+    - Fisher
+
+- name: Byzance
+  position:
+    x: 24
+    y: 62
+  populations:
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Fisher
+    - Merchant
+    - Merchant
+    - Merchant
+    - Merchant
+    - Merchant
+    - Merchant
+    - Merchant
+
+- name: Apollonia
+  position:
+    x: 16
+    y: 53
+  populations:
+    - Hunter
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Fisher
+    - Merchant
+
+- name: Kallatis
+  position:
+    x: 20
+    y: 36
+  populations:
+    - Hunter
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Merchant
+    - Merchant
+
+- name: Tanais
+  position:
+    x: 62
+    y: 4
+  populations:
+    - Hunter
+    - Hunter
+    - Hunter
+    - Hunter
+    - Hunter
+    - Hunter
+    - Farmer
+    - Fisher
+    - Fisher
+    - Merchant
+
+- name: Nikonion
+  position:
+    x: 24
+    y: 21
+  populations:
+    - Hunter
+    - Hunter
+    - Hunter
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Merchant
+
+- name: Kerkinitis
+  position:
+    x: 37
+    y: 24
+  populations:
+    - Hunter
+    - Farmer
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
+    - Fisher
+    - Merchant
+    - Merchant
+
+- name: Hermonassa
+  position:
+    x: 55
+    y: 21
+  populations:
+    - Farmer
+    - Fisher
+    - Fisher
+    - Fisher
+    - Merchant
+    - Merchant
+
+- name: Gorgippia
+  position:
+    x: 61
+    y: 23
+  populations:
+    - Hunter
+    - Hunter
+    - Farmer
+    - Fisher
+
+- name: Phasis
+  position:
+    x: 86
+    y: 40
+  populations:
+    - Hunter
+    - Hunter
+    - Hunter
+    - Farmer
+    - Merchant
+    - Merchant
+
+- name: Sinope
+  position:
+    x: 60
+    y: 47
+  populations:
+    - Hunter
+    - Farmer
+    - Fisher
+    - Fisher
+    - Merchant
