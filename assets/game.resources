@@ -1,3 +1,108 @@
+- name: Beer
+  base_price: 7
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Brick
+  base_price: 3
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Cloth
+  base_price: 15
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Clothing
+  base_price: 35
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Hemp
+  base_price: 3
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Honey
+  base_price: 5
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Mead
+  base_price: 15
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Raw Metal
+  base_price: 5
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Metal Goods
+  base_price: 17
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Pitch
+  base_price: 11
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Salt
+  base_price: 6
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Sprices
+  base_price: 50
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Wine
+  base_price: 40
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Wood
+  base_price: 3
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
+- name: Wool
+  base_price: 5
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
 - name: Grain
   base_price: 3
   demand:
@@ -6,29 +111,36 @@
     Population: 1
     Farmer: 3
 
-- name: Dairy
-  base_price: 8
+- name: Cheese
+  base_price: 10
   demand:
     Population: 2
   max:
     Population: 2
 
+- name: Pelts
+  base_price: 30
+  demand:
+    Population: 1
+  max:
+    Population: 1
+
 - name: Meat
-  base_price: 15
+  base_price: 28
   demand:
     Population: 1.5
   max:
     Population: 2
 
 - name: Fish
-  base_price: 10
+  base_price: 13
   demand:
     Population: 1.5
   max:
     Population: 2
 
 - name: Livestock
-  base_price: 25
+  base_price: 50
   demand:
     Farmer: 6
   max:

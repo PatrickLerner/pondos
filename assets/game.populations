@@ -7,18 +7,18 @@
         harvest: 7
         winter: 2
 
+    - resource: Pelts
+      amount:
+        growth: 2
+        summer: 2
+        harvest: 2
+
 - name: Farmer
   production:
     - resource: Grain
       amount:
         summer: 3
         harvest: 10
-
-    - resource: Dairy
-      amount:
-        summer: 2
-        harvest: 2
-        winter: 2
 
 - name: Fisher
   production:
@@ -36,3 +36,132 @@
         summer: 35
         harvest: 35
         winter: 10
+
+- name: Cheesemaker
+  production:
+    - resource: Cheese
+      amount:
+        summer: 2
+        harvest: 2
+        winter: 2
+
+- name: Beekeeper
+  production:
+    - resource: Honey
+      amount:
+        summer: 3
+        harvest: 3
+
+- name: Salt Worker
+  production:
+    - resource: Salt
+      amount:
+        growth: 2
+        summer: 5
+        harvest: 3
+
+- name: Sprice Grower
+  production:
+    - resource: Sprices
+      amount:
+        harvest: 2
+
+- name: Miner
+  production:
+    - resource: Raw Metal
+      amount:
+        growth: 2
+        summer: 2
+        harvest: 2
+        winter: 2
+
+- name: Blacksmith
+  production:
+    - resource: Metal Goods
+      amount:
+        growth: 2
+        summer: 2
+        harvest: 2
+        winter: 2
+
+- name: Winemaker
+  production:
+    - resource: Wine
+      amount:
+        summer: 2
+        harvest: 10
+
+- name: Brewer
+  production:
+    - resource: Beer
+      amount:
+        growth: 5
+        summer: 5
+        harvest: 5
+        winter: 2
+
+    - resource: Mead
+      amount:
+        growth: 4
+        summer: 5
+        harvest: 3
+        winter: 4
+
+- name: Pitch Worker
+  production:
+    - resource: Pitch
+      amount:
+        growth: 5
+        summer: 5
+        harvest: 5
+
+- name: Brickmaker
+  production:
+    - resource: Brick
+      amount:
+        growth: 4
+        summer: 5
+        harvest: 4
+        winter: 2
+
+- name: Lumberjack
+  production:
+    - resource: Wood
+      amount:
+        growth: 4
+        summer: 10
+        harvest: 7
+        winter: 3
+
+- name: Hemp Worker
+  production:
+    - resource: Hemp
+      amount:
+        growth: 4
+        summer: 10
+        harvest: 7
+        winter: 3
+
+- name: Shepherd
+  production:
+    - resource: Wool
+      amount:
+        growth: 10
+        summer: 7
+        harvest: 3
+
+- name: Clothmaker
+  production:
+    - resource: Cloth
+      amount:
+        growth: 10
+        summer: 7
+        harvest: 3
+
+- name: Tailor
+  production:
+    - resource: Clothing
+      amount:
+        growth: 10
+        summer: 7
+        harvest: 3

@@ -3,44 +3,44 @@
     x: 41
     y: 29
   populations:
-    - Hunter
-    - Hunter
-    - Farmer
+    - Beekeeper
     - Farmer
     - Fisher
     - Fisher
-    - Fisher
+    - Hunter
+    - Hunter
+    - Lumberjack
     - Merchant
     - Merchant
-    - Merchant
+    - Miner
 
 - name: Theodosie
   position:
     x: 48
     y: 27
   populations:
+    - Beekeeper
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
     - Hunter
     - Hunter
-    - Farmer
-    - Farmer
-    - Farmer
-    - Farmer
-    - Fisher
-    - Fisher
-    - Fisher
+    - Lumberjack
     - Merchant
-    - Merchant
+    - Shepherd
 
 - name: Pityos
   position:
     x: 82
     y: 28
   populations:
-    - Hunter
-    - Hunter
-    - Hunter
+    - Brickmaker
     - Farmer
     - Fisher
+    - Hunter
+    - Salt Worker
 
 - name: Byzance
   position:
@@ -53,100 +53,100 @@
     - Fisher
     - Fisher
     - Fisher
+    - Fisher
     - Merchant
     - Merchant
     - Merchant
     - Merchant
-    - Merchant
-    - Merchant
-    - Merchant
+    - Shepherd
+    - Winemaker
 
 - name: Apollonia
   position:
     x: 16
     y: 53
   populations:
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
     - Hunter
-    - Farmer
-    - Farmer
-    - Farmer
-    - Fisher
-    - Fisher
-    - Fisher
     - Merchant
+    - Winemaker
 
 - name: Kallatis
   position:
     x: 20
     y: 36
   populations:
-    - Hunter
     - Farmer
     - Farmer
     - Farmer
     - Fisher
-    - Fisher
-    - Merchant
-    - Merchant
+    - Hemp Worker
+    - Lumberjack
+    - Lumberjack
+    - Winemaker
 
 - name: Tanais
   position:
     x: 62
     y: 4
   populations:
-    - Hunter
-    - Hunter
-    - Hunter
-    - Hunter
-    - Hunter
-    - Hunter
     - Farmer
     - Fisher
     - Fisher
-    - Merchant
+    - Hunter
+    - Hunter
+    - Hunter
+    - Hunter
+    - Miner
+    - Miner
+    - Salt Worker
 
 - name: Nikonion
   position:
     x: 24
     y: 21
   populations:
-    - Hunter
-    - Hunter
-    - Hunter
-    - Farmer
     - Farmer
     - Farmer
     - Fisher
-    - Fisher
-    - Merchant
+    - Hemp Worker
+    - Hunter
+    - Hunter
+    - Hunter
+    - Lumberjack
+    - Lumberjack
 
 - name: Kerkinitis
   position:
     x: 37
     y: 24
   populations:
+    - Beekeeper
+    - Beekeeper
+    - Farmer
+    - Farmer
+    - Farmer
+    - Fisher
+    - Fisher
     - Hunter
-    - Farmer
-    - Farmer
-    - Farmer
-    - Farmer
-    - Fisher
-    - Fisher
-    - Fisher
-    - Merchant
-    - Merchant
+    - Miner
+    - Miner
 
 - name: Hermonassa
   position:
     x: 55
     y: 21
   populations:
-    - Farmer
     - Fisher
     - Fisher
     - Fisher
-    - Merchant
-    - Merchant
+    - Fisher
+    - Miner
+    - Salt Worker
 
 - name: Gorgippia
   position:
@@ -154,8 +154,8 @@
     y: 23
   populations:
     - Hunter
-    - Hunter
-    - Farmer
+    - Salt Worker
+    - Fisher
     - Fisher
 
 - name: Phasis
@@ -163,20 +163,22 @@
     x: 86
     y: 40
   populations:
-    - Hunter
-    - Hunter
-    - Hunter
-    - Farmer
-    - Merchant
-    - Merchant
+    - Fisher
+    - Fisher
+    - Miner
+    - Miner
+    - Salt Worker
+    - Sprice Grower
 
 - name: Sinope
   position:
     x: 60
     y: 47
   populations:
-    - Hunter
-    - Farmer
     - Fisher
-    - Fisher
-    - Merchant
+    - Lumberjack
+    - Lumberjack
+    - Lumberjack
+    - Shepherd
+    - Shepherd
+    - Shepherd
