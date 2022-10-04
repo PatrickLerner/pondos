@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+# enforce source formatting
+rustfmt --check $(find src -name "*.rs")
+
+# enforce clippy compliance and do not tolerate warnings
+cargo clippy --all-targets --all-features -- -D warnings

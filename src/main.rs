@@ -1,14 +1,16 @@
-use bevy::{prelude::*, render::texture::ImageSettings};
+use bevy::{prelude::*, reflect::TypeUuid, render::texture::ImageSettings};
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_ecs_tilemap::prelude::*;
 use bevy_egui::{egui, EguiContext, EguiPlugin};
 use dotenv::dotenv;
 use egui::{FontFamily, FontId, TextStyle};
-use game_time::GameTimeAdvanceEvent;
-use settlement::Resources;
+use game_time::{GameTime, GameTimeAdvanceEvent};
+use serde::Deserialize;
+use std::collections::HashMap;
 
 mod game_time;
 mod helpers;
+mod loading;
 mod map;
 mod population;
 mod settlement;
@@ -33,13 +35,9 @@ pub fn color_mode(mut egui_context: ResMut<EguiContext>) {
     egui_context.ctx_mut().set_visuals(egui::Visuals::light());
 }
 
-pub fn player_start(mut player: ResMut<Player>) {
-    player.resources.gold = 350;
-}
-
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub enum GameState {
-    LoadingMap,
+    Loading,
     Map,
     Settlement,
     TravelToSettlement,
@@ -53,7 +51,66 @@ pub struct Player {
     location_marker: Option<Entity>,
     location_marker_texture_atlas_handle: Option<Handle<TextureAtlas>>,
     location_marker_need_update: bool,
-    resources: Resources,
+    gold: u32,
+    resources: HashMap<String, u32>,
+}
+
+#[derive(Debug, Deserialize, PartialEq)]
+// TODO: validate entries here when loading data
+pub struct CalculatedPopulationValue(HashMap<String, f32>);
+
+impl CalculatedPopulationValue {
+    pub fn value(&self, populations: &Vec<String>) -> f32 {
+        self.0.iter().fold(0.0, |acc, (pop, modifier)| {
+            let count = if pop == "Population" {
+                populations.len()
+            } else {
+                populations.iter().filter(|i| i == &pop).count()
+            } as f32;
+
+            acc + modifier * count
+        })
+    }
+}
+
+#[derive(Debug, Deserialize, PartialEq, TypeUuid)]
+#[serde(rename_all = "lowercase")]
+#[uuid = "bafb929f-a7b1-45c3-b907-f71720724940"]
+pub struct Settings {
+    max_gold: CalculatedPopulationValue,
+    max_multipliers: SeasonalAmount<f32>,
+}
+
+#[derive(Deserialize, Component, Debug, Hash, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
+pub struct SeasonalAmount<T> {
+    #[serde(default)]
+    pub growth: T,
+    #[serde(default)]
+    pub summer: T,
+    #[serde(default)]
+    pub harvest: T,
+    #[serde(default)]
+    pub winter: T,
+}
+
+impl<T> SeasonalAmount<T>
+where
+    T: Copy,
+{
+    pub fn value(&self, time: &GameTime) -> T {
+        if time.is_growth_season() {
+            self.growth
+        } else if time.is_summer_season() {
+            self.summer
+        } else if time.is_harvest_season() {
+            self.harvest
+        } else if time.is_winter_season() {
+            self.winter
+        } else {
+            unreachable!("unknown season");
+        }
+    }
 }
 
 pub struct PlayerTravelEvent {
@@ -116,22 +173,31 @@ fn main() {
     .add_event::<game_time::GameTimeAdvancedEvent>()
     .add_event::<game_time::GameTimeAdvanceEvent>()
     .add_event::<settlement::CloseSettlementUIEvent>()
-    .add_state(GameState::LoadingMap)
+    .add_state(GameState::Loading)
     .insert_resource(ImageSettings::default_nearest())
     .init_resource::<game_time::GameTime>()
     .init_resource::<helpers::camera::GameCamera>()
     .init_resource::<Player>()
     .init_resource::<Option<settlement::SelectedSettlement>>()
     .add_plugins(DefaultPlugins)
-    .add_plugin(YamlAssetPlugin::<map::on_enter::Settlements>::new(&["yml"]))
+    .add_plugin(YamlAssetPlugin::<loading::Settlements>::new(&[
+        "settlements",
+    ]))
+    .add_plugin(YamlAssetPlugin::<settlement::Resources>::new(&[
+        "resources",
+    ]))
+    .add_plugin(YamlAssetPlugin::<population::Populations>::new(&[
+        "populations",
+    ]))
+    .add_plugin(YamlAssetPlugin::<Settings>::new(&["settings"]))
     .add_plugin(TilemapPlugin)
     .add_plugin(EguiPlugin)
+    .add_plugin(loading::LoadingPlugin)
     .add_plugin(map::MapPlugin)
     .add_plugin(settlement::SettlementPlugin)
     .add_plugin(game_time::GameTimePlugin)
     .add_system(handle_travel)
     .add_system(population::population_production)
-    .add_startup_system(player_start)
     .add_startup_system(color_mode)
     .add_startup_system(helpers::camera::spawn_camera)
     .run();

@@ -1,42 +1,11 @@
-use super::{GRASS, HILLS, MOUNTAIN, SETTLEMENT, TILEMAP_SIZE, WATER, WOODS, Z_FEATURES, Z_GROUND};
+use super::{FeaturesTilemap, MapImage};
 use crate::{
-    game_time::GameTime, helpers::camera::GameCamera, map::MapSize, settlement::Settlement,
-    GameState, Player,
+    helpers::camera::GameCamera,
+    map::constants::{GRASS, HILLS, MOUNTAIN, TILEMAP_SIZE, WATER, WOODS, Z_FEATURES, Z_GROUND},
+    map::MapSize,
 };
-use bevy::{prelude::*, reflect::TypeUuid};
+use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
-use serde::Deserialize;
-
-#[derive(Default)]
-pub struct AssetsLoading(Vec<HandleUntyped>);
-
-#[derive(Debug, Deserialize, TypeUuid)]
-#[uuid = "39cadc56-aa9c-4543-8640-a018b74b5052"]
-pub struct Settlements(Vec<Settlement>);
-
-pub struct MapImage(Handle<Image>);
-pub struct FeaturesTilemap((Entity, TilemapId));
-
-pub fn setup(mut commands: Commands, server: Res<AssetServer>) {
-    let map_image: Handle<Image> = server.load("map.png");
-    let map_image = MapImage(map_image);
-    let settlements: Handle<Settlements> = server.load("settlements.yml");
-
-    log::debug!("requesting map resources");
-    commands.insert_resource(map_image);
-    commands.insert_resource(settlements);
-}
-
-pub fn transition(
-    mut game_state: ResMut<State<GameState>>,
-    settlement_handle: Option<Res<Handle<Settlements>>>,
-    map_image_handle: Option<Res<MapImage>>,
-) {
-    if settlement_handle.is_none() && map_image_handle.is_none() {
-        log::info!("map fully loaded");
-        game_state.set(GameState::Map).unwrap();
-    }
-}
 
 pub fn load_map(
     mut commands: Commands,
@@ -157,65 +126,6 @@ pub fn load_map(
             commands.insert_resource(map_size);
 
             commands.remove_resource::<MapImage>();
-        }
-    }
-}
-
-pub fn load_settlements(
-    mut commands: Commands,
-    mut player: ResMut<Player>,
-    settlement_handle: Option<Res<Handle<Settlements>>>,
-    mut settlements: ResMut<Assets<Settlements>>,
-    map_size: Option<Res<MapSize>>,
-    features_tilemap_id: Option<Res<FeaturesTilemap>>,
-    mut tilemap_query: Query<&mut TileStorage>,
-) {
-    if let Some(settlement_handle) = settlement_handle {
-        if let Some(map_size) = map_size {
-            if let Some(features_tilemap_id) = features_tilemap_id {
-                if settlements.get(settlement_handle.as_ref()).is_some() {
-                    log::debug!("loading settlements data");
-                    let settlements = settlements.remove(settlement_handle.id).unwrap();
-
-                    for mut settlement in settlements.0.into_iter() {
-                        let position = TilePos {
-                            x: settlement.position.x,
-                            y: map_size.height - 1 - settlement.position.y,
-                        };
-
-                        player.position =
-                            Vec2::new(settlement.position.x as f32, settlement.position.y as f32);
-                        player.location_marker_need_update = true;
-
-                        let mut time = GameTime { year: 0, season: 0 };
-                        for _ in 0..20 {
-                            settlement.production_tick(&time);
-                            settlement.resource_cap_tick(&time);
-                            time.advance();
-                        }
-
-                        let tile_entity = commands
-                            .spawn()
-                            .insert_bundle(TileBundle {
-                                position,
-                                tilemap_id: features_tilemap_id.0 .1,
-                                texture: SETTLEMENT,
-                                ..Default::default()
-                            })
-                            .insert(settlement)
-                            .id();
-
-                        player.location = Some(tile_entity);
-
-                        let mut features_tile_storage =
-                            tilemap_query.get_mut(features_tilemap_id.0 .0).unwrap();
-                        features_tile_storage.set(&position, Some(tile_entity));
-                    }
-
-                    commands.remove_resource::<MapImage>();
-                    commands.remove_resource::<Handle<Settlements>>()
-                }
-            }
         }
     }
 }

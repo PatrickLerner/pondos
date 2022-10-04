@@ -1,0 +1,36 @@
+- name: Grain
+  base_price: 3
+  demand:
+    Population: 1
+  max:
+    Population: 1
+    Farmer: 3
+
+- name: Dairy
+  base_price: 8
+  demand:
+    Population: 2
+  max:
+    Population: 2
+
+- name: Meat
+  base_price: 15
+  demand:
+    Population: 1.5
+  max:
+    Population: 2
+
+- name: Fish
+  base_price: 10
+  demand:
+    Population: 1.5
+  max:
+    Population: 2
+
+- name: Livestock
+  base_price: 25
+  demand:
+    Farmer: 6
+  max:
+    Population: 1
+    Farmer: 8
