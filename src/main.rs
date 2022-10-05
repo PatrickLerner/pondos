@@ -2,12 +2,14 @@ use bevy::{prelude::*, reflect::TypeUuid, render::texture::ImageSettings};
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_ecs_tilemap::prelude::*;
 use bevy_egui::{egui, EguiContext, EguiPlugin};
+use clap::Command;
 use dotenv::dotenv;
 use egui::{FontFamily, FontId, TextStyle};
 use game_time::{GameTime, GameTimeAdvanceEvent};
 use serde::Deserialize;
 use std::collections::HashMap;
 
+mod debug_populations;
 mod game_time;
 mod helpers;
 mod loading;
@@ -146,8 +148,27 @@ fn handle_travel(
     }
 }
 
+fn cli() -> Command {
+    Command::new("pondos")
+        .about("a game about trading")
+        .subcommand(
+            Command::new("debug_populations")
+                .about("Gives the yearly value each population brings to debug game balance"),
+        )
+}
+
 fn main() {
     dotenv().ok();
+
+    let matches = cli().get_matches();
+
+    match matches.subcommand() {
+        Some(("debug_populations", _)) => {
+            debug_populations::debug_populations();
+            std::process::exit(0);
+        }
+        _ => {}
+    }
 
     let mut app = App::new();
 
