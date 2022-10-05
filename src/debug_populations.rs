@@ -1,24 +1,26 @@
 use std::{fs::File, io::BufReader};
 
-use crate::{population::Populations, settlement::Resources};
+use crate::{population::Population, settlement::Resource};
 
 pub fn debug_populations() {
-    let resources: Resources = {
+    let resources: Vec<Resource> = {
         let file = File::open("assets/game.resources").unwrap();
         let reader = BufReader::new(file);
         serde_yaml::from_reader(reader).unwrap()
     };
-    let populations: Populations = {
+    let mut populations: Vec<Population> = {
         let file = File::open("assets/game.populations").unwrap();
         let reader = BufReader::new(file);
         serde_yaml::from_reader(reader).unwrap()
     };
 
+    populations.sort_by(|a, b| a.name.partial_cmp(&b.name).unwrap());
+
     println!("Debug yearly value of population production:\n");
 
     let mut lines = vec![];
 
-    for population in populations.0.iter() {
+    for population in populations.iter() {
         let mut output = 0;
 
         for production in population.production.iter() {
@@ -31,7 +33,6 @@ pub fn debug_populations() {
                 1
             } else {
                 resources
-                    .0
                     .iter()
                     .find(|i| i.name == production.resource)
                     .unwrap()

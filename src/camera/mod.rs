@@ -84,3 +84,12 @@ pub fn pan_orbit_camera(
 pub fn spawn_camera(mut commands: Commands) {
     commands.spawn_bundle(Camera2dBundle::default());
 }
+
+pub struct CameraPlugin;
+
+impl Plugin for CameraPlugin {
+    fn build(&self, app: &mut App) {
+        app.init_resource::<GameCamera>()
+            .add_startup_system(spawn_camera);
+    }
+}

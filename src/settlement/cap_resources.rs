@@ -1,16 +1,14 @@
 use crate::{
     game_time::{GameTime, GameTimeAdvancedEvent},
-    settlement::Settlement,
+    settlement::{Resource, Settlement},
     Settings,
 };
 use bevy::prelude::*;
 
-use super::Resources;
-
 pub fn cap_resources(
     mut settlements: Query<&mut Settlement>,
     mut events: EventReader<GameTimeAdvancedEvent>,
-    resources: Option<Res<Resources>>,
+    resources: Option<Res<Vec<Resource>>>,
     settings: Option<Res<Settings>>,
 ) {
     if let Some(resources) = resources {
@@ -34,7 +32,7 @@ impl Settlement {
     pub fn resource_cap_tick(
         &mut self,
         time: &GameTime,
-        resources: &Resources,
+        resources: &[Resource],
         settings: &Settings,
     ) {
         let multiplier = settings.max_multipliers.value(time);
@@ -42,7 +40,7 @@ impl Settlement {
         let max_gold = settings.max_gold.value(&self.populations).ceil() as u32;
         cap_resource(&mut self.gold, multiplier, max_gold);
 
-        for resource in resources.0.iter() {
+        for resource in resources.iter() {
             let max = resource.max.value(&self.populations).ceil() as u32;
 
             cap_resource(

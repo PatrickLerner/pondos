@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
-use crate::{CalculatedPopulationValue, GameState};
-use bevy::{prelude::*, reflect::TypeUuid};
+use crate::{types::CalculatedPopulationValue, GameState};
+use bevy::prelude::*;
 use serde::Deserialize;
 
 mod cap_resources;
@@ -30,11 +30,7 @@ pub struct Position {
     pub y: u32,
 }
 
-#[derive(Debug, Deserialize, TypeUuid)]
-#[uuid = "b8c204ad-f39e-4358-a88b-24d2c342140f"]
-pub struct Resources(pub Vec<Resource>);
-
-#[derive(Debug, Deserialize, PartialEq)]
+#[derive(Debug, Deserialize, PartialEq, Clone)]
 #[serde(rename_all = "lowercase")]
 pub struct Resource {
     pub name: String,

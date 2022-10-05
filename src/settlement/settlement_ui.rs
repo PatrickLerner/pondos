@@ -31,7 +31,7 @@ pub fn settlement_ui(
         egui::CentralPanel::default().show(egui_context.ctx_mut(), |ui| {
             ui.label(
                 RichText::new(&settlement.name)
-                    .text_style(crate::panel_heading())
+                    .text_style(crate::ui_config::panel_heading())
                     .strong(),
             );
             ui.add_space(15.);

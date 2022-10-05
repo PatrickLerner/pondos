@@ -1,4 +1,4 @@
-use super::{Resources, SelectedSettlement, Settlement};
+use super::{Resource, SelectedSettlement, Settlement};
 use crate::{GameState, Player};
 use bevy::prelude::*;
 use bevy_egui::{
@@ -117,7 +117,7 @@ pub fn trade_ui(
     mut settlements: Query<&mut Settlement>,
     mut player: ResMut<Player>,
     mut game_state: ResMut<State<GameState>>,
-    resources: Res<Resources>,
+    resources: Res<Vec<Resource>>,
 ) {
     if let Some(entity) = selected_settlement.as_ref() {
         let mut settlement = settlements
@@ -136,7 +136,7 @@ pub fn trade_ui(
         egui::CentralPanel::default().show(egui_context.ctx_mut(), |ui| {
             ui.label(
                 RichText::new(&settlement.name)
-                    .text_style(crate::panel_heading())
+                    .text_style(crate::ui_config::panel_heading())
                     .strong(),
             );
             ui.add_space(15.);
@@ -157,7 +157,7 @@ pub fn trade_ui(
                     ui.end_row();
                 }
 
-                for resource in resources.0.iter() {
+                for resource in resources.iter() {
                     let demand = resource.demand.value(&settlement.populations).ceil() as u32;
 
                     let prices = PriceCalculator {

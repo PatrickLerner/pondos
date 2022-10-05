@@ -1,16 +1,15 @@
 use crate::{
     game_time::{GameTime, GameTimeAdvancedEvent},
     settlement::Settlement,
-    SeasonalAmount,
+    types::SeasonalAmount,
 };
-use bevy::{prelude::*, reflect::TypeUuid};
+use bevy::prelude::*;
 use serde::Deserialize;
-use std::collections::HashSet;
 
 pub fn population_production(
     mut settlements: Query<&mut Settlement>,
     mut events: EventReader<GameTimeAdvancedEvent>,
-    populations: Option<Res<Populations>>,
+    populations: Option<Res<Vec<Population>>>,
 ) {
     if let Some(populations) = populations {
         for event in events.iter() {
@@ -35,17 +34,13 @@ pub struct Production {
     pub amount: SeasonalAmount<u32>,
 }
 
-#[derive(Debug, Deserialize, TypeUuid)]
-#[uuid = "e7ac1c59-c2ac-4a77-9ace-532038a44758"]
-pub struct Populations(pub HashSet<Population>);
-
 impl Settlement {
-    pub fn production_tick(&mut self, time: &GameTime, populations: &Populations) {
+    pub fn production_tick(&mut self, time: &GameTime, populations: &[Population]) {
         for population in self.populations.clone() {
-            let population = populations.0.iter().find(|i| i.name == population).unwrap();
+            let population = populations.iter().find(|i| i.name == population).unwrap();
 
             for production in population.production.iter() {
-                let amount = production.amount.value(&time);
+                let amount = production.amount.value(time);
 
                 let resource = if production.resource == "Gold" {
                     &mut self.gold

@@ -1,7 +1,7 @@
 use crate::{
     game_time::GameTime,
-    population::Populations,
-    settlement::{Resources, Settlement},
+    population::Population,
+    settlement::{Resource, Settlement},
     Settings,
 };
 use bevy::prelude::*;
@@ -11,8 +11,8 @@ use super::RequiresInitialization;
 pub fn initialize_settlements(
     mut commands: Commands,
     mut uninitialized_settlements: Query<(Entity, &mut Settlement), With<RequiresInitialization>>,
-    resources: Option<Res<Resources>>,
-    populations: Option<Res<Populations>>,
+    resources: Option<Res<Vec<Resource>>>,
+    populations: Option<Res<Vec<Population>>>,
     settings: Option<Res<Settings>>,
 ) {
     if let Some(resources) = resources {
