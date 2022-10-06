@@ -1,6 +1,6 @@
 use super::{FeaturesTilemap, MapImage};
 use crate::{
-    helpers::camera::GameCamera,
+    camera::GameCamera,
     map::constants::{GRASS, HILLS, MOUNTAIN, TILEMAP_SIZE, WATER, WOODS, Z_FEATURES, Z_GROUND},
     map::MapSize,
 };

@@ -1,6 +1,6 @@
 use crate::{
-    population::Populations,
-    settlement::{Resources, Settlement},
+    population::Population,
+    settlement::{Resource, Settlement},
     GameState, Player, Settings,
 };
 use bevy::{prelude::*, reflect::TypeUuid};
@@ -21,6 +21,14 @@ pub struct AssetsLoading(Vec<HandleUntyped>);
 #[derive(Debug, Deserialize, TypeUuid)]
 #[uuid = "39cadc56-aa9c-4543-8640-a018b74b5052"]
 pub struct Settlements(Vec<Settlement>);
+
+#[derive(Debug, Deserialize, TypeUuid)]
+#[uuid = "b8c204ad-f39e-4358-a88b-24d2c342140f"]
+pub struct Resources(Vec<Resource>);
+
+#[derive(Debug, Deserialize, TypeUuid)]
+#[uuid = "e7ac1c59-c2ac-4a77-9ace-532038a44758"]
+pub struct Populations(Vec<Population>);
 
 pub struct MapImage(Handle<Image>);
 pub struct FeaturesTilemap((Entity, TilemapId));
@@ -44,9 +52,10 @@ pub fn setup(mut commands: Commands, server: Res<AssetServer>) {
     commands.insert_resource(settings);
 }
 
+#[allow(clippy::type_complexity)]
 pub fn transition(
     mut game_state: ResMut<State<GameState>>,
-    resources: (
+    res: (
         Option<Res<Handle<Settlements>>>,
         Option<Res<Handle<Populations>>>,
         Option<Res<MapImage>>,
@@ -62,7 +71,7 @@ pub fn transition(
         map_image_handle,
         resources_handle,
         settings_handle,
-    ) = resources;
+    ) = res;
 
     if settlement_handle.is_none()
         && populations_handle.is_none()

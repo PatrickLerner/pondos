@@ -21,11 +21,13 @@ pub fn load_settlements(
                     log::debug!("loading settlements data");
                     let settlements = settlements.remove(settlement_handle.id).unwrap();
 
-                    for settlement in settlements.0.into_iter() {
+                    for mut settlement in settlements.0.into_iter() {
                         let position = TilePos {
                             x: settlement.position.x,
                             y: map_size.height - 1 - settlement.position.y,
                         };
+
+                        settlement.populations.sort();
 
                         let tile_entity = commands
                             .spawn()
