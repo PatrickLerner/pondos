@@ -35,7 +35,7 @@ pub struct Position {
 pub struct Resource {
     pub name: String,
     pub base_price: u32,
-    demand: CalculatedPopulationValue,
+    pub demand: CalculatedPopulationValue,
     max: CalculatedPopulationValue,
 }
 

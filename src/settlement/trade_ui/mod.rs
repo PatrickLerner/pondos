@@ -1,15 +1,13 @@
 use super::{Resource, SelectedSettlement, Settlement};
-use crate::{GameState, Player};
+use crate::{price_calculator::PriceCalculator, AveragePrices, GameState, Player};
 use bevy::prelude::*;
 use bevy_egui::{
     egui::{self, Align, Align2, RichText},
     EguiContext,
 };
 
-mod price_calculator;
 mod trade_row;
 
-use price_calculator::PriceCalculator;
 use trade_row::TradeRow;
 
 const WINDOW_PADDING_X: f32 = 40.;
@@ -25,6 +23,7 @@ pub fn trade_ui(
     mut game_state: ResMut<State<GameState>>,
     resources: Res<Vec<Resource>>,
     windows: Res<Windows>,
+    average_prices: Res<AveragePrices>,
 ) {
     if let Some(entity) = selected_settlement.as_ref() {
         let mut settlement = settlements
@@ -74,6 +73,7 @@ pub fn trade_ui(
                                         .text_style(crate::ui_config::panel_heading())
                                         .strong(),
                                 );
+                                ui.label("");
                                 ui.end_row();
                             }
 
@@ -87,6 +87,7 @@ pub fn trade_ui(
                                 ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
                                     ui.label(format!("{}", settlement.gold));
                                 });
+                                ui.label("");
                                 ui.end_row();
                             }
 
@@ -107,6 +108,10 @@ pub fn trade_ui(
                                     settlement: &mut settlement,
                                     sell_price: prices.sell_price(),
                                     buy_price: prices.buy_price(),
+                                    average_price: *average_prices
+                                        .prices
+                                        .get(&resource.name)
+                                        .unwrap_or(&0.0),
                                 }
                                 .render();
                                 ui.end_row();
