@@ -13,7 +13,7 @@ pub fn configure_text_styles(ctx: &egui::Context) {
     let mut style = (*ctx.style()).clone();
     style
         .text_styles
-        .insert(panel_heading(), FontId::new(40.0, Proportional));
+        .insert(panel_heading(), FontId::new(20.0, Proportional));
     ctx.set_style(style);
 }
 

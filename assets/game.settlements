@@ -4,7 +4,7 @@
     y: 29
   populations:
     - Beekeeper
-    - Farmer
+    - Beekeeper
     - Fisher
     - Fisher
     - Hunter
@@ -19,17 +19,17 @@
     x: 48
     y: 27
   populations:
-    - Blacksmith
     - Beekeeper
-    - Farmer
-    - Farmer
-    - Farmer
+    - Beekeeper
+    - Blacksmith
+    - Blacksmith
     - Fisher
     - Fisher
     - Hunter
     - Hunter
     - Lumberjack
     - Merchant
+    - Miner
     - Shepherd
 
 - name: Pityos
@@ -139,16 +139,16 @@
     x: 37
     y: 24
   populations:
+    - Beekeeper
+    - Beekeeper
+    - Beekeeper
     - Brewer
-    - Beekeeper
-    - Beekeeper
-    - Farmer
-    - Farmer
-    - Farmer
+    - Fisher
+    - Fisher
     - Fisher
     - Fisher
     - Hunter
-    - Miner
+    - Hunter
     - Miner
 
 - name: Hermonassa
