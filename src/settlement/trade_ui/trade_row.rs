@@ -98,9 +98,9 @@ impl<'a> TradeRow<'a> {
 
             let wording = match rel {
                 -100..=-50 => "extremely cheap",
-                -51..=-25 => "cheap",
-                -26..=-10 => "below average",
-                -11..=10 => "average",
+                -49..=-25 => "cheap",
+                -24..=-10 => "below average",
+                -9..=10 => "average",
                 11..=25 => "above average",
                 26..=50 => "expensive",
                 51..=100 => "very expensive",

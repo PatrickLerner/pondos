@@ -21,10 +21,11 @@ pub fn trade_ui(
     mut settlements: Query<&mut Settlement>,
     mut player: ResMut<Player>,
     mut game_state: ResMut<State<GameState>>,
-    resources: Res<Vec<Resource>>,
     windows: Res<Windows>,
-    average_prices: Res<AveragePrices>,
+    trade_info: (Res<Vec<Resource>>, Res<AveragePrices>),
 ) {
+    let (resources, average_prices) = trade_info;
+
     if let Some(entity) = selected_settlement.as_ref() {
         let mut settlement = settlements
             .get_mut(entity.0)
