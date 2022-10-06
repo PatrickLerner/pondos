@@ -92,7 +92,13 @@ fn resource_info(ui: &mut Ui, settlement: &Settlement) {
     let resources = &settlement.resources;
     ui.label(format!("Gold: {}", settlement.gold));
 
+    let mut lines = vec![];
     for (resource, amount) in resources.iter().filter(|(_, amount)| *amount > &0) {
-        ui.label(format!("{}: {}", resource, amount));
+        lines.push(format!("{}: {}", resource, amount));
+    }
+    lines.sort();
+
+    for line in lines {
+        ui.label(line);
     }
 }

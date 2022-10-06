@@ -1,65 +1,93 @@
 - name: Beer
   base_price: 7
   demand:
-    Population: 1
-  max:
-    Population: 1
-
-- name: Brick
-  base_price: 3
-  demand:
-    Population: 1
-  max:
-    Population: 1
-
-- name: Cloth
-  base_price: 15
-  demand:
-    Population: 1
-  max:
-    Population: 1
-
-- name: Clothing
-  base_price: 35
-  demand:
-    Population: 1
-  max:
-    Population: 1
-
-- name: Hemp
-  base_price: 3
-  demand:
-    Population: 1
-  max:
-    Population: 1
-
-- name: Honey
-  base_price: 5
-  demand:
-    Population: 1
+    Population: 1.5
   max:
     Population: 1
 
 - name: Mead
   base_price: 15
   demand:
-    Population: 1
+    Population: 1.5
+    Merchant: 1
   max:
     Population: 1
+
+- name: Brick
+  base_price: 12
+  demand:
+    Population: 2
+  max:
+    Population: 2
+
+- name: Cloth
+  base_price: 15
+  demand:
+    Population: 0.2
+    Tailor: 1.8
+  max:
+    Tailor: 2
+    Clothmaker: 2
+
+- name: Wool
+  base_price: 5
+  demand:
+    Population: 0.2
+    Tailor: 1
+  max:
+    Shepherd: 2
+    Tailor: 2
+    Population: 0.2
+
+- name: Pelts
+  base_price: 30
+  demand:
+    Population: 0.3
+    Tailor: 1.5
+    Merchant: 1
+  max:
+    Population: 0.3
+
+- name: Clothing
+  base_price: 35
+  demand:
+    Population: 1
+    Merchant: 2
+  max:
+    Tailor: 2
+    Population: 0.2
+
+- name: Hemp
+  base_price: 12
+  demand:
+    Population: 3
+  max:
+    Population: 2
+
+- name: Honey
+  base_price: 5
+  demand:
+    Population: 2
+  max:
+    Population: 2
 
 - name: Raw Metal
   base_price: 5
   demand:
-    Population: 1
+    Population: 0.5
+    Blacksmith: 3
   max:
-    Population: 1
+    Miner: 2
+    Population: 0.5
 
 - name: Metal Goods
   base_price: 17
   demand:
-    Population: 1
+    Population: 0.4
+    Miner: 2
   max:
-    Population: 1
+    Blacksmith: 1
+    Population: 0.5
 
 - name: Pitch
   base_price: 11
@@ -72,13 +100,16 @@
   base_price: 6
   demand:
     Population: 1
+    Fisher: 2
+    Hunter: 1
   max:
-    Population: 1
+    Population: 3
 
 - name: Spices
   base_price: 50
   demand:
     Population: 1
+    Merchant: 1
   max:
     Population: 1
 
@@ -86,25 +117,20 @@
   base_price: 40
   demand:
     Population: 1
+    Merchant: 1
   max:
-    Population: 1
+    Population: 0.4
 
 - name: Wood
-  base_price: 3
+  base_price: 12
   demand:
-    Population: 1
+    Population: 2
+    Miner: 1
   max:
-    Population: 1
-
-- name: Wool
-  base_price: 5
-  demand:
-    Population: 1
-  max:
-    Population: 1
+    Population: 2
 
 - name: Grain
-  base_price: 3
+  base_price: 12
   demand:
     Population: 1
   max:
@@ -114,21 +140,16 @@
 - name: Cheese
   base_price: 10
   demand:
-    Population: 2
+    Population: 1
+    Merchant: 2
   max:
     Population: 2
-
-- name: Pelts
-  base_price: 30
-  demand:
-    Population: 1
-  max:
-    Population: 1
 
 - name: Meat
   base_price: 28
   demand:
     Population: 1.5
+    Merchant: 2
   max:
     Population: 2
 
@@ -136,12 +157,15 @@
   base_price: 13
   demand:
     Population: 1.5
+    Merchant: 1
   max:
-    Population: 2
+    Fisher: 1
+    Population: 1
 
 - name: Livestock
   base_price: 50
   demand:
+    Cheesemaker: 1
     Farmer: 6
   max:
     Population: 1

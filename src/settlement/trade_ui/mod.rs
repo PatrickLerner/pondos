@@ -2,120 +2,15 @@ use super::{Resource, SelectedSettlement, Settlement};
 use crate::{GameState, Player};
 use bevy::prelude::*;
 use bevy_egui::{
-    egui::{self, Align, Align2, RichText, Ui},
+    egui::{self, Align, Align2, RichText},
     EguiContext,
 };
 
-struct TradeRow<'a> {
-    ui: &'a mut Ui,
-    resource: String,
-    settlement: &'a mut Settlement,
-    player: &'a mut Player,
-    sell_price: u32,
-    buy_price: u32,
-}
+mod price_calculator;
+mod trade_row;
 
-impl<'a> TradeRow<'a> {
-    fn render(&mut self) {
-        self.ui.label(&self.resource);
-        let player_count = *self.player.resources.get(&self.resource).unwrap_or(&0);
-        let settlement_count = *self.settlement.resources.get(&self.resource).unwrap_or(&0);
-
-        {
-            self.ui
-                .with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
-                    ui.label(format!("{}", player_count));
-                });
-        }
-
-        {
-            let button = self.ui.add_sized(
-                [60., 20.],
-                egui::Button::new(format!("sell ({})", self.sell_price)),
-            );
-
-            if button.clicked() && player_count > 0 && self.settlement.gold >= self.sell_price {
-                *self
-                    .settlement
-                    .resources
-                    .entry(self.resource.clone())
-                    .or_default() += 1;
-                *self
-                    .player
-                    .resources
-                    .entry(self.resource.clone())
-                    .or_default() -= 1;
-                self.player.gold += self.sell_price;
-                self.settlement.gold -= self.sell_price;
-                log::info!("sell {} for {}", self.resource, self.sell_price);
-            }
-        }
-
-        {
-            let button = self.ui.add_sized(
-                [60., 20.],
-                egui::Button::new(format!("buy ({})", self.buy_price)),
-            );
-
-            if button.clicked() && settlement_count > 0 && self.player.gold >= self.buy_price {
-                *self
-                    .settlement
-                    .resources
-                    .entry(self.resource.clone())
-                    .or_default() -= 1;
-                *self
-                    .player
-                    .resources
-                    .entry(self.resource.clone())
-                    .or_default() += 1;
-                self.player.gold -= self.buy_price;
-                self.settlement.gold += self.buy_price;
-                log::info!("buy {} for {}", self.resource, self.buy_price);
-            }
-        }
-
-        {
-            self.ui
-                .with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
-                    ui.label(format!("{}", settlement_count));
-                });
-        }
-    }
-}
-
-pub struct PriceCalculator {
-    base_price: u32,
-    demand: u32,
-    supply: u32,
-}
-
-const MIN_SHORTAGE_MOD: f32 = 0.8;
-const MAX_SHORTAGE_MOD: f32 = 2.0;
-
-impl PriceCalculator {
-    fn shortage_mod(&self) -> f32 {
-        let res = (self.demand as f32 - self.supply as f32) / self.demand as f32;
-
-        f32::clamp(1. + res, MIN_SHORTAGE_MOD, MAX_SHORTAGE_MOD)
-    }
-
-    /// price for which player can buy
-    fn buy_price(&self) -> u32 {
-        (self.base_price as f32 * self.shortage_mod()).ceil() as u32
-    }
-
-    /// price for which player can sell
-    fn sell_price(&self) -> u32 {
-        let price = Self {
-            base_price: self.base_price,
-            demand: self.demand,
-            supply: self.supply + 1,
-        };
-
-        // we would buy for price we could sell it at if we had one more
-        price.buy_price()
-    }
-}
+use price_calculator::PriceCalculator;
+use trade_row::TradeRow;
 
 const WINDOW_PADDING_X: f32 = 40.;
 const WINDOW_PADDING_Y: f32 = 80.;
@@ -166,11 +61,7 @@ pub fn trade_ui(
                     .show(ui, |ui| {
                         egui::Grid::new("resources").show(ui, |ui| {
                             {
-                                ui.label(
-                                    RichText::new("Resource")
-                                        .text_style(crate::ui_config::panel_heading())
-                                        .strong(),
-                                );
+                                ui.label("");
                                 ui.label(
                                     RichText::new("Convoy")
                                         .text_style(crate::ui_config::panel_heading())
