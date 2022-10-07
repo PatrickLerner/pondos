@@ -36,7 +36,7 @@ bevy_common_assets = { version = "0.3", features = ["yaml"] }
 clap = { version = "4.0", features = ["derive"] }
 
 # keep the following in sync with Bevy's dependencies
-winit = { version = "0.26.0", default-features = false }
+winit = { version = "0.27.3", default-features = false }
 image = { version = "0.24", default-features = false }
 
 [build-dependencies]
