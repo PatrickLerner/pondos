@@ -30,9 +30,11 @@ const MIN_MAX_ZOOM: f32 = 1.0;
 const KEYBOARD_SPEED: f32 = 10.0;
 
 pub fn pan_orbit_camera(
-    mut ev_motion: EventReader<MouseMotion>,
-    mut ev_scroll: EventReader<MouseWheel>,
-    input_mouse: Res<Input<MouseButton>>,
+    mouse_events: (
+        EventReader<MouseMotion>,
+        EventReader<MouseWheel>,
+        Res<Input<MouseButton>>,
+    ),
     keyboard_input: Res<Input<KeyCode>>,
     mut game_camera: ResMut<GameCamera>,
     mut camera: Query<&mut Transform, With<Camera>>,
@@ -40,6 +42,8 @@ pub fn pan_orbit_camera(
     windows: Res<Windows>,
     map_size: Res<MapSize>,
 ) {
+    let (mut ev_motion, mut ev_scroll, input_mouse) = mouse_events;
+
     let map_pixel_size = map_size.pixel_size();
     let window = windows.primary();
     let max_zoom_x = map_pixel_size.x / window.width();

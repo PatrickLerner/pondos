@@ -1,15 +1,13 @@
-use super::{CloseSettlementUIEvent, SelectedSettlement, Settlement};
+use super::{
+    CloseSettlementUIEvent, SelectedSettlement, Settlement, MAX_HEIGHT, MAX_WIDTH,
+    WINDOW_PADDING_X, WINDOW_PADDING_Y,
+};
 use crate::game_state::GameState;
 use bevy::prelude::*;
 use bevy_egui::{
     egui::{self, Align, Align2, Ui},
     EguiContext,
 };
-
-const WINDOW_PADDING_X: f32 = 40.;
-const WINDOW_PADDING_Y: f32 = 80.;
-const MAX_WIDTH: f32 = 800.;
-const MAX_HEIGHT: f32 = 600.;
 
 pub fn settlement_ui(
     mut egui_context: ResMut<EguiContext>,
@@ -89,8 +87,6 @@ fn resource_info(ui: &mut Ui, settlement: &Settlement) {
     ui.add_space(5.);
 
     let resources = &settlement.resources;
-    ui.label(format!("Gold: {}", settlement.gold));
-
     let mut lines = vec![];
     for (resource, amount) in resources.iter().filter(|(_, amount)| *amount > &0) {
         lines.push(format!("{}: {}", resource, amount));
@@ -100,4 +96,6 @@ fn resource_info(ui: &mut Ui, settlement: &Settlement) {
     for line in lines {
         ui.label(line);
     }
+
+    ui.label(format!("Gold: {}", settlement.gold));
 }

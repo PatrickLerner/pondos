@@ -65,7 +65,9 @@ impl<'a> TradeRow<'a> {
         }
 
         {
-            let enabled = settlement_count > 0 && self.player.gold >= self.buy_price;
+            let enabled = settlement_count > 0
+                && self.player.gold >= self.buy_price
+                && self.player.resource_space_left() > 0;
             let text = format!("buy ({})", self.buy_price);
 
             if button(self.ui, text, enabled).clicked() && enabled {

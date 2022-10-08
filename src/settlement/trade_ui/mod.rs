@@ -1,4 +1,6 @@
-use super::{SelectedSettlement, Settlement};
+use super::{
+    SelectedSettlement, Settlement, MAX_HEIGHT, MAX_WIDTH, WINDOW_PADDING_X, WINDOW_PADDING_Y,
+};
 use crate::{
     game_state::GameState,
     player::Player,
@@ -14,11 +16,6 @@ use bevy_egui::{
 mod trade_row;
 
 use trade_row::TradeRow;
-
-const WINDOW_PADDING_X: f32 = 40.;
-const WINDOW_PADDING_Y: f32 = 80.;
-const MAX_WIDTH: f32 = 800.;
-const MAX_HEIGHT: f32 = 600.;
 
 pub fn trade_ui(
     mut egui_context: ResMut<EguiContext>,
@@ -83,20 +80,6 @@ pub fn trade_ui(
                                 ui.end_row();
                             }
 
-                            {
-                                ui.label("Gold");
-                                ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
-                                    ui.label(format!("{}", player.gold));
-                                });
-                                ui.label("");
-                                ui.label("");
-                                ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
-                                    ui.label(format!("{}", settlement.gold));
-                                });
-                                ui.label("");
-                                ui.end_row();
-                            }
-
                             for resource in resources.iter() {
                                 let demand =
                                     resource.demand.value(&settlement.populations).ceil() as u32;
@@ -120,6 +103,43 @@ pub fn trade_ui(
                                         .unwrap_or(&0.0),
                                 }
                                 .render();
+                                ui.end_row();
+                            }
+
+                            {
+                                for _ in 0..6 {
+                                    ui.separator();
+                                }
+                                ui.end_row();
+                            }
+
+                            {
+                                ui.label("Gold");
+                                ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
+                                    ui.label(format!("{}", player.gold));
+                                });
+                                ui.label("");
+                                ui.label("");
+                                ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
+                                    ui.label(format!("{}", settlement.gold));
+                                });
+                                ui.label("");
+                                ui.end_row();
+                            }
+
+                            {
+                                ui.label("Space");
+                                ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
+                                    ui.label(format!(
+                                        "{} / {}",
+                                        player.resource_space_used(),
+                                        player.resource_space_total()
+                                    ));
+                                });
+                                ui.label("");
+                                ui.label("");
+                                ui.label("");
+                                ui.label("");
                                 ui.end_row();
                             }
                         });

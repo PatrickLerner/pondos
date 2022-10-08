@@ -20,6 +20,18 @@ impl Player {
         self.location = location;
         self.location_marker_need_update = true;
     }
+
+    pub fn resource_space_total(&self) -> u32 {
+        10
+    }
+
+    pub fn resource_space_left(&self) -> u32 {
+        self.resource_space_total() - self.resource_space_used()
+    }
+
+    pub fn resource_space_used(&self) -> u32 {
+        self.resources.iter().fold(0, |acc, (_, count)| acc + count)
+    }
 }
 
 pub struct PlayerTravelEvent {

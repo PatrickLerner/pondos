@@ -17,6 +17,7 @@ pub fn load_map(
     if let Some(map_image_handle) = map_image_handle {
         if map_image.get(&map_image_handle.0).is_some() {
             log::debug!("loading terrain data");
+
             let map_image = map_image.remove(map_image_handle.0.id).unwrap();
 
             let texture_handle: Handle<Image> = asset_server.load("tiles.png");
@@ -29,6 +30,16 @@ pub fn load_map(
                 width: size.x as u32,
                 height: size.y as u32,
             };
+            let tile_size = TilemapTileSize {
+                x: TILEMAP_SIZE,
+                y: TILEMAP_SIZE,
+            };
+
+            game_camera.pan_max = Vec2::new(
+                tile_size.x * map_size.width as f32,
+                tile_size.y * map_size.height as f32,
+            );
+            game_camera.position = game_camera.pan_max / 2.0;
 
             let mut ground_tile_storage = TileStorage::empty(map_size.into());
             let ground_tilemap_entity = commands.spawn().id();
@@ -82,17 +93,6 @@ pub fn load_map(
                     tile_storage.set(&position, Some(tile_entity));
                 }
             }
-
-            let tile_size = TilemapTileSize {
-                x: TILEMAP_SIZE,
-                y: TILEMAP_SIZE,
-            };
-
-            game_camera.pan_max = Vec2::new(
-                tile_size.x * map_size.width as f32,
-                tile_size.y * map_size.height as f32,
-            );
-            game_camera.position = game_camera.pan_max / 2.0;
 
             commands
                 .entity(ground_tilemap_entity)
