@@ -86,6 +86,9 @@
   demand:
     Population: 0.4
     Miner: 2
+    Farmer: 1
+    Salt Worker: 0.4
+    Lumberjack: 1
   max:
     Blacksmith: 1
     Population: 0.5

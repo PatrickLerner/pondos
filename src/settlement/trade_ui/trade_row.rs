@@ -44,7 +44,7 @@ impl<'a> TradeRow<'a> {
         }
 
         {
-            let enabled = player_count > 0 && self.settlement.gold >= self.sell_price;
+            let enabled = player_count > 0 && self.settlement.silver >= self.sell_price;
             let text = format!("sell ({})", self.sell_price);
 
             if button(self.ui, text, enabled).clicked() && enabled {
@@ -58,15 +58,15 @@ impl<'a> TradeRow<'a> {
                     .resources
                     .entry(self.resource.clone())
                     .or_default() -= 1;
-                self.player.gold += self.sell_price;
-                self.settlement.gold -= self.sell_price;
+                self.player.silver += self.sell_price;
+                self.settlement.silver -= self.sell_price;
                 log::info!("sell {} for {}", self.resource, self.sell_price);
             }
         }
 
         {
             let enabled = settlement_count > 0
-                && self.player.gold >= self.buy_price
+                && self.player.silver >= self.buy_price
                 && self.player.resource_space_left() > 0;
             let text = format!("buy ({})", self.buy_price);
 
@@ -81,8 +81,8 @@ impl<'a> TradeRow<'a> {
                     .resources
                     .entry(self.resource.clone())
                     .or_default() += 1;
-                self.player.gold -= self.buy_price;
-                self.settlement.gold += self.buy_price;
+                self.player.silver -= self.buy_price;
+                self.settlement.silver += self.buy_price;
                 log::info!("buy {} for {}", self.resource, self.buy_price);
             }
         }

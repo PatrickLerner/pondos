@@ -31,7 +31,7 @@
 
 - name: Merchant
   production:
-    - resource: Gold
+    - resource: Silver
       amount:
         growth: 120
         summer: 120

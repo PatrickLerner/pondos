@@ -39,7 +39,7 @@ pub fn debug_populations() {
                 + production.amount.harvest
                 + 2 * production.amount.winter;
 
-            let base_price = if production.resource == "Gold" {
+            let base_price = if production.resource == "Silver" {
                 1
             } else {
                 resources
@@ -54,7 +54,10 @@ pub fn debug_populations() {
 
         let count = all_pops.iter().filter(|p| **p == population.name).count();
 
-        lines.push(format!("{} {} g/a ({}x)", population.name, output, count));
+        lines.push(format!(
+            "{} {} silver per year ({}x)",
+            population.name, output, count
+        ));
     }
 
     lines.sort();

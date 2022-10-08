@@ -114,14 +114,14 @@ pub fn trade_ui(
                             }
 
                             {
-                                ui.label("Gold");
+                                ui.label("Silver");
                                 ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
-                                    ui.label(format!("{}", player.gold));
+                                    ui.label(format!("{}", player.silver));
                                 });
                                 ui.label("");
                                 ui.label("");
                                 ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
-                                    ui.label(format!("{}", settlement.gold));
+                                    ui.label(format!("{}", settlement.silver));
                                 });
                                 ui.label("");
                                 ui.end_row();

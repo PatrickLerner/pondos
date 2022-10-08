@@ -6,6 +6,7 @@ use clap::Command;
 use dotenv::dotenv;
 use serde::Deserialize;
 
+mod building;
 mod camera;
 mod debug_populations;
 mod game_state;
@@ -24,7 +25,7 @@ mod ui_config;
 #[serde(rename_all = "lowercase")]
 #[uuid = "bafb929f-a7b1-45c3-b907-f71720724940"]
 pub struct Settings {
-    max_gold: types::CalculatedPopulationValue,
+    max_silver: types::CalculatedPopulationValue,
     max_multipliers: types::SeasonalAmount<f32>,
 }
 
@@ -101,7 +102,7 @@ fn main() {
     .insert_resource(ImageSettings::default_nearest())
     .init_resource::<game_time::GameTime>()
     .init_resource::<Option<settlement::SelectedSettlement>>()
-    .init_resource::<Option<settlement::SelectedBuilding>>()
+    .init_resource::<Option<building::SelectedBuilding>>()
     .add_plugins(DefaultPlugins)
     .add_plugin(YamlAssetPlugin::<loading::Settlements>::new(&[
         "settlements",
@@ -117,6 +118,7 @@ fn main() {
     .add_plugin(camera::CameraPlugin)
     .add_plugin(map::MapPlugin)
     .add_plugin(settlement::SettlementPlugin)
+    .add_plugin(building::BuildingPlugin)
     .add_plugin(game_time::GameTimePlugin)
     .add_system(player::handle_travel)
     .add_system(population::population_production)

@@ -28,7 +28,10 @@ pub fn travel_ui(
                 ui.set_width(180.);
                 ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
                     ui.horizontal(|ui| {
-                        if ui.button("Travel").clicked() {
+                        if ui
+                            .add_sized([80., 30.], egui::Button::new("Travel"))
+                            .clicked()
+                        {
                             handle_travel.send(PlayerTravelEvent::new(
                                 entity.0,
                                 settlement.position.x,
@@ -36,7 +39,10 @@ pub fn travel_ui(
                             ));
                             game_state.set(GameState::Settlement).unwrap();
                         }
-                        if ui.button("Abort").clicked() {
+                        if ui
+                            .add_sized([60., 30.], egui::Button::new("Abort"))
+                            .clicked()
+                        {
                             events.send(CloseSettlementUIEvent);
                         }
                     });

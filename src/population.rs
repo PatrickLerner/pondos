@@ -42,8 +42,8 @@ impl Settlement {
             for production in population.production.iter() {
                 let amount = production.amount.value(time);
 
-                let resource = if production.resource == "Gold" {
-                    &mut self.gold
+                let resource = if production.resource == "Silver" {
+                    &mut self.silver
                 } else {
                     self.resources
                         .entry(production.resource.clone())

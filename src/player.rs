@@ -31,7 +31,7 @@ const BASE_RESOURCE_SPACE: u32 = 5;
 pub struct Player {
     pub position: Vec2,
     pub location: Option<Entity>,
-    pub gold: u32,
+    pub silver: u32,
     pub resources: HashMap<String, u32>,
     pub location_marker: Option<Entity>,
     pub location_marker_texture_atlas_handle: Option<Handle<TextureAtlas>>,

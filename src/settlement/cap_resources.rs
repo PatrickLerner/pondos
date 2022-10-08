@@ -38,8 +38,8 @@ impl Settlement {
     ) {
         let multiplier = settings.max_multipliers.value(time);
 
-        let max_gold = settings.max_gold.value(&self.populations).ceil() as u32;
-        cap_resource(&mut self.gold, multiplier, max_gold);
+        let max_silver = settings.max_silver.value(&self.populations).ceil() as u32;
+        cap_resource(&mut self.silver, multiplier, max_silver);
 
         for resource in resources.iter() {
             let max = resource.max.value(&self.populations).ceil() as u32;

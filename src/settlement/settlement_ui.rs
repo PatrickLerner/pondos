@@ -1,8 +1,11 @@
 use super::{
-    BuildingType, CloseSettlementUIEvent, SelectedBuilding, SelectedSettlement, Settlement,
-    MAX_HEIGHT, MAX_WIDTH, WINDOW_PADDING_X, WINDOW_PADDING_Y,
+    CloseSettlementUIEvent, SelectedSettlement, Settlement, MAX_HEIGHT, MAX_WIDTH,
+    WINDOW_PADDING_X, WINDOW_PADDING_Y,
 };
-use crate::game_state::GameState;
+use crate::{
+    building::{BuildingType, SelectedBuilding},
+    game_state::GameState,
+};
 use bevy::prelude::*;
 use bevy_egui::{
     egui::{self, Align, Align2, Ui},
@@ -96,7 +99,10 @@ fn buildings_ui(
     for building in settlement.buildings.iter() {
         match building.building_type {
             BuildingType::Shipyard => {
-                if ui.button("Shipyard").clicked() {
+                if ui
+                    .add_sized([100., 30.], egui::Button::new("Shipyard"))
+                    .clicked()
+                {
                     *selected_building = Some(SelectedBuilding(building.entity));
                     game_state.push(GameState::Shipyard).unwrap();
                 }
@@ -129,5 +135,5 @@ fn resource_info(ui: &mut Ui, settlement: &Settlement) {
         ui.label(line);
     }
 
-    ui.label(format!("Gold: {}", settlement.gold));
+    ui.label(format!("Silver: {}", settlement.silver));
 }
