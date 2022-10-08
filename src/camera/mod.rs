@@ -8,6 +8,8 @@ use bevy_egui::EguiContext;
 pub struct GameCamera {
     pub position: Vec2,
     pub scroll: f32,
+    pub pan_min: Vec2,
+    pub pan_max: Vec2,
 }
 
 impl Default for GameCamera {
@@ -15,6 +17,8 @@ impl Default for GameCamera {
         GameCamera {
             position: Vec2::ZERO,
             scroll: 1.0,
+            pan_min: (0., 0.).into(),
+            pan_max: (0., 0.).into(),
         }
     }
 }
@@ -74,6 +78,11 @@ pub fn pan_orbit_camera(
 
     game_camera.position.x -= pan.x * game_camera.scroll;
     game_camera.position.y += pan.y * game_camera.scroll;
+
+    game_camera.position = game_camera
+        .position
+        .clamp(game_camera.pan_min, game_camera.pan_max);
+
     game_camera.scroll -= scroll / 300.0;
     game_camera.scroll = game_camera.scroll.max(MIN_ZOOM).min(MAX_ZOOM);
 

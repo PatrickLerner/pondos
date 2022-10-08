@@ -88,10 +88,11 @@ pub fn load_map(
                 y: TILEMAP_SIZE,
             };
 
-            game_camera.position = Vec2::new(
-                tile_size.x * map_size.width as f32 / 2.0,
-                tile_size.y * map_size.height as f32 / 2.0,
+            game_camera.pan_max = Vec2::new(
+                tile_size.x * map_size.width as f32,
+                tile_size.y * map_size.height as f32,
             );
+            game_camera.position = game_camera.pan_max / 2.0;
 
             commands
                 .entity(ground_tilemap_entity)
