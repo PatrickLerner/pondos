@@ -1,5 +1,8 @@
 use super::{FeaturesTilemap, MapImage, Settlements};
-use crate::map::{constants::SETTLEMENT, MapSize};
+use crate::{
+    map::{constants::SETTLEMENT, MapSize},
+    settlement::{BuildingType, Shipyard},
+};
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
 
@@ -25,6 +28,16 @@ pub fn load_settlements(
                         };
 
                         settlement.populations.sort();
+
+                        for building in settlement.buildings.iter_mut() {
+                            let building_component = match building.building_type {
+                                BuildingType::Shipyard => Shipyard::default(),
+                            };
+
+                            let entity = commands.spawn().insert(building_component).id();
+
+                            building.entity = entity;
+                        }
 
                         let tile_entity = commands
                             .spawn()

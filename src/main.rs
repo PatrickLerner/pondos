@@ -101,6 +101,7 @@ fn main() {
     .insert_resource(ImageSettings::default_nearest())
     .init_resource::<game_time::GameTime>()
     .init_resource::<Option<settlement::SelectedSettlement>>()
+    .init_resource::<Option<settlement::SelectedBuilding>>()
     .add_plugins(DefaultPlugins)
     .add_plugin(YamlAssetPlugin::<loading::Settlements>::new(&[
         "settlements",

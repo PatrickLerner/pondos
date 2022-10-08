@@ -137,6 +137,8 @@
     - Clothmaker
 
 - name: Byzance
+  buildings:
+    - Shipyard
   position:
     x: 24
     y: 62

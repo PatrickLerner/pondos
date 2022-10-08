@@ -19,8 +19,8 @@ impl Default for GameCamera {
         GameCamera {
             position: Vec2::ZERO,
             scroll: 1.0,
-            pan_min: (0., 0.).into(),
-            pan_max: (0., 0.).into(),
+            pan_min: Vec2::ZERO,
+            pan_max: Vec2::ZERO,
         }
     }
 }
@@ -107,7 +107,11 @@ pub fn pan_orbit_camera(
 }
 
 pub fn spawn_camera(mut commands: Commands) {
-    commands.spawn_bundle(Camera2dBundle::default());
+    commands.spawn_bundle(Camera2dBundle {
+        // move way out of the way where map gets rendered during loading
+        transform: Transform::from_xyz(-1000., -1000., 0.0),
+        ..default()
+    });
 }
 
 pub struct CameraPlugin;

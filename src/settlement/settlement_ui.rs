@@ -1,6 +1,6 @@
 use super::{
-    CloseSettlementUIEvent, SelectedSettlement, Settlement, MAX_HEIGHT, MAX_WIDTH,
-    WINDOW_PADDING_X, WINDOW_PADDING_Y,
+    BuildingType, CloseSettlementUIEvent, SelectedBuilding, SelectedSettlement, Settlement,
+    MAX_HEIGHT, MAX_WIDTH, WINDOW_PADDING_X, WINDOW_PADDING_Y,
 };
 use crate::game_state::GameState;
 use bevy::prelude::*;
@@ -12,6 +12,7 @@ use bevy_egui::{
 pub fn settlement_ui(
     mut egui_context: ResMut<EguiContext>,
     selected_settlement: Res<Option<SelectedSettlement>>,
+    mut selected_building: ResMut<Option<SelectedBuilding>>,
     settlements: Query<&Settlement>,
     mut events: EventWriter<CloseSettlementUIEvent>,
     mut game_state: ResMut<State<GameState>>,
@@ -49,9 +50,18 @@ pub fn settlement_ui(
 
                 if win_max_width > 400. {
                     ui.columns(2, |columns| {
-                        egui::ScrollArea::vertical()
-                            .id_source("population")
-                            .show(&mut columns[0], |ui| population_info(ui, settlement));
+                        egui::ScrollArea::vertical().id_source("population").show(
+                            &mut columns[0],
+                            |ui| {
+                                population_info(ui, settlement);
+                                buildings_ui(
+                                    ui,
+                                    settlement,
+                                    &mut game_state,
+                                    &mut selected_building,
+                                );
+                            },
+                        );
 
                         egui::ScrollArea::vertical()
                             .id_source("resources")
@@ -61,6 +71,7 @@ pub fn settlement_ui(
                     ui.with_layout(egui::Layout::top_down_justified(Align::Min), |ui| {
                         egui::ScrollArea::both().id_source("info").show(ui, |ui| {
                             population_info(ui, settlement);
+                            buildings_ui(ui, settlement, &mut game_state, &mut selected_building);
                             resource_info(ui, settlement);
                         });
                     });
@@ -69,6 +80,27 @@ pub fn settlement_ui(
 
         if !open {
             events.send(CloseSettlementUIEvent);
+        }
+    }
+}
+
+fn buildings_ui(
+    ui: &mut Ui,
+    settlement: &Settlement,
+    game_state: &mut State<GameState>,
+    selected_building: &mut Option<SelectedBuilding>,
+) {
+    ui.heading("Buildings");
+    ui.add_space(5.);
+
+    for building in settlement.buildings.iter() {
+        match building.building_type {
+            BuildingType::Shipyard => {
+                if ui.button("Shipyard").clicked() {
+                    *selected_building = Some(SelectedBuilding(building.entity));
+                    game_state.push(GameState::Shipyard).unwrap();
+                }
+            }
         }
     }
 }

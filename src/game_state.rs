@@ -5,4 +5,5 @@ pub enum GameState {
     Settlement,
     TravelToSettlement,
     TradeWithSettlement,
+    Shipyard,
 }
