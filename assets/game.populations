@@ -176,3 +176,19 @@
         growth: 5
         summer: 3
         harvest: 2
+
+- name: Slavers
+  production:
+    - resource: Slaves
+      amount:
+        growth: 9
+        summer: 12
+        harvest: 3
+        winter: 3
+
+    - resource: Silver
+      amount:
+        growth: 10
+        summer: 5
+        harvest: 10
+        winter: 5

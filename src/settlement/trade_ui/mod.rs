@@ -1,7 +1,6 @@
-use super::{
-    SelectedSettlement, Settlement, MAX_HEIGHT, MAX_WIDTH, WINDOW_PADDING_X, WINDOW_PADDING_Y,
-};
+use super::{SelectedSettlement, Settlement};
 use crate::{
+    create_window,
     game_state::GameState,
     player::Player,
     price_calculator::{AveragePrices, PriceCalculator},
@@ -9,7 +8,7 @@ use crate::{
 };
 use bevy::prelude::*;
 use bevy_egui::{
-    egui::{self, Align, Align2, RichText},
+    egui::{self, Align, RichText},
     EguiContext,
 };
 
@@ -35,21 +34,12 @@ pub fn trade_ui(
 
         let mut open = true;
 
-        let window = windows.get_primary().unwrap();
-        let win_max_width = window.width() - WINDOW_PADDING_X;
-        let width = f32::min(win_max_width, MAX_WIDTH);
-        let win_max_height = window.height() - WINDOW_PADDING_Y;
-        let height = f32::min(win_max_height, MAX_HEIGHT);
-
-        egui::Window::new(format!("Trade with {}", settlement.name))
-            .anchor(Align2::CENTER_CENTER, (0., 0.))
-            .resizable(false)
-            .open(&mut open)
-            .collapsible(false)
-            .show(egui_context.ctx_mut(), |ui| {
-                ui.set_height(height);
-                ui.set_width(width);
-
+        create_window(
+            egui_context.ctx_mut(),
+            &windows,
+            &format!("Trade with {}", settlement.name),
+            &mut open,
+            |ui| {
                 ui.add_space(10.);
                 ui.with_layout(egui::Layout::right_to_left(Align::Min), |ui| {
                     let button = ui.add_sized([100., 30.], egui::Button::new("Back to Overview"));
@@ -144,7 +134,8 @@ pub fn trade_ui(
                             }
                         });
                     });
-            });
+            },
+        );
 
         if !open {
             game_state.pop().unwrap();

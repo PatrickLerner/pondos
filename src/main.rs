@@ -63,6 +63,48 @@ fn init_game_version(mut commands: Commands, asset_server: Res<AssetServer>) {
     );
 }
 
+const WINDOW_PADDING_X: f32 = 40.;
+const WINDOW_PADDING_Y: f32 = 80.;
+const MAX_WIDTH: f32 = 800.;
+const MAX_HEIGHT: f32 = 640.;
+
+pub fn create_window<'a>(
+    ctx: &bevy_egui::egui::Context,
+    windows: &'a Windows,
+    name: &str,
+    open: &mut bool,
+    add_contents: impl FnOnce(&mut bevy_egui::egui::Ui),
+) {
+    create_window_with_mobile(ctx, windows, name, open, |ui, _| add_contents(ui))
+}
+
+pub fn create_window_with_mobile<'a>(
+    ctx: &bevy_egui::egui::Context,
+    windows: &'a Windows,
+    name: &str,
+    open: &mut bool,
+    add_contents: impl FnOnce(&mut bevy_egui::egui::Ui, bool),
+) {
+    let window = windows.get_primary().unwrap();
+    let win_max_width = window.width() - WINDOW_PADDING_X;
+    let width = f32::min(win_max_width, MAX_WIDTH);
+    let win_max_height = window.height() - WINDOW_PADDING_Y;
+    let height = f32::min(win_max_height, MAX_HEIGHT);
+    let mobile = win_max_height <= 400.;
+
+    bevy_egui::egui::Window::new(name)
+        .anchor(bevy_egui::egui::Align2::CENTER_CENTER, (0., 0.))
+        .resizable(false)
+        .collapsible(false)
+        .open(open)
+        .show(ctx, |ui| {
+            ui.set_width(width);
+            ui.set_height(height);
+
+            add_contents(ui, mobile);
+        });
+}
+
 fn main() {
     dotenv().ok();
 

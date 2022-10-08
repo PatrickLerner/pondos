@@ -176,3 +176,15 @@
   max:
     Population: 1
     Farmer: 8
+
+- name: Slaves
+  base_price: 20
+  demand:
+    Population: 0.2
+    Farmer: 1
+    Miner: 1
+    Winemaker: 0.2
+    Fisher: 0.4
+  max:
+    Population: 1
+    Farmer: 4

@@ -5,6 +5,7 @@
   populations:
     - Hemp Worker
     - Hemp Worker
+    - Hemp Worker
     - Beekeeper
     - Fisher
     - Fisher
@@ -22,7 +23,7 @@
     - Fisher
     - Fisher
 
-- name: Tanais
+- name: (Emporium) Tanais
   position:
     x: 62
     y: 4
@@ -34,6 +35,7 @@
     - Hunter
     - Hunter
     - Hunter
+    - Slavers
 
 - name: Hermonassa
   position:
@@ -118,6 +120,7 @@
     y: 49
   populations:
     - Hemp Worker
+    - Hemp Worker
     - Beer Brewer
     - Beer Brewer
     - Brickmaker
@@ -178,16 +181,22 @@
     - Farmer
     - Pitch Worker
     - Pitch Worker
+    - Cheesemaker
+    - Cheesemaker
 
-- name: Olbia
+- name: (Emporium) Olbia
   position:
     x: 26
     y: 20
   populations:
     - Shepherd
     - Shepherd
+    - Fisher
+    - Fisher
+    - Farmer
+    - Farmer
     - Hemp Worker
-    - Hemp Worker
-    - Cheesemaker
-    - Cheesemaker
     - Hunter
+    - Hunter
+    - Slavers
+    - Slavers

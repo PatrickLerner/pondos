@@ -4,11 +4,6 @@ use serde::{Deserialize, Deserializer};
 
 mod shipyard_ui;
 
-const WINDOW_PADDING_X: f32 = 40.;
-const WINDOW_PADDING_Y: f32 = 80.;
-const MAX_WIDTH: f32 = 800.;
-const MAX_HEIGHT: f32 = 640.;
-
 #[derive(Deserialize, Debug)]
 pub struct Building {
     pub building_type: BuildingType,
