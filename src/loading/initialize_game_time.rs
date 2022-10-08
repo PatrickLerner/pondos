@@ -1,7 +1,7 @@
 use crate::{
     game_time::{GameTime, GameTimeAdvanceEvent},
     population::Population,
-    settlement::Resource,
+    resources::Resource,
     Settings,
 };
 use bevy::prelude::*;
@@ -13,9 +13,11 @@ pub fn initialize_game_time(
     game_time: Res<GameTime>,
     mut events: EventWriter<GameTimeAdvanceEvent>,
 ) {
-    if resources.is_some() && populations.is_some() && settings.is_some() {
-        if !game_time.is_initialized() {
-            events.send(GameTimeAdvanceEvent);
-        }
+    if resources.is_some()
+        && populations.is_some()
+        && settings.is_some()
+        && !game_time.is_initialized()
+    {
+        events.send(GameTimeAdvanceEvent);
     }
 }

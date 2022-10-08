@@ -1,7 +1,8 @@
 use super::CursorPos;
 use crate::{
+    game_state::GameState,
+    player::Player,
     settlement::{SelectedSettlement, Settlement},
-    GameState, Player,
 };
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;

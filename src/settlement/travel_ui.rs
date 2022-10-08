@@ -1,5 +1,5 @@
 use super::{CloseSettlementUIEvent, SelectedSettlement, Settlement};
-use crate::{player::PlayerTravelEvent, GameState};
+use crate::{game_state::GameState, player::PlayerTravelEvent};
 use bevy::prelude::*;
 use bevy_egui::{
     egui::{self, Align, Align2},

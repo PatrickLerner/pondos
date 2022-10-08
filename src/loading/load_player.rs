@@ -1,4 +1,4 @@
-use crate::{settlement::Settlement, Player};
+use crate::{player::Player, settlement::Settlement};
 use bevy::prelude::*;
 
 pub fn load_player(mut commands: Commands, settlements: Query<(Entity, &Settlement)>) {

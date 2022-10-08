@@ -1,8 +1,6 @@
 use crate::{
-    game_time::GameTime,
-    population::Population,
-    settlement::{Resource, Settlement},
-    GameState, Player, Settings,
+    game_state::GameState, game_time::GameTime, player::Player, population::Population,
+    resources::Resource, settlement::Settlement, Settings,
 };
 use bevy::{prelude::*, reflect::TypeUuid};
 use bevy_ecs_tilemap::prelude::*;

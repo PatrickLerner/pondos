@@ -1,5 +1,10 @@
-use super::{Resource, SelectedSettlement, Settlement};
-use crate::{price_calculator::PriceCalculator, AveragePrices, GameState, Player};
+use super::{SelectedSettlement, Settlement};
+use crate::{
+    game_state::GameState,
+    player::Player,
+    price_calculator::{AveragePrices, PriceCalculator},
+    resources::Resource,
+};
 use bevy::prelude::*;
 use bevy_egui::{
     egui::{self, Align, Align2, RichText},

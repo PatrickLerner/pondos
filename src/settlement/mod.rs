@@ -1,8 +1,7 @@
-use std::collections::HashMap;
-
-use crate::{types::CalculatedPopulationValue, GameState};
+use crate::game_state::GameState;
 use bevy::prelude::*;
 use serde::Deserialize;
+use std::collections::HashMap;
 
 mod cap_resources;
 mod close_by_keyboard;
@@ -28,15 +27,6 @@ pub struct Settlement {
 pub struct Position {
     pub x: u32,
     pub y: u32,
-}
-
-#[derive(Debug, Deserialize, PartialEq, Clone)]
-#[serde(rename_all = "lowercase")]
-pub struct Resource {
-    pub name: String,
-    pub base_price: u32,
-    pub demand: CalculatedPopulationValue,
-    max: CalculatedPopulationValue,
 }
 
 pub struct CloseSettlementUIEvent;

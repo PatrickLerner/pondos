@@ -1,6 +1,7 @@
 use crate::{
     game_time::{GameTime, GameTimeAdvancedEvent},
-    settlement::{Resource, Settlement},
+    resources::Resource,
+    settlement::Settlement,
     Settings,
 };
 use bevy::prelude::*;

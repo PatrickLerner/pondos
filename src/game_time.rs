@@ -1,4 +1,4 @@
-use super::GameState;
+use super::game_state::GameState;
 use bevy::prelude::*;
 use bevy_egui::{
     egui::{self, Align2},

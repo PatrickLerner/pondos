@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
 
-use super::{camera::pan_orbit_camera, GameState};
+use super::{camera::pan_orbit_camera, game_state::GameState};
 
 mod on_exit;
 mod settlement_click;

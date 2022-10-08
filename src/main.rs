@@ -1,13 +1,9 @@
-use std::collections::HashMap;
-
 use bevy::{prelude::*, reflect::TypeUuid, render::texture::ImageSettings};
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_ecs_tilemap::prelude::*;
 use bevy_egui::EguiPlugin;
 use clap::Command;
 use dotenv::dotenv;
-use game_time::GameTimeAdvancedEvent;
-use price_calculator::PriceCalculator;
 use serde::Deserialize;
 
 mod camera;
@@ -19,13 +15,10 @@ mod map;
 mod player;
 mod population;
 mod price_calculator;
+mod resources;
 mod settlement;
 mod types;
 mod ui_config;
-
-pub use game_state::GameState;
-pub use player::Player;
-use settlement::{Resource, Settlement};
 
 #[derive(Debug, Deserialize, PartialEq, TypeUuid)]
 #[serde(rename_all = "lowercase")]
@@ -42,45 +35,6 @@ fn cli() -> Command {
             Command::new("debug_populations")
                 .about("Gives the yearly value each population brings to debug game balance"),
         )
-}
-
-#[derive(Default)]
-pub struct AveragePrices {
-    pub prices: HashMap<String, f32>,
-}
-
-fn average_prices(
-    settlements: Query<&Settlement>,
-    mut average_prices: ResMut<AveragePrices>,
-    resources: Option<Res<Vec<Resource>>>,
-    events: EventReader<GameTimeAdvancedEvent>,
-) {
-    if events.is_empty() || resources.is_none() {
-        return;
-    }
-
-    let resources = resources.unwrap();
-
-    let settlement_count = settlements.iter().len() as f32;
-
-    for resource in resources.iter() {
-        let sum = settlements.iter().fold(0.0, |acc, settlement| {
-            let demand = resource.demand.value(&settlement.populations).ceil() as u32;
-
-            let prices = PriceCalculator {
-                base_price: resource.base_price,
-                demand,
-                supply: *settlement.resources.get(&resource.name).unwrap_or(&0),
-            };
-
-            acc + prices.sell_price() as f32
-        });
-
-        *average_prices
-            .prices
-            .entry(resource.name.clone())
-            .or_default() = sum / settlement_count;
-    }
 }
 
 fn main() {
@@ -113,12 +67,12 @@ fn main() {
         197.0 / 255.0,
         185.0 / 255.0,
     )))
-    .init_resource::<AveragePrices>()
+    .init_resource::<price_calculator::AveragePrices>()
     .add_event::<player::PlayerTravelEvent>()
     .add_event::<game_time::GameTimeAdvancedEvent>()
     .add_event::<game_time::GameTimeAdvanceEvent>()
     .add_event::<settlement::CloseSettlementUIEvent>()
-    .add_state(GameState::Loading)
+    .add_state(game_state::GameState::Loading)
     .insert_resource(ImageSettings::default_nearest())
     .init_resource::<game_time::GameTime>()
     .init_resource::<Option<settlement::SelectedSettlement>>()
@@ -140,7 +94,7 @@ fn main() {
     .add_plugin(game_time::GameTimePlugin)
     .add_system(player::handle_travel)
     .add_system(population::population_production)
-    .add_system(average_prices)
+    .add_system(price_calculator::average_prices)
     .add_startup_system(ui_config::color_mode)
     .run();
 }
