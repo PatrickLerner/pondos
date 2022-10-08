@@ -1,4 +1,5 @@
 use crate::{
+    game_time::GameTime,
     population::Population,
     settlement::{Resource, Settlement},
     GameState, Player, Settings,
@@ -7,7 +8,7 @@ use bevy::{prelude::*, reflect::TypeUuid};
 use bevy_ecs_tilemap::prelude::*;
 use serde::Deserialize;
 
-mod initialize_settlements;
+mod initialize_game_time;
 mod load_map;
 mod load_player;
 mod load_populations;
@@ -32,9 +33,6 @@ pub struct Populations(Vec<Population>);
 
 pub struct MapImage(Handle<Image>);
 pub struct FeaturesTilemap((Entity, TilemapId));
-
-#[derive(Component)]
-pub struct RequiresInitialization;
 
 pub fn setup(mut commands: Commands, server: Res<AssetServer>) {
     let map_image: Handle<Image> = server.load("map.png");
@@ -61,9 +59,9 @@ pub fn transition(
         Option<Res<MapImage>>,
         Option<Res<Handle<Resources>>>,
         Option<Res<Handle<Settings>>>,
+        Res<GameTime>,
     ),
     player: Option<Res<Player>>,
-    uninitialized_settlements: Query<(), (With<Settlement>, With<RequiresInitialization>)>,
 ) {
     let (
         settlement_handle,
@@ -71,6 +69,7 @@ pub fn transition(
         map_image_handle,
         resources_handle,
         settings_handle,
+        game_time,
     ) = res;
 
     if settlement_handle.is_none()
@@ -79,7 +78,7 @@ pub fn transition(
         && resources_handle.is_none()
         && settings_handle.is_none()
         && player.is_some()
-        && uninitialized_settlements.iter().any(|_| true)
+        && game_time.is_initialized()
     {
         log::info!("all resources fully loaded");
         game_state.set(GameState::Map).unwrap();
@@ -99,7 +98,7 @@ impl Plugin for LoadingPlugin {
                     .with_system(load_populations::load_populations)
                     .with_system(load_resources::load_resources)
                     .with_system(load_settings::load_settings)
-                    .with_system(initialize_settlements::initialize_settlements)
+                    .with_system(initialize_game_time::initialize_game_time)
                     .with_system(load_player::load_player),
             );
     }

@@ -1,8 +1,5 @@
 use super::{FeaturesTilemap, MapImage, Settlements};
-use crate::{
-    loading::RequiresInitialization,
-    map::{constants::SETTLEMENT, MapSize},
-};
+use crate::map::{constants::SETTLEMENT, MapSize};
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
 
@@ -38,7 +35,6 @@ pub fn load_settlements(
                                 ..Default::default()
                             })
                             .insert(settlement)
-                            .insert(RequiresInitialization)
                             .id();
 
                         let mut features_tile_storage =

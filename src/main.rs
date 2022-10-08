@@ -121,7 +121,6 @@ fn main() {
     .add_state(GameState::Loading)
     .insert_resource(ImageSettings::default_nearest())
     .init_resource::<game_time::GameTime>()
-    .init_resource::<Player>()
     .init_resource::<Option<settlement::SelectedSettlement>>()
     .add_plugins(DefaultPlugins)
     .add_plugin(YamlAssetPlugin::<loading::Settlements>::new(&[
