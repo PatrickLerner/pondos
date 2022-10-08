@@ -3,189 +3,98 @@
     x: 41
     y: 29
   populations:
-    - Beekeeper
+    - Hemp Worker
+    - Hemp Worker
     - Beekeeper
     - Fisher
     - Fisher
-    - Hunter
-    - Hunter
-    - Lumberjack
-    - Merchant
-    - Merchant
-    - Miner
 
-- name: Theodosie
+- name: Theodosia
   position:
     x: 48
     y: 27
   populations:
+    - Mead Brewer
+    - Mead Brewer
     - Beekeeper
     - Beekeeper
-    - Blacksmith
-    - Blacksmith
+    - Beekeeper
     - Fisher
     - Fisher
-    - Hunter
-    - Hunter
-    - Lumberjack
-    - Merchant
-    - Miner
-    - Shepherd
-
-- name: Pityos
-  position:
-    x: 82
-    y: 28
-  populations:
-    - Brickmaker
-    - Farmer
-    - Fisher
-    - Hunter
-    - Pitch Worker
-    - Salt Worker
-
-- name: Byzance
-  position:
-    x: 24
-    y: 62
-  populations:
-    - Blacksmith
-    - Brewer
-    - Brewer
-    - Farmer
-    - Farmer
-    - Fisher
-    - Fisher
-    - Fisher
-    - Merchant
-    - Merchant
-    - Merchant
-    - Merchant
-    - Shepherd
-    - Winemaker
-    - Tailor
-    - Tailor
-
-- name: Apollonia
-  position:
-    x: 16
-    y: 53
-  populations:
-    - Brewer
-    - Cheesemaker
-    - Clothmaker
-    - Farmer
-    - Farmer
-    - Fisher
-    - Fisher
-    - Hunter
-    - Merchant
-    - Tailor
-    - Winemaker
-
-- name: Kallatis
-  position:
-    x: 20
-    y: 36
-  populations:
-    - Blacksmith
-    - Clothmaker
-    - Farmer
-    - Farmer
-    - Farmer
-    - Fisher
-    - Hemp Worker
-    - Lumberjack
-    - Lumberjack
-    - Winemaker
 
 - name: Tanais
   position:
     x: 62
     y: 4
   populations:
-    - Blacksmith
-    - Farmer
-    - Fisher
-    - Fisher
-    - Hunter
-    - Hunter
-    - Hunter
-    - Hunter
-    - Miner
-    - Miner
-    - Pitch Worker
-    - Salt Worker
-
-- name: Nikonion
-  position:
-    x: 24
-    y: 21
-  populations:
-    - Blacksmith
-    - Clothmaker
-    - Farmer
-    - Farmer
-    - Fisher
-    - Hemp Worker
-    - Hunter
-    - Hunter
-    - Hunter
     - Lumberjack
-    - Lumberjack
-
-- name: Kerkinitis
-  position:
-    x: 37
-    y: 24
-  populations:
-    - Beekeeper
-    - Beekeeper
-    - Beekeeper
-    - Brewer
-    - Fisher
-    - Fisher
-    - Fisher
-    - Fisher
+    - Shepherd
+    - Shepherd
     - Hunter
     - Hunter
-    - Miner
+    - Hunter
+    - Hunter
 
 - name: Hermonassa
   position:
     x: 55
     y: 21
   populations:
-    - Cheesemaker
+    - Beer Brewer
+    - Beer Brewer
+    - Mead Brewer
+    - Farmer
     - Fisher
-    - Fisher
-    - Fisher
-    - Miner
-    - Pitch Worker
-    - Salt Worker
 
-- name: Gorgippia
+- name: Pityos
   position:
-    x: 61
-    y: 23
+    x: 82
+    y: 28
   populations:
     - Fisher
     - Fisher
-    - Hunter
-    - Pitch Worker
+    - Fisher
+    - Cheesemaker
+    - Cheesemaker
+    - Salt Worker
+    - Salt Worker
     - Salt Worker
 
 - name: Phasis
   position:
-    x: 86
-    y: 40
+    x: 88
+    y: 35
   populations:
     - Blacksmith
     - Fisher
-    - Fisher
+    - Miner
     - Miner
     - Miner
     - Salt Worker
+    - Salt Worker
+
+- name: Athenae
+  position:
+    x: 86
+    y: 40
+  populations:
+    - Fisher
+    - Fisher
+    - Fisher
+    - Miner
+    - Miner
+    - Spice Grower
+
+- name: Trapezus
+  position:
+    x: 83
+    y: 44
+  populations:
+    - Brickmaker
+    - Brickmaker
+    - Brickmaker
+    - Fisher
+    - Fisher
     - Spice Grower
 
 - name: Sinope
@@ -193,12 +102,89 @@
     x: 60
     y: 47
   populations:
-    - Brewer
+    - Merchant
+    - Merchant
+    - Tailor
+    - Tailor
+    - Blacksmith
+    - Blacksmith
+    - Clothmaker
+    - Clothmaker
+
+- name: Kitoron
+  position:
+    x: 49
+    y: 49
+  populations:
+    - Hemp Worker
+    - Beer Brewer
+    - Beer Brewer
+    - Brickmaker
+    - Farmer
+
+- name: Heraklia
+  position:
+    x: 40
+    y: 55
+  populations:
+    - Pitch Worker
+    - Pitch Worker
+    - Lumberjack
+    - Lumberjack
+    - Lumberjack
+    - Farmer
+    - Farmer
+    - Clothmaker
+
+- name: Byzance
+  position:
+    x: 24
+    y: 62
+  populations:
+    - Blacksmith
+    - Merchant
+    - Merchant
+    - Merchant
+    - Tailor
+    - Tailor
+    - Farmer
+    - Farmer
+    - Winemaker
+    - Winemaker
+
+- name: Odissos
+  position:
+    x: 16
+    y: 53
+  populations:
+    - Merchant
+    - Beer Brewer
+    - Beer Brewer
+    - Winemaker
+    - Farmer
+
+- name: Istria
+  position:
+    x: 20
+    y: 36
+  populations:
+    - Lumberjack
+    - Lumberjack
+    - Farmer
+    - Farmer
+    - Farmer
+    - Pitch Worker
+    - Pitch Worker
+
+- name: Olbia
+  position:
+    x: 26
+    y: 20
+  populations:
+    - Shepherd
+    - Shepherd
+    - Hemp Worker
+    - Hemp Worker
     - Cheesemaker
-    - Fisher
-    - Lumberjack
-    - Lumberjack
-    - Lumberjack
-    - Shepherd
-    - Shepherd
-    - Shepherd
+    - Cheesemaker
+    - Hunter

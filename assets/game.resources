@@ -68,6 +68,7 @@
   base_price: 5
   demand:
     Population: 2
+    Mead Brewer: 3
   max:
     Population: 2
 
@@ -126,6 +127,7 @@
   demand:
     Population: 2
     Miner: 1
+    Pitch Worker: 1
   max:
     Population: 2
 
@@ -133,6 +135,7 @@
   base_price: 12
   demand:
     Population: 1
+    Beer Brewer: 1.5
   max:
     Population: 1
     Farmer: 3

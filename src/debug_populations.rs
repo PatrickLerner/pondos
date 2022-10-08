@@ -1,6 +1,9 @@
 use std::{fs::File, io::BufReader};
 
-use crate::{population::Population, settlement::Resource};
+use crate::{
+    population::Population,
+    settlement::{Resource, Settlement},
+};
 
 pub fn debug_populations() {
     let resources: Vec<Resource> = {
@@ -13,6 +16,16 @@ pub fn debug_populations() {
         let reader = BufReader::new(file);
         serde_yaml::from_reader(reader).unwrap()
     };
+    let settlements: Vec<Settlement> = {
+        let file = File::open("assets/game.settlements").unwrap();
+        let reader = BufReader::new(file);
+        serde_yaml::from_reader(reader).unwrap()
+    };
+
+    let all_pops: Vec<String> = settlements
+        .into_iter()
+        .flat_map(|settlement| settlement.populations)
+        .collect();
 
     populations.sort_by(|a, b| a.name.partial_cmp(&b.name).unwrap());
 
@@ -42,7 +55,9 @@ pub fn debug_populations() {
             output += yearly * base_price;
         }
 
-        lines.push(format!("{} {}", population.name, output));
+        let count = all_pops.iter().filter(|p| **p == population.name).count();
+
+        lines.push(format!("{} {} g/a ({}x)", population.name, output, count));
     }
 
     lines.sort();
