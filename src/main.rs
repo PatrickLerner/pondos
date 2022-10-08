@@ -37,6 +37,31 @@ fn cli() -> Command {
         )
 }
 
+const NAME: &str = env!("CARGO_PKG_NAME");
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+fn init_game_version(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn().insert_bundle(
+        TextBundle::from_section(
+            format!("{} v{}", NAME, VERSION),
+            TextStyle {
+                font: asset_server.load("fonts/FiraMono-Medium.ttf"),
+                font_size: 14.0,
+                color: Color::WHITE,
+            },
+        )
+        .with_style(Style {
+            align_self: AlignSelf::FlexEnd,
+            position_type: PositionType::Absolute,
+            position: UiRect {
+                bottom: Val::Px(5.0),
+                right: Val::Px(15.0),
+                ..default()
+            },
+            ..default()
+        }),
+    );
+}
+
 fn main() {
     dotenv().ok();
 
@@ -96,5 +121,6 @@ fn main() {
     .add_system(population::population_production)
     .add_system(price_calculator::average_prices)
     .add_startup_system(ui_config::color_mode)
+    .add_startup_system(init_game_version)
     .run();
 }
