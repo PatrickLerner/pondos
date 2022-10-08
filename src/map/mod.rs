@@ -1,6 +1,8 @@
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
 
+use self::constants::TILEMAP_SIZE;
+
 use super::{camera::pan_orbit_camera, game_state::GameState};
 
 mod on_exit;
@@ -14,6 +16,15 @@ pub mod constants;
 pub struct MapSize {
     pub width: u32,
     pub height: u32,
+}
+
+impl MapSize {
+    pub fn pixel_size(&self) -> Vec2 {
+        Vec2::new(
+            self.width as f32 * TILEMAP_SIZE,
+            self.height as f32 * TILEMAP_SIZE,
+        )
+    }
 }
 
 impl From<MapSize> for TilemapSize {
