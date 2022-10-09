@@ -1,8 +1,11 @@
 use super::{FeaturesTilemap, MapImage};
 use crate::{
     camera::GameCamera,
-    map::constants::{GRASS, HILLS, MOUNTAIN, TILEMAP_SIZE, WATER, WOODS, Z_FEATURES, Z_GROUND},
-    map::MapSize,
+    map::{
+        constants::{TILEMAP_SIZE, Z_FEATURES, Z_GROUND},
+        types::MapTileType,
+        MapSize,
+    },
 };
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
@@ -49,8 +52,9 @@ pub fn load_map(
             let features_tilemap_entity = commands.spawn().id();
             let features_tilemap_id = TilemapId(features_tilemap_entity);
 
+            let winter = true;
             fill_tilemap_rect(
-                GRASS,
+                MapTileType::Grass.texture(winter),
                 TilePos { x: 0, y: 0 },
                 map_size.into(),
                 ground_tilemap_id,
@@ -67,12 +71,12 @@ pub fn load_map(
                         map_image.data[offset + 2],
                     );
 
-                    let (tile_storage, tilemap_id, texture) = match pixel {
-                        (137, 249, 79) => (&mut ground_tile_storage, ground_tilemap_id, GRASS),
-                        (0, 0, 255) => (&mut ground_tile_storage, ground_tilemap_id, WATER),
-                        (93, 63, 20) => (&mut features_tile_storage, features_tilemap_id, MOUNTAIN),
-                        (255, 148, 0) => (&mut features_tile_storage, features_tilemap_id, HILLS),
-                        (4, 113, 1) => (&mut features_tile_storage, features_tilemap_id, WOODS),
+                    let map_tile_type = match pixel {
+                        (137, 249, 79) => MapTileType::Grass,
+                        (0, 0, 255) => MapTileType::Water,
+                        (93, 63, 20) => MapTileType::Mountain,
+                        (255, 148, 0) => MapTileType::Hills,
+                        (4, 113, 1) => MapTileType::Woods,
                         _ => panic!("Unknown color on map {:?}", pixel),
                     };
 
@@ -81,16 +85,51 @@ pub fn load_map(
                         y: map_size.height - 1 - y,
                     };
 
-                    let tile_entity = commands
-                        .spawn()
-                        .insert_bundle(TileBundle {
-                            position,
-                            tilemap_id,
-                            texture,
-                            ..Default::default()
-                        })
-                        .id();
-                    tile_storage.set(&position, Some(tile_entity));
+                    let ground_tile = if map_tile_type.ground() {
+                        map_tile_type
+                    } else {
+                        MapTileType::Grass
+                    };
+
+                    {
+                        let texture = ground_tile.texture(winter);
+                        let tile_entity = commands
+                            .spawn()
+                            .insert_bundle(TileBundle {
+                                position,
+                                tilemap_id: ground_tilemap_id,
+                                texture,
+                                ..Default::default()
+                            })
+                            .insert(ground_tile)
+                            .id();
+
+                        if map_tile_type.animation_count() > 1 {
+                            commands.entity(tile_entity).insert(AnimatedTile {
+                                start: texture.0,
+                                end: texture.0 + map_tile_type.animation_count(),
+                                speed: 0.3,
+                            });
+                        }
+
+                        ground_tile_storage.set(&position, Some(tile_entity));
+                    }
+
+                    if !map_tile_type.ground() {
+                        let texture = map_tile_type.texture(winter);
+                        let tile_entity = commands
+                            .spawn()
+                            .insert_bundle(TileBundle {
+                                position,
+                                tilemap_id: features_tilemap_id,
+                                texture,
+                                ..Default::default()
+                            })
+                            .insert(map_tile_type)
+                            .id();
+
+                        features_tile_storage.set(&position, Some(tile_entity));
+                    }
                 }
             }
 

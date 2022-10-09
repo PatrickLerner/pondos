@@ -17,10 +17,19 @@ mod ui;
 
 const TRACK_PRODUCTION_TICKS: usize = 8;
 
+#[derive(Deserialize, Debug)]
+#[serde(rename_all = "lowercase")]
+pub enum SettlementType {
+    City,
+    Outpost,
+}
+
 #[derive(Deserialize, Component, Debug)]
 #[serde(deny_unknown_fields)]
 pub struct Settlement {
     pub name: String,
+    #[serde(rename = "type")]
+    pub settlement_type: SettlementType,
     pub position: Position,
     #[serde(default)]
     pub silver: u32,

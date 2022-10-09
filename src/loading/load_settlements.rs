@@ -1,7 +1,8 @@
 use super::{FeaturesTilemap, MapImage, Settlements};
 use crate::{
     building::{BuildingType, Shipyard},
-    map::{constants::SETTLEMENT, MapSize},
+    map::{types::MapTileType, MapSize},
+    settlement::SettlementType,
 };
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
@@ -39,15 +40,23 @@ pub fn load_settlements(
                             building.entity = entity;
                         }
 
+                        let map_tile_type = match settlement.settlement_type {
+                            SettlementType::City => MapTileType::Settlement,
+                            SettlementType::Outpost => MapTileType::Outpost,
+                        };
+
+                        let winter = true;
+                        let texture = map_tile_type.texture(winter);
                         let tile_entity = commands
                             .spawn()
                             .insert_bundle(TileBundle {
                                 position,
                                 tilemap_id: features_tilemap_id.0 .1,
-                                texture: SETTLEMENT,
+                                texture,
                                 ..Default::default()
                             })
                             .insert(settlement)
+                            .insert(map_tile_type)
                             .id();
 
                         let mut features_tile_storage =

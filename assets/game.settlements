@@ -1,4 +1,5 @@
 - name: Chersonesus
+  type: city
   position:
     x: 41
     y: 29
@@ -12,6 +13,7 @@
     - Potter
 
 - name: Theodosia
+  type: city
   position:
     x: 48
     y: 27
@@ -26,6 +28,7 @@
     - Butcher
 
 - name: (Emporium) Tanais
+  type: outpost
   position:
     x: 62
     y: 4
@@ -40,6 +43,7 @@
     - Slavers
 
 - name: Hermonassa
+  type: city
   position:
     x: 55
     y: 21
@@ -52,6 +56,7 @@
     - Fisher
 
 - name: Pityos
+  type: city
   position:
     x: 82
     y: 28
@@ -66,6 +71,7 @@
     - Salt Worker
 
 - name: Phasis
+  type: city
   position:
     x: 88
     y: 35
@@ -79,6 +85,7 @@
     - Salt Worker
 
 - name: Athenae
+  type: city
   position:
     x: 86
     y: 40
@@ -91,6 +98,7 @@
     - Spice Grower
 
 - name: Trapezus
+  type: city
   position:
     x: 83
     y: 44
@@ -105,6 +113,7 @@
     - Potter
 
 - name: Sinope
+  type: city
   position:
     x: 60
     y: 47
@@ -119,6 +128,7 @@
     - Clothmaker
 
 - name: Kitoron
+  type: city
   position:
     x: 49
     y: 49
@@ -132,6 +142,7 @@
     - Potter
 
 - name: Heraklia
+  type: city
   position:
     x: 40
     y: 55
@@ -149,6 +160,7 @@
     - Tanner
 
 - name: Byzance
+  type: city
   buildings:
     - Shipyard
   position:
@@ -168,6 +180,7 @@
     - Winemaker
 
 - name: Odissos
+  type: city
   position:
     x: 16
     y: 53
@@ -181,6 +194,7 @@
     - Tanner
 
 - name: Istria
+  type: city
   position:
     x: 20
     y: 36
@@ -199,6 +213,7 @@
     - Cheesemaker
 
 - name: (Emporium) Olbia
+  type: outpost
   position:
     x: 26
     y: 20

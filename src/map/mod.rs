@@ -1,7 +1,9 @@
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
 
-use self::constants::TILEMAP_SIZE;
+use crate::game_time::GameTimeAdvancedEvent;
+
+use self::{constants::TILEMAP_SIZE, types::MapTileType};
 
 use super::{camera::pan_orbit_camera, game_state::GameState};
 
@@ -11,6 +13,7 @@ mod update_cursor_pos;
 mod update_player_position;
 
 pub mod constants;
+pub mod types;
 
 #[derive(Clone, Copy)]
 pub struct MapSize {
@@ -36,6 +39,39 @@ impl From<MapSize> for TilemapSize {
     }
 }
 
+const WINTER_SEASON: i8 = 5;
+const SUMMER_SEASON: i8 = 2;
+
+fn switch_tiles(
+    tiles: &mut Query<(&mut TileTexture, Option<&mut AnimatedTile>, &MapTileType)>,
+    winter: bool,
+) {
+    for (mut texture, animated_tile, map_tile_type) in tiles.iter_mut() {
+        *texture = map_tile_type.texture(winter);
+
+        if let Some(mut animated_tile) = animated_tile {
+            animated_tile.start = texture.0;
+            animated_tile.end = texture.0 + map_tile_type.animation_count();
+        }
+    }
+}
+
+pub fn update_tiles(
+    mut events: EventReader<GameTimeAdvancedEvent>,
+    mut tiles: Query<(&mut TileTexture, Option<&mut AnimatedTile>, &MapTileType)>,
+) {
+    for event in events.iter() {
+        if event.time.is_initialized() {
+            if event.time.season == WINTER_SEASON {
+                switch_tiles(&mut tiles, true)
+            }
+            if event.time.season == SUMMER_SEASON {
+                switch_tiles(&mut tiles, false)
+            }
+        }
+    }
+}
+
 #[derive(Default, Debug)]
 pub struct CursorPos(Vec2);
 
@@ -46,6 +82,7 @@ impl Plugin for MapPlugin {
         app.init_resource::<CursorPos>()
             .add_system(update_player_position::update_player_position)
             .add_system(update_cursor_pos::update_cursor_pos)
+            .add_system(update_tiles)
             .add_system_set(SystemSet::on_exit(GameState::Map).with_system(on_exit::on_exit))
             .add_system_set(
                 SystemSet::on_update(GameState::Map)

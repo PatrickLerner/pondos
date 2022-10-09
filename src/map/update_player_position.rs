@@ -1,6 +1,6 @@
 use crate::{
     map::{
-        constants::{MARKER, TILEMAP_COLUMNS, TILEMAP_ROWS, TILEMAP_SIZE, Z_MARKER},
+        constants::{PLAYER_MARKER, TILEMAP_COLUMNS, TILEMAP_ROWS, TILEMAP_SIZE, Z_MARKER},
         MapSize,
     },
     player::Player,
@@ -45,13 +45,13 @@ pub fn update_player_position(
 
     commands.entity(entity).insert_bundle(SpriteSheetBundle {
         sprite: TextureAtlasSprite {
-            index: MARKER as usize,
+            index: PLAYER_MARKER.0 as usize,
             ..default()
         },
         texture_atlas: texture_atlas_handle.clone(),
         transform: Transform::from_xyz(
             (player.position.x + 0.5) * TILEMAP_SIZE,
-            (map_size.height as f32 - 1.0 - player.position.y + 0.5) * TILEMAP_SIZE,
+            (map_size.height as f32 - 1.0 - player.position.y + 0.5 + 1.0) * TILEMAP_SIZE,
             Z_MARKER,
         ),
         ..default()
