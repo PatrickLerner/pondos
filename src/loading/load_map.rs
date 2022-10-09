@@ -52,7 +52,7 @@ pub fn load_map(
             let features_tilemap_entity = commands.spawn().id();
             let features_tilemap_id = TilemapId(features_tilemap_entity);
 
-            let winter = true;
+            let winter = false;
             fill_tilemap_rect(
                 MapTileType::Grass.texture(winter),
                 TilePos { x: 0, y: 0 },

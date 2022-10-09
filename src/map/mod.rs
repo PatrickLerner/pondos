@@ -63,9 +63,11 @@ pub fn update_tiles(
     for event in events.iter() {
         if event.time.is_initialized() {
             if event.time.season == WINTER_SEASON {
+                log::debug!("switching to winter tiles");
                 switch_tiles(&mut tiles, true)
             }
             if event.time.season == SUMMER_SEASON {
+                log::debug!("switching to summer tiles");
                 switch_tiles(&mut tiles, false)
             }
         }

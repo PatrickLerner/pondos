@@ -45,7 +45,7 @@ pub fn load_settlements(
                             SettlementType::Outpost => MapTileType::Outpost,
                         };
 
-                        let winter = true;
+                        let winter = false;
                         let texture = map_tile_type.texture(winter);
                         let tile_entity = commands
                             .spawn()

@@ -19,7 +19,7 @@ pub struct GameTime {
 
 impl GameTime {
     pub fn is_initialized(&self) -> bool {
-        self.year > 1 || (self.year == 1 && self.season == 2)
+        self.year > 1 || (self.year == 1 && self.season >= 2)
     }
 }
 
