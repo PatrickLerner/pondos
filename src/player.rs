@@ -27,7 +27,7 @@ impl TransportType {
 
 const BASE_RESOURCE_SPACE: u32 = 5;
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct Player {
     pub position: Vec2,
     pub location: Option<Entity>,

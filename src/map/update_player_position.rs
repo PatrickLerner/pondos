@@ -60,4 +60,5 @@ pub fn update_player_position(
     player.location_marker = Some(entity);
     player.location_marker_texture_atlas_handle = Some(texture_atlas_handle);
     player.location_marker_need_update = false;
+    log::debug!("updated player marker");
 }

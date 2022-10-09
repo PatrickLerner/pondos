@@ -9,6 +9,7 @@ use serde::Deserialize;
 mod building;
 mod camera;
 mod debug_populations;
+mod debug_settlements;
 mod game_state;
 mod game_time;
 mod loading;
@@ -37,8 +38,17 @@ fn cli() -> Command {
     Command::new("pondos")
         .about("a game about trading")
         .subcommand(
-            Command::new("debug_populations")
-                .about("Gives the yearly value each population brings to debug game balance"),
+            Command::new("debug")
+                .subcommand(
+                    Command::new("populations").about(
+                        "Gives the yearly value each population brings to debug game balance",
+                    ),
+                )
+                .subcommand(
+                    Command::new("settlements").about(
+                        "Gives the yearly value each settlement brings to debug game balance",
+                    ),
+                ),
         )
 }
 
@@ -69,8 +79,9 @@ fn init_game_version(mut commands: Commands, asset_server: Res<AssetServer>) {
 
 const WINDOW_PADDING_X: f32 = 40.;
 const WINDOW_PADDING_Y: f32 = 80.;
-const MAX_WIDTH: f32 = 800.;
-const MAX_HEIGHT: f32 = 640.;
+const MAX_WIDTH: f32 = 720.;
+const MAX_HEIGHT: f32 = 720.;
+const MOBILE_BREAK_POINT: f32 = 400.;
 
 pub fn create_window<'a>(
     ctx: &bevy_egui::egui::Context,
@@ -94,7 +105,6 @@ pub fn create_window_with_mobile<'a>(
     let width = f32::min(win_max_width, MAX_WIDTH);
     let win_max_height = window.height() - WINDOW_PADDING_Y;
     let height = f32::min(win_max_height, MAX_HEIGHT);
-    let mobile = win_max_height <= 400.;
 
     bevy_egui::egui::Window::new(name)
         .anchor(bevy_egui::egui::Align2::CENTER_CENTER, (0., 0.))
@@ -105,6 +115,7 @@ pub fn create_window_with_mobile<'a>(
             ui.set_width(width);
             ui.set_height(height);
 
+            let mobile = win_max_width <= MOBILE_BREAK_POINT;
             add_contents(ui, mobile);
         });
 }
@@ -114,8 +125,13 @@ fn main() {
 
     let matches = cli().get_matches();
 
-    if let Some(("debug_populations", _)) = matches.subcommand() {
-        debug_populations::debug_populations();
+    if let Some(("debug", cmd)) = matches.subcommand() {
+        if let Some(("populations", _)) = cmd.subcommand() {
+            debug_populations::debug_populations();
+        }
+        if let Some(("settlements", _)) = cmd.subcommand() {
+            debug_settlements::debug_settlements();
+        }
         std::process::exit(0);
     }
 
@@ -123,8 +139,8 @@ fn main() {
 
     #[cfg(not(target_family = "wasm"))]
     app.insert_resource(WindowDescriptor {
-        width: 1280.0,
-        height: 720.0,
+        width: 1680.0,
+        height: 1050.0,
         title: String::from("Pondos"),
         ..Default::default()
     });

@@ -1,6 +1,5 @@
-use std::{fs::File, io::BufReader};
-
 use crate::{population::Population, resources::Resource, settlement::Settlement, COIN_NAME};
+use std::{fs::File, io::BufReader};
 
 pub fn debug_populations() {
     let resources: Vec<Resource> = {

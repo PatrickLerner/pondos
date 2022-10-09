@@ -16,9 +16,16 @@
   production:
     - resource: Grain
       amount:
-        growth: 5
-        summer: 6
-        harvest: 18
+        growth: 4
+        summer: 5
+        harvest: 16
+
+    - resource: Livestock
+      amount:
+        growth: 3
+        summer: 1
+        harvest: 1
+        winter: 1
 
 - name: Fisher
   production:
@@ -46,6 +53,11 @@
         summer: 10
         harvest: 10
         winter: 8
+
+    - resource: Livestock
+      amount:
+        growth: 1
+        harvest: 1
 
 - name: Beekeeper
   production:
@@ -81,6 +93,33 @@
         summer: 10
         harvest: 10
         winter: 10
+
+- name: Butcher
+  production:
+    - resource: Meat
+      amount:
+        growth: 1
+        summer: 4
+        harvest: 5
+        winter: 3
+
+- name: Tanner
+  production:
+    - resource: Leather
+      amount:
+        growth: 7
+        summer: 14
+        harvest: 12
+        winter: 11
+
+- name: Potter
+  production:
+    - resource: Pottery
+      amount:
+        growth: 5
+        summer: 4
+        harvest: 5
+        winter: 2
 
 - name: Blacksmith
   production:
@@ -155,10 +194,16 @@
   production:
     - resource: Wool
       amount:
-        growth: 25
-        summer: 12
-        harvest: 8
+        growth: 22
+        summer: 10
+        harvest: 7
         winter: 2
+
+    - resource: Livestock
+      amount:
+        growth: 2
+        harvest: 1
+        winter: 1
 
 - name: Clothmaker
   production:

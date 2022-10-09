@@ -41,6 +41,16 @@
     Shepherd: 20
     Tailor: -20
 
+- name: Leather
+  base_price: 7
+  demand:
+    Population: 0.2
+    Tailor: 1
+  max:
+    Tanner: 20
+    Tailor: -15
+    Blacksmith: -5
+
 - name: Pelts
   base_price: 30
   demand:
@@ -97,6 +107,19 @@
     Lumberjack: 1
   max:
     Blacksmith: 10
+    Population: -0.5
+
+- name: Pottery
+  base_price: 20
+  demand:
+    Population: 0.4
+    Farmer: 1
+    Salt Worker: 1
+    Winemaker: 1
+    Mead Brewer: 1
+    Beer Brewer: 1
+  max:
+    Potter: 10
     Population: -0.5
 
 - name: Pitch
@@ -190,13 +213,19 @@
     Population: -0.5
 
 - name: Livestock
-  base_price: 50
+  base_price: 30
   demand:
+    Population: 0.2
+    Shepherd: 2
     Cheesemaker: 1
-    Farmer: 6
+    Butcher: 2
+    Tanner: 1
+    Farmer: 4
   max:
     Population: 0.5
     Farmer: 8
+    Tanner: -2
+    Butcher: -2
 
 - name: Slaves
   base_price: 20

@@ -9,6 +9,7 @@
     - Beekeeper
     - Fisher
     - Fisher
+    - Potter
 
 - name: Theodosia
   position:
@@ -22,6 +23,7 @@
     - Beekeeper
     - Fisher
     - Fisher
+    - Butcher
 
 - name: (Emporium) Tanais
   position:
@@ -99,6 +101,8 @@
     - Fisher
     - Fisher
     - Spice Grower
+    - Potter
+    - Potter
 
 - name: Sinope
   position:
@@ -125,11 +129,14 @@
     - Beer Brewer
     - Brickmaker
     - Farmer
+    - Potter
 
 - name: Heraklia
   position:
     x: 40
     y: 55
+  buildings:
+    - Shipyard
   populations:
     - Pitch Worker
     - Pitch Worker
@@ -139,6 +146,7 @@
     - Farmer
     - Farmer
     - Clothmaker
+    - Tanner
 
 - name: Byzance
   buildings:
@@ -147,6 +155,7 @@
     x: 24
     y: 62
   populations:
+    - Butcher
     - Blacksmith
     - Merchant
     - Merchant
@@ -168,12 +177,17 @@
     - Beer Brewer
     - Winemaker
     - Farmer
+    - Butcher
+    - Tanner
 
 - name: Istria
   position:
     x: 20
     y: 36
+  buildings:
+    - Shipyard
   populations:
+    - Tanner
     - Lumberjack
     - Lumberjack
     - Farmer
@@ -191,7 +205,6 @@
   populations:
     - Shepherd
     - Shepherd
-    - Fisher
     - Fisher
     - Farmer
     - Farmer

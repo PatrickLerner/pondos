@@ -35,9 +35,9 @@ pub fn settlement_ui(
                 if mobile {
                     ui.with_layout(egui::Layout::top_down_justified(Align::Min), |ui| {
                         egui::ScrollArea::both().id_source("info").show(ui, |ui| {
-                            population_info(ui, settlement);
-                            ui.add_space(5.);
                             buildings_ui(ui, settlement, &mut game_state, &mut selected_building);
+                            ui.add_space(5.);
+                            population_info(ui, settlement);
                             ui.add_space(5.);
                             resource_info(ui, settlement);
                             ui.add_space(5.);
@@ -49,14 +49,14 @@ pub fn settlement_ui(
                         egui::ScrollArea::vertical().id_source("population").show(
                             &mut columns[0],
                             |ui| {
-                                population_info(ui, settlement);
-                                ui.add_space(5.);
                                 buildings_ui(
                                     ui,
                                     settlement,
                                     &mut game_state,
                                     &mut selected_building,
                                 );
+                                ui.add_space(5.);
+                                population_info(ui, settlement);
                             },
                         );
 

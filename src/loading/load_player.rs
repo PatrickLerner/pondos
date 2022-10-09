@@ -1,7 +1,16 @@
 use crate::{player::Player, settlement::Settlement};
 use bevy::prelude::*;
 
-pub fn load_player(mut commands: Commands, settlements: Query<(Entity, &Settlement)>) {
+pub fn load_player(
+    mut commands: Commands,
+    settlements: Query<(Entity, &Settlement)>,
+
+    player: Option<ResMut<Player>>,
+) {
+    if player.is_some() {
+        return;
+    }
+
     if let Some((entity, settlement)) = settlements.iter().last() {
         let player = Player {
             silver: 350,
@@ -11,6 +20,7 @@ pub fn load_player(mut commands: Commands, settlements: Query<(Entity, &Settleme
             ..default()
         };
 
+        log::debug!("spawn player");
         commands.insert_resource(player);
     }
 }

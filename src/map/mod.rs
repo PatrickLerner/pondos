@@ -45,11 +45,11 @@ impl Plugin for MapPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<CursorPos>()
             .add_system(update_player_position::update_player_position)
+            .add_system(update_cursor_pos::update_cursor_pos)
             .add_system_set(SystemSet::on_exit(GameState::Map).with_system(on_exit::on_exit))
             .add_system_set(
                 SystemSet::on_update(GameState::Map)
                     .with_system(pan_orbit_camera)
-                    .with_system(update_cursor_pos::update_cursor_pos)
                     .with_system(settlement_click::settlement_click),
             );
     }
