@@ -1,4 +1,7 @@
-use crate::{player::Player, settlement::Settlement};
+use crate::{
+    player::{Player, TransportType},
+    settlement::Settlement,
+};
 use bevy::prelude::*;
 
 pub fn load_player(
@@ -17,6 +20,7 @@ pub fn load_player(
             position: Vec2::new(settlement.position.x as f32, settlement.position.y as f32),
             location: Some(entity),
             location_marker_need_update: true,
+            convoy: vec![TransportType::SmallShip],
             ..default()
         };
 
