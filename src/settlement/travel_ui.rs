@@ -1,8 +1,11 @@
-use super::{CloseSettlementUIEvent, SelectedSettlement, Settlement};
-use crate::{game_state::GameState, player::PlayerTravelEvent};
+use super::{ui::production_ui, CloseSettlementUIEvent, SelectedSettlement, Settlement};
+use crate::{
+    game_state::{GameState, SettlementState},
+    player::PlayerTravelEvent,
+};
 use bevy::prelude::*;
 use bevy_egui::{
-    egui::{self, Align, Align2},
+    egui::{self, Align2},
     EguiContext,
 };
 
@@ -24,28 +27,31 @@ pub fn travel_ui(
             .collapsible(false)
             .anchor(Align2::CENTER_CENTER, (0., 0.))
             .show(egui_context.ctx_mut(), |ui| {
-                ui.set_height(30.);
-                ui.set_width(180.);
-                ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
-                    ui.horizontal(|ui| {
-                        if ui
-                            .add_sized([80., 30.], egui::Button::new("Travel"))
-                            .clicked()
-                        {
-                            handle_travel.send(PlayerTravelEvent::new(
-                                entity.0,
-                                settlement.position.x,
-                                settlement.position.y,
-                            ));
-                            game_state.set(GameState::Settlement).unwrap();
-                        }
-                        if ui
-                            .add_sized([60., 30.], egui::Button::new("Abort"))
-                            .clicked()
-                        {
-                            events.send(CloseSettlementUIEvent);
-                        }
-                    });
+                ui.add_space(10.);
+                production_ui(ui, settlement);
+                ui.add_space(10.);
+
+                ui.columns(2, |columns| {
+                    if columns[0]
+                        .add_sized([60., 30.], egui::Button::new("Abort"))
+                        .clicked()
+                    {
+                        events.send(CloseSettlementUIEvent);
+                    }
+
+                    if columns[1]
+                        .add_sized([80., 30.], egui::Button::new("Travel"))
+                        .clicked()
+                    {
+                        handle_travel.send(PlayerTravelEvent::new(
+                            entity.0,
+                            settlement.position.x,
+                            settlement.position.y,
+                        ));
+                        game_state
+                            .set(GameState::Settlement(SettlementState::Overview))
+                            .unwrap();
+                    }
                 });
             });
     }

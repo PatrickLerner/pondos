@@ -2,8 +2,13 @@
 pub enum GameState {
     Loading,
     Map,
-    Settlement,
-    TravelToSettlement,
-    TradeWithSettlement,
+    Travel,
+    Settlement(SettlementState),
+}
+
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
+pub enum SettlementState {
+    Overview,
+    Trade,
     Shipyard,
 }

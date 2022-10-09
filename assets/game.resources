@@ -3,7 +3,8 @@
   demand:
     Population: 1.5
   max:
-    Population: 1
+    Beer Brewer: 20
+    Population: -1
 
 - name: Mead
   base_price: 15
@@ -11,14 +12,16 @@
     Population: 1.5
     Merchant: 1
   max:
-    Population: 1
+    Mead Brewer: 20
+    Population: -1
 
 - name: Brick
   base_price: 12
   demand:
     Population: 2
   max:
-    Population: 2
+    Brickmaker: 10
+    Population: -0.5
 
 - name: Cloth
   base_price: 15
@@ -26,8 +29,8 @@
     Population: 0.2
     Tailor: 1.8
   max:
-    Tailor: 2
-    Clothmaker: 2
+    Tailor: -10
+    Clothmaker: 10
 
 - name: Wool
   base_price: 5
@@ -35,9 +38,8 @@
     Population: 0.2
     Tailor: 1
   max:
-    Shepherd: 2
-    Tailor: 2
-    Population: 0.2
+    Shepherd: 20
+    Tailor: -20
 
 - name: Pelts
   base_price: 30
@@ -46,23 +48,26 @@
     Tailor: 1.5
     Merchant: 1
   max:
-    Population: 0.3
+    Tailor: -1
+    Hunter: 1
 
 - name: Clothing
   base_price: 35
   demand:
-    Population: 1
-    Merchant: 2
+    Population: 1.5
+    Merchant: 3
+    Miner: 1
   max:
-    Tailor: 2
-    Population: 0.2
+    Tailor: 6
+    Merchant: -2
+    Population: -0.2
 
 - name: Hemp
   base_price: 12
   demand:
     Population: 3
   max:
-    Population: 2
+    Hemp Worker: 15
 
 - name: Honey
   base_price: 5
@@ -70,7 +75,8 @@
     Population: 2
     Mead Brewer: 3
   max:
-    Population: 2
+    Beekeeper: 20
+    Mead Brewer: -20
 
 - name: Raw Metal
   base_price: 5
@@ -78,8 +84,8 @@
     Population: 0.5
     Blacksmith: 3
   max:
-    Miner: 2
-    Population: 0.5
+    Miner: 10
+    Blacksmith: -10
 
 - name: Metal Goods
   base_price: 17
@@ -90,24 +96,27 @@
     Salt Worker: 0.4
     Lumberjack: 1
   max:
-    Blacksmith: 1
-    Population: 0.5
+    Blacksmith: 10
+    Population: -0.5
 
 - name: Pitch
   base_price: 11
   demand:
     Population: 1
   max:
-    Population: 1
+    Pitch Worker: 10
 
 - name: Salt
   base_price: 6
   demand:
     Population: 1
-    Fisher: 2
-    Hunter: 1
+    Fisher: 5
+    Hunter: 10
   max:
-    Population: 3
+    Salt Worker: 20
+    Population: 5
+    Hunter: -10
+    Fisher: -5
 
 - name: Spices
   base_price: 50
@@ -115,7 +124,9 @@
     Population: 1
     Merchant: 1
   max:
-    Population: 1
+    Space Grower: 4
+    Population: -0.5
+    Merchant: -0.5
 
 - name: Wine
   base_price: 40
@@ -123,7 +134,8 @@
     Population: 1
     Merchant: 1
   max:
-    Population: 0.4
+    Winemaker: 10
+    Population: -0.4
 
 - name: Wood
   base_price: 12
@@ -131,8 +143,13 @@
     Population: 2
     Miner: 1
     Pitch Worker: 1
+    Blacksmith: 1
   max:
-    Population: 2
+    Blacksmith: -1
+    Miner: -1
+    Pitch Worker: -1
+    Population: -1
+    Lumberjack: 10
 
 - name: Grain
   base_price: 12
@@ -140,8 +157,8 @@
     Population: 1
     Beer Brewer: 1.5
   max:
-    Population: 1
-    Farmer: 3
+    Population: -0.5
+    Farmer: 5
 
 - name: Cheese
   base_price: 10
@@ -149,7 +166,9 @@
     Population: 1
     Merchant: 2
   max:
-    Population: 2
+    Merchant: -1
+    Cheesemaker: 5
+    Population: -1
 
 - name: Meat
   base_price: 28
@@ -157,7 +176,9 @@
     Population: 1.5
     Merchant: 2
   max:
-    Population: 2
+    Population: -0.5
+    Hunter: 3
+    Merchant: 1
 
 - name: Fish
   base_price: 13
@@ -165,8 +186,8 @@
     Population: 1.5
     Merchant: 1
   max:
-    Fisher: 1
-    Population: 1
+    Fisher: 5
+    Population: -0.5
 
 - name: Livestock
   base_price: 50
@@ -174,7 +195,7 @@
     Cheesemaker: 1
     Farmer: 6
   max:
-    Population: 1
+    Population: 0.5
     Farmer: 8
 
 - name: Slaves
@@ -186,5 +207,9 @@
     Winemaker: 0.2
     Fisher: 0.4
   max:
+    Slaver: 3
     Population: 1
-    Farmer: 4
+    Farmer: -1
+    Winemaker: -1
+    Miner: -2
+    Fisher: -1

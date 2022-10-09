@@ -1,6 +1,6 @@
 use std::{fs::File, io::BufReader};
 
-use crate::{population::Population, resources::Resource, settlement::Settlement};
+use crate::{population::Population, resources::Resource, settlement::Settlement, COIN_NAME};
 
 pub fn debug_populations() {
     let resources: Vec<Resource> = {
@@ -39,7 +39,7 @@ pub fn debug_populations() {
                 + production.amount.harvest
                 + 2 * production.amount.winter;
 
-            let base_price = if production.resource == "Silver" {
+            let base_price = if production.resource == COIN_NAME {
                 1
             } else {
                 resources

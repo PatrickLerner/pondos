@@ -1,4 +1,8 @@
-use crate::{game_state::GameState, game_time::GameTimeAdvancedEvent, player::TransportType};
+use crate::{
+    game_state::{GameState, SettlementState},
+    game_time::GameTimeAdvancedEvent,
+    player::TransportType,
+};
 use bevy::prelude::*;
 use serde::{Deserialize, Deserializer};
 
@@ -64,7 +68,8 @@ impl Plugin for BuildingPlugin {
     fn build(&self, app: &mut App) {
         app.add_system(shipyard_construction).add_system_set(
             // TODO: close by escape
-            SystemSet::on_update(GameState::Shipyard).with_system(shipyard_ui::shipyard_ui),
+            SystemSet::on_update(GameState::Settlement(SettlementState::Shipyard))
+                .with_system(shipyard_ui::shipyard_ui),
         );
     }
 }

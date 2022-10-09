@@ -1,10 +1,11 @@
 use super::{SelectedSettlement, Settlement};
 use crate::{
     create_window,
-    game_state::GameState,
+    game_state::{GameState, SettlementState},
     player::Player,
     price_calculator::{AveragePrices, PriceCalculator},
     resources::Resource,
+    COIN_NAME,
 };
 use bevy::prelude::*;
 use bevy_egui::{
@@ -44,7 +45,9 @@ pub fn trade_ui(
                 ui.with_layout(egui::Layout::right_to_left(Align::Min), |ui| {
                     let button = ui.add_sized([100., 30.], egui::Button::new("Back to Overview"));
                     if button.clicked() {
-                        game_state.pop().unwrap();
+                        game_state
+                            .set(GameState::Settlement(SettlementState::Overview))
+                            .unwrap()
                     }
                 });
 
@@ -104,7 +107,7 @@ pub fn trade_ui(
                             }
 
                             {
-                                ui.label("Silver");
+                                ui.label(COIN_NAME);
                                 ui.with_layout(egui::Layout::right_to_left(Align::Max), |ui| {
                                     ui.label(format!("{}", player.silver));
                                 });

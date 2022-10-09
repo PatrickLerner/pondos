@@ -1,7 +1,7 @@
 use super::{SelectedBuilding, Shipyard};
 use crate::{
     create_window,
-    game_state::GameState,
+    game_state::{GameState, SettlementState},
     player::{Player, TransportType},
 };
 use bevy::prelude::*;
@@ -33,7 +33,9 @@ pub fn shipyard_ui(
                         let button =
                             ui.add_sized([100., 30.], egui::Button::new("Back to Overview"));
                         if button.clicked() {
-                            game_state.pop().unwrap();
+                            game_state
+                                .set(GameState::Settlement(SettlementState::Overview))
+                                .unwrap()
                         }
                     });
 

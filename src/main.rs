@@ -21,12 +21,16 @@ mod settlement;
 mod types;
 mod ui_config;
 
+const COIN_NAME: &str = "Silver";
+
 #[derive(Debug, Deserialize, PartialEq, TypeUuid)]
 #[serde(rename_all = "lowercase")]
 #[uuid = "bafb929f-a7b1-45c3-b907-f71720724940"]
 pub struct Settings {
     max_silver: types::CalculatedPopulationValue,
+    min_silver: types::CalculatedPopulationValue,
     max_multipliers: types::SeasonalAmount<f32>,
+    cap_percentage: f32,
 }
 
 fn cli() -> Command {

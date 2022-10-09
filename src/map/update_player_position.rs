@@ -10,10 +10,16 @@ use bevy::prelude::*;
 pub fn update_player_position(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    mut player: ResMut<Player>,
+    player: Option<ResMut<Player>>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
-    map_size: Res<MapSize>,
+    map_size: Option<Res<MapSize>>,
 ) {
+    if player.is_none() || map_size.is_none() {
+        return;
+    };
+    let mut player = player.unwrap();
+    let map_size = map_size.unwrap();
+
     if !player.location_marker_need_update {
         return;
     }

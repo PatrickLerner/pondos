@@ -1,7 +1,10 @@
+use std::collections::HashMap;
+
 use crate::{
     game_time::{GameTime, GameTimeAdvancedEvent},
     settlement::Settlement,
     types::SeasonalAmount,
+    COIN_NAME,
 };
 use bevy::prelude::*;
 use serde::Deserialize;
@@ -36,13 +39,15 @@ pub struct Production {
 
 impl Settlement {
     pub fn production_tick(&mut self, time: &GameTime, populations: &[Population]) {
+        let mut tick_production = HashMap::new();
+
         for population in self.populations.clone() {
             let population = populations.iter().find(|i| i.name == population).unwrap();
 
             for production in population.production.iter() {
                 let amount = production.amount.value(time);
 
-                let resource = if production.resource == "Silver" {
+                let resource = if production.resource == COIN_NAME {
                     &mut self.silver
                 } else {
                     self.resources
@@ -50,8 +55,14 @@ impl Settlement {
                         .or_default()
                 };
 
+                *tick_production
+                    .entry(production.resource.clone())
+                    .or_default() += amount;
+
                 *resource += amount;
             }
         }
+
+        self.track_production_tick(tick_production);
     }
 }
