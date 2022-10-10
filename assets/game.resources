@@ -120,9 +120,11 @@
     Winemaker: 1
     Mead Brewer: 1
     Beer Brewer: 1
+    Olive Farmer: 1
   max:
     Potter: 10
     Population: -0.5
+    Olive Farmer: -1
 
 - name: Pitch
   base_price: 11
@@ -223,6 +225,7 @@
     Butcher: 2
     Tanner: 1
     Farmer: 4
+    Olive Farmer: 1
   max:
     Population: 0.5
     Farmer: 8
@@ -244,3 +247,12 @@
     Winemaker: -1
     Miner: -2
     Fisher: -1
+
+- name: Olive Oil
+  base_price: 23
+  demand:
+    Population: 2
+    Merchant: 2
+  max:
+    Olive Farmer: 10
+    Population: 0.5

@@ -38,6 +38,13 @@
         harvest: 13
         winter: 1
 
+- name: Olive Farmer
+  production:
+    - resource: Olive Oil
+      amount:
+        summer: 3
+        harvest: 20
+
 - name: Merchant
   production:
     - resource: Silver

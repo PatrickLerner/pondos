@@ -11,10 +11,15 @@ pub const WOODS: TileTexture = TileTexture(6);
 pub const SETTLEMENT: TileTexture = TileTexture(2 * TILES_PER_COLUMN);
 pub const OUTPOST: TileTexture = TileTexture(2 * TILES_PER_COLUMN + 2);
 pub const PLAYER_MARKER: TileTexture = TileTexture(2 * TILES_PER_COLUMN + 4);
+pub const GRASS_OVERLAY_CORNER: TileTexture = TileTexture(3 * TILES_PER_COLUMN + 6);
+pub const GRASS_OVERLAY_STRAIGHT: TileTexture = TileTexture(3 * TILES_PER_COLUMN + 4);
+pub const GRASS_OVERLAY_TUNNEL: TileTexture = TileTexture(3 * TILES_PER_COLUMN);
+pub const GRASS_OVERLAY_TUNNEL_END: TileTexture = TileTexture(3 * TILES_PER_COLUMN + 2);
 
 pub const TILEMAP_SIZE: f32 = 16.0;
 pub const TILEMAP_COLUMNS: usize = 8;
-pub const TILEMAP_ROWS: usize = 4;
+// TODO: determine automatically?
+pub const TILEMAP_ROWS: usize = 6;
 
 pub const Z_GROUND: f32 = -0.03;
 pub const Z_FEATURES: f32 = -0.02;

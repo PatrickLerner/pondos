@@ -113,6 +113,7 @@
     - Spice Grower
     - Potter
     - Potter
+    - Olive Farmer
 
 - name: Sinope
   type: city
@@ -180,6 +181,7 @@
     - Farmer
     - Winemaker
     - Winemaker
+    - Olive Farmer
 
 - name: Odissos
   type: city
@@ -194,6 +196,7 @@
     - Farmer
     - Butcher
     - Tanner
+    - Olive Farmer
 
 - name: Istria
   type: city
