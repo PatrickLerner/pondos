@@ -61,7 +61,7 @@ pub fn load_settlements(
 
                         let mut features_tile_storage =
                             tilemap_query.get_mut(features_tilemap_id.0 .0).unwrap();
-                        features_tile_storage.set(&position, Some(tile_entity));
+                        features_tile_storage.set(&position, tile_entity);
                     }
 
                     commands.remove_resource::<MapImage>();
