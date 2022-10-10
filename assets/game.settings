@@ -1,11 +1,13 @@
 # vi: ft=yaml
 
 min_silver:
-  Population: 5
-  Merchant: 10
+  Population: 30
+  Merchant: 100
 max_silver:
-  Population: 50
-  Merchant: 200
+  Population: 70
+  Merchant: 300
+start_settlement: Hermonassa
+start_silver: 350
 max_multipliers:
   growth: 1.0
   summer: 1.0

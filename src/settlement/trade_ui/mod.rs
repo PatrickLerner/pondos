@@ -5,6 +5,7 @@ use crate::{
     player::Player,
     price_calculator::{AveragePrices, PriceCalculator},
     resources::Resource,
+    ui_config::large_button,
     COIN_NAME,
 };
 use bevy::prelude::*;
@@ -43,8 +44,7 @@ pub fn trade_ui(
             |ui| {
                 ui.add_space(10.);
                 ui.with_layout(egui::Layout::right_to_left(Align::Min), |ui| {
-                    let button = ui.add_sized([100., 30.], egui::Button::new("Back to Overview"));
-                    if button.clicked() {
+                    if large_button(ui, 100., "Back to Overview").clicked() {
                         game_state
                             .set(GameState::Settlement(SettlementState::Overview))
                             .unwrap()

@@ -2,10 +2,11 @@ use super::Settlement;
 use crate::{
     building::{BuildingType, SelectedBuilding},
     game_state::{GameState, SettlementState},
+    ui_config::large_button,
     COIN_NAME,
 };
 use bevy::prelude::*;
-use bevy_egui::egui::{self, Ui};
+use bevy_egui::egui::Ui;
 
 pub fn production_ui(ui: &mut Ui, settlement: &Settlement) {
     ui.heading("Local production");
@@ -52,10 +53,7 @@ pub fn buildings_ui(
     ui.heading("Buildings");
     ui.add_space(5.);
 
-    if ui
-        .add_sized([100., 30.], egui::Button::new("Market"))
-        .clicked()
-    {
+    if large_button(ui, 100., "Market").clicked() {
         game_state
             .set(GameState::Settlement(SettlementState::Trade))
             .unwrap();
@@ -64,10 +62,7 @@ pub fn buildings_ui(
     for building in settlement.buildings.iter() {
         match building.building_type {
             BuildingType::Shipyard => {
-                if ui
-                    .add_sized([100., 30.], egui::Button::new("Shipyard"))
-                    .clicked()
-                {
+                if large_button(ui, 100., "Shipyard").clicked() {
                     *selected_building = Some(SelectedBuilding(building.entity));
                     game_state
                         .set(GameState::Settlement(SettlementState::Shipyard))

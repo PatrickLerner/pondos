@@ -1,6 +1,9 @@
 use bevy::prelude::*;
-use bevy_egui::{egui, EguiContext};
-use egui::{FontFamily, FontId, TextStyle};
+use bevy_egui::{
+    egui::{self, Response, Ui},
+    EguiContext,
+};
+use egui::{Color32, FontFamily, FontId, TextStyle};
 
 #[inline]
 pub fn panel_heading() -> TextStyle {
@@ -20,4 +23,16 @@ pub fn configure_text_styles(ctx: &egui::Context) {
 pub fn color_mode(mut egui_context: ResMut<EguiContext>) {
     configure_text_styles(egui_context.ctx_mut());
     egui_context.ctx_mut().set_visuals(egui::Visuals::light());
+}
+
+pub fn enabled_color(enabled: bool) -> Color32 {
+    if enabled {
+        Color32::BLACK
+    } else {
+        Color32::GRAY
+    }
+}
+
+pub fn large_button(ui: &mut Ui, width: f32, label: &str) -> Response {
+    ui.add_sized([width, 30.], egui::Button::new(label))
 }

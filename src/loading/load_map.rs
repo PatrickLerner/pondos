@@ -39,8 +39,8 @@ impl<'a> MapLoader<'a> {
     }
 
     pub fn map_tile_with_mapping(&self, x: i32, y: i32) -> Option<MapTileType> {
-        if let Some(map_tile) = self.map_tile(x, y) {
-            Some(if MapTileType::Water == map_tile {
+        self.map_tile(x, y).map(|map_tile| {
+            if MapTileType::Water == map_tile {
                 let left = self.map_tile(x - 1, y);
                 let left = left.is_none() || left == Some(MapTileType::Water);
                 let right = self.map_tile(x + 1, y);
@@ -62,10 +62,8 @@ impl<'a> MapLoader<'a> {
                 }
             } else {
                 map_tile
-            })
-        } else {
-            None
-        }
+            }
+        })
     }
 }
 

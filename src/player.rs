@@ -13,6 +13,16 @@ pub enum TransportType {
     LargeShip,
 }
 
+impl std::fmt::Display for TransportType {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            TransportType::SmallShip => write!(f, "Small Ship"),
+            TransportType::MediumShip => write!(f, "Medium Ship"),
+            TransportType::LargeShip => write!(f, "Large Ship"),
+        }
+    }
+}
+
 impl TransportType {
     fn resource_space(&self) -> u32 {
         match self {
@@ -21,6 +31,14 @@ impl TransportType {
             TransportType::SmallShip => 20,
             TransportType::MediumShip => 50,
             TransportType::LargeShip => 100,
+        }
+    }
+
+    pub fn price(&self) -> u32 {
+        match self {
+            TransportType::SmallShip => 3000,
+            TransportType::MediumShip => 6000,
+            TransportType::LargeShip => 10000,
         }
     }
 }

@@ -2,6 +2,7 @@ use super::{ui::production_ui, CloseSettlementUIEvent, SelectedSettlement, Settl
 use crate::{
     game_state::{GameState, SettlementState},
     player::PlayerTravelEvent,
+    ui_config::large_button,
 };
 use bevy::prelude::*;
 use bevy_egui::{
@@ -32,17 +33,11 @@ pub fn travel_ui(
                 ui.add_space(10.);
 
                 ui.columns(2, |columns| {
-                    if columns[0]
-                        .add_sized([60., 30.], egui::Button::new("Abort"))
-                        .clicked()
-                    {
+                    if large_button(&mut columns[0], 60., "Abort").clicked() {
                         events.send(CloseSettlementUIEvent);
                     }
 
-                    if columns[1]
-                        .add_sized([80., 30.], egui::Button::new("Travel"))
-                        .clicked()
-                    {
+                    if large_button(&mut columns[1], 80., "Travel").clicked() {
                         handle_travel.send(PlayerTravelEvent::new(
                             entity.0,
                             settlement.position.x,

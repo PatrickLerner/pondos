@@ -3,10 +3,12 @@ use crate::{
     create_window,
     game_state::{GameState, SettlementState},
     player::{Player, TransportType},
+    ui_config::{enabled_color, large_button},
+    COIN_NAME,
 };
 use bevy::prelude::*;
 use bevy_egui::{
-    egui::{self, Align},
+    egui::{self, Align, RichText},
     EguiContext,
 };
 
@@ -30,9 +32,7 @@ pub fn shipyard_ui(
                 |ui| {
                     ui.add_space(10.);
                     ui.with_layout(egui::Layout::right_to_left(Align::Min), |ui| {
-                        let button =
-                            ui.add_sized([100., 30.], egui::Button::new("Back to Overview"));
-                        if button.clicked() {
+                        if large_button(ui, 100., "Back to Overview").clicked() {
                             game_state
                                 .set(GameState::Settlement(SettlementState::Overview))
                                 .unwrap()
@@ -41,15 +41,15 @@ pub fn shipyard_ui(
 
                     if let Some(construction) = shipyard.construction {
                         if shipyard.construction_time == 0 {
-                            ui.label(format!("{:?} ready for pickup", construction));
+                            ui.label(format!("{} ready for pickup", construction));
 
-                            if ui.button("Pickup").clicked() {
+                            if large_button(ui, 100., "Pickup").clicked() {
                                 shipyard.construction = None;
                                 player.convoy.push(construction);
                             }
                         } else {
                             ui.label(format!(
-                                "Constructing {:?} for {} seasons",
+                                "Constructing {} for {} seasons",
                                 construction, shipyard.construction_time
                             ));
                         }
@@ -61,10 +61,23 @@ pub fn shipyard_ui(
                         ]
                         .into_iter()
                         {
-                            if ui
-                                .button(format!("Construct a {:?}", transport_type))
-                                .clicked()
-                            {
+                            let enabled = player.silver >= transport_type.price();
+
+                            let button = ui.add_sized(
+                                [300., 30.],
+                                egui::Button::new(
+                                    RichText::new(format!(
+                                        "Construct a {} ({} {})",
+                                        transport_type,
+                                        transport_type.price(),
+                                        COIN_NAME
+                                    ))
+                                    .color(enabled_color(enabled)),
+                                ),
+                            );
+
+                            if button.clicked() && enabled {
+                                player.silver -= transport_type.price();
                                 shipyard.construction = Some(transport_type);
                                 shipyard.construction_time = 5;
                             }

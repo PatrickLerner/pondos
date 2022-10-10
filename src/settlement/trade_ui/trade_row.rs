@@ -1,5 +1,5 @@
-use crate::{player::Player, settlement::Settlement};
-use bevy_egui::egui::{self, Align, Color32, RichText, Ui};
+use crate::{player::Player, settlement::Settlement, ui_config::enabled_color};
+use bevy_egui::egui::{self, Align, RichText, Ui};
 
 pub struct TradeRow<'a> {
     pub ui: &'a mut Ui,
@@ -9,14 +9,6 @@ pub struct TradeRow<'a> {
     pub sell_price: u32,
     pub buy_price: u32,
     pub average_price: f32,
-}
-
-fn enabled_color(enabled: bool) -> Color32 {
-    if enabled {
-        Color32::BLACK
-    } else {
-        Color32::GRAY
-    }
 }
 
 fn button(ui: &mut Ui, text: String, enabled: bool) -> egui::Response {

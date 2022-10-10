@@ -30,6 +30,8 @@ const COIN_NAME: &str = "Silver";
 pub struct Settings {
     max_silver: types::CalculatedPopulationValue,
     min_silver: types::CalculatedPopulationValue,
+    start_settlement: String,
+    start_silver: u32,
     max_multipliers: types::SeasonalAmount<f32>,
     cap_percentage: f32,
 }
