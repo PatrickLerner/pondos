@@ -1,19 +1,25 @@
 use crate::{
     map::{
-        constants::{MARKER, TILEMAP_COLUMNS, TILEMAP_ROWS, TILEMAP_SIZE, Z_MARKER},
+        constants::{PLAYER_MARKER, TILEMAP_COLUMNS, TILEMAP_ROWS, TILEMAP_SIZE, Z_MARKER},
         MapSize,
     },
-    Player,
+    player::Player,
 };
 use bevy::prelude::*;
 
 pub fn update_player_position(
     mut commands: Commands,
     asset_server: Res<AssetServer>,
-    mut player: ResMut<Player>,
+    player: Option<ResMut<Player>>,
     mut texture_atlases: ResMut<Assets<TextureAtlas>>,
-    map_size: Res<MapSize>,
+    map_size: Option<Res<MapSize>>,
 ) {
+    if player.is_none() || map_size.is_none() {
+        return;
+    };
+    let mut player = player.unwrap();
+    let map_size = map_size.unwrap();
+
     if !player.location_marker_need_update {
         return;
     }
@@ -39,13 +45,13 @@ pub fn update_player_position(
 
     commands.entity(entity).insert_bundle(SpriteSheetBundle {
         sprite: TextureAtlasSprite {
-            index: MARKER as usize,
+            index: PLAYER_MARKER.0 as usize,
             ..default()
         },
         texture_atlas: texture_atlas_handle.clone(),
         transform: Transform::from_xyz(
             (player.position.x + 0.5) * TILEMAP_SIZE,
-            (map_size.height as f32 - 1.0 - player.position.y + 0.5) * TILEMAP_SIZE,
+            (map_size.height as f32 - 1.0 - player.position.y + 0.5 + 1.0) * TILEMAP_SIZE,
             Z_MARKER,
         ),
         ..default()
@@ -54,4 +60,5 @@ pub fn update_player_position(
     player.location_marker = Some(entity);
     player.location_marker_texture_atlas_handle = Some(texture_atlas_handle);
     player.location_marker_need_update = false;
+    log::debug!("updated player marker");
 }

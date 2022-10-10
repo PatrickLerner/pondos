@@ -1,8 +1,16 @@
-max_gold:
-  Population: 10
-  Merchant: 90
+# vi: ft=yaml
+
+min_silver:
+  Population: 30
+  Merchant: 100
+max_silver:
+  Population: 70
+  Merchant: 300
+start_settlement: Hermonassa
+start_silver: 350
 max_multipliers:
   growth: 1.0
   summer: 1.0
   harvest: 1.5
   winter: 0.2
+cap_percentage: 0.35

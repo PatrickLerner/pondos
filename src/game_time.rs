@@ -1,4 +1,4 @@
-use super::GameState;
+use super::game_state::GameState;
 use bevy::prelude::*;
 use bevy_egui::{
     egui::{self, Align2},
@@ -17,9 +17,19 @@ pub struct GameTime {
     pub year: i16,
 }
 
+impl GameTime {
+    pub fn is_initialized(&self) -> bool {
+        self.year > 1 || (self.year == 1 && self.season >= 2)
+    }
+}
+
 impl Default for GameTime {
     fn default() -> Self {
-        Self { year: 1, season: 0 }
+        Self {
+            // we tick for a few years to generate resources on loading
+            year: -5,
+            season: 0,
+        }
     }
 }
 
@@ -63,11 +73,13 @@ impl GameTime {
 
 pub fn log_time(mut events: EventReader<GameTimeAdvancedEvent>) {
     for event in events.iter() {
-        log::info!(
-            "game time advanced - year {} season {}",
-            event.time.year,
-            event.time.season
-        );
+        if event.time.is_initialized() {
+            log::info!(
+                "game time advanced - year {} season {}",
+                event.time.year,
+                event.time.season
+            );
+        }
     }
 }
 

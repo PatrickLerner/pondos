@@ -1,17 +1,15 @@
-use std::collections::HashMap;
-
 use bevy::{prelude::*, reflect::TypeUuid, render::texture::ImageSettings};
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_ecs_tilemap::prelude::*;
 use bevy_egui::EguiPlugin;
 use clap::Command;
 use dotenv::dotenv;
-use game_time::GameTimeAdvancedEvent;
-use price_calculator::PriceCalculator;
 use serde::Deserialize;
 
+mod building;
 mod camera;
 mod debug_populations;
+mod debug_settlements;
 mod game_state;
 mod game_time;
 mod loading;
@@ -19,68 +17,109 @@ mod map;
 mod player;
 mod population;
 mod price_calculator;
+mod resources;
 mod settlement;
 mod types;
 mod ui_config;
 
-pub use game_state::GameState;
-pub use player::Player;
-use settlement::{Resource, Settlement};
+const COIN_NAME: &str = "Silver";
 
 #[derive(Debug, Deserialize, PartialEq, TypeUuid)]
 #[serde(rename_all = "lowercase")]
 #[uuid = "bafb929f-a7b1-45c3-b907-f71720724940"]
 pub struct Settings {
-    max_gold: types::CalculatedPopulationValue,
+    max_silver: types::CalculatedPopulationValue,
+    min_silver: types::CalculatedPopulationValue,
+    start_settlement: String,
+    start_silver: u32,
     max_multipliers: types::SeasonalAmount<f32>,
+    cap_percentage: f32,
 }
 
 fn cli() -> Command {
     Command::new("pondos")
         .about("a game about trading")
         .subcommand(
-            Command::new("debug_populations")
-                .about("Gives the yearly value each population brings to debug game balance"),
+            Command::new("debug")
+                .subcommand(
+                    Command::new("populations").about(
+                        "Gives the yearly value each population brings to debug game balance",
+                    ),
+                )
+                .subcommand(
+                    Command::new("settlements").about(
+                        "Gives the yearly value each settlement brings to debug game balance",
+                    ),
+                ),
         )
 }
 
-#[derive(Default)]
-pub struct AveragePrices {
-    pub prices: HashMap<String, f32>,
+const NAME: &str = env!("CARGO_PKG_NAME");
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+fn init_game_version(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn().insert_bundle(
+        TextBundle::from_section(
+            format!("{} v{}", NAME, VERSION),
+            TextStyle {
+                font: asset_server.load("fonts/FiraMono-Medium.ttf"),
+                font_size: 14.0,
+                color: Color::WHITE,
+            },
+        )
+        .with_style(Style {
+            align_self: AlignSelf::FlexEnd,
+            position_type: PositionType::Absolute,
+            position: UiRect {
+                bottom: Val::Px(5.0),
+                right: Val::Px(15.0),
+                ..default()
+            },
+            ..default()
+        }),
+    );
 }
 
-fn average_prices(
-    settlements: Query<&Settlement>,
-    mut average_prices: ResMut<AveragePrices>,
-    resources: Option<Res<Vec<Resource>>>,
-    events: EventReader<GameTimeAdvancedEvent>,
+const WINDOW_PADDING_X: f32 = 40.;
+const WINDOW_PADDING_Y: f32 = 80.;
+const MAX_WIDTH: f32 = 720.;
+const MAX_HEIGHT: f32 = 720.;
+const MOBILE_BREAK_POINT: f32 = 400.;
+
+pub fn create_window<'a>(
+    ctx: &bevy_egui::egui::Context,
+    windows: &'a Windows,
+    name: &str,
+    open: &mut bool,
+    add_contents: impl FnOnce(&mut bevy_egui::egui::Ui),
 ) {
-    if events.is_empty() || resources.is_none() {
-        return;
-    }
+    create_window_with_mobile(ctx, windows, name, open, |ui, _| add_contents(ui))
+}
 
-    let resources = resources.unwrap();
+pub fn create_window_with_mobile<'a>(
+    ctx: &bevy_egui::egui::Context,
+    windows: &'a Windows,
+    name: &str,
+    open: &mut bool,
+    add_contents: impl FnOnce(&mut bevy_egui::egui::Ui, bool),
+) {
+    let window = windows.get_primary().unwrap();
+    let win_max_width = window.width() - WINDOW_PADDING_X;
+    let width = f32::min(win_max_width, MAX_WIDTH);
+    let win_max_height = window.height() - WINDOW_PADDING_Y;
+    let height = f32::min(win_max_height, MAX_HEIGHT);
 
-    let settlement_count = settlements.iter().len() as f32;
+    bevy_egui::egui::Window::new(name)
+        .anchor(bevy_egui::egui::Align2::CENTER_CENTER, (0., 0.))
+        .resizable(false)
+        .collapsible(false)
+        .open(open)
+        .show(ctx, |ui| {
+            ui.set_width(width);
+            ui.set_height(height);
 
-    for resource in resources.iter() {
-        let sum = settlements.iter().fold(0.0, |acc, settlement| {
-            let demand = resource.demand.value(&settlement.populations).ceil() as u32;
-
-            let prices = PriceCalculator {
-                base_price: resource.base_price,
-                demand,
-                supply: *settlement.resources.get(&resource.name).unwrap_or(&0),
-            };
-
-            acc + prices.sell_price() as f32
+            let mobile = win_max_width <= MOBILE_BREAK_POINT;
+            add_contents(ui, mobile);
         });
-
-        *average_prices
-            .prices
-            .entry(resource.name.clone())
-            .or_default() = sum / settlement_count;
-    }
 }
 
 fn main() {
@@ -88,8 +127,13 @@ fn main() {
 
     let matches = cli().get_matches();
 
-    if let Some(("debug_populations", _)) = matches.subcommand() {
-        debug_populations::debug_populations();
+    if let Some(("debug", cmd)) = matches.subcommand() {
+        if let Some(("populations", _)) = cmd.subcommand() {
+            debug_populations::debug_populations();
+        }
+        if let Some(("settlements", _)) = cmd.subcommand() {
+            debug_settlements::debug_settlements();
+        }
         std::process::exit(0);
     }
 
@@ -97,8 +141,8 @@ fn main() {
 
     #[cfg(not(target_family = "wasm"))]
     app.insert_resource(WindowDescriptor {
-        width: 1280.0,
-        height: 720.0,
+        width: 1680.0,
+        height: 1050.0,
         title: String::from("Pondos"),
         ..Default::default()
     });
@@ -113,16 +157,16 @@ fn main() {
         197.0 / 255.0,
         185.0 / 255.0,
     )))
-    .init_resource::<AveragePrices>()
+    .init_resource::<price_calculator::AveragePrices>()
     .add_event::<player::PlayerTravelEvent>()
     .add_event::<game_time::GameTimeAdvancedEvent>()
     .add_event::<game_time::GameTimeAdvanceEvent>()
     .add_event::<settlement::CloseSettlementUIEvent>()
-    .add_state(GameState::Loading)
+    .add_state(game_state::GameState::Loading)
     .insert_resource(ImageSettings::default_nearest())
     .init_resource::<game_time::GameTime>()
-    .init_resource::<Player>()
     .init_resource::<Option<settlement::SelectedSettlement>>()
+    .init_resource::<Option<building::SelectedBuilding>>()
     .add_plugins(DefaultPlugins)
     .add_plugin(YamlAssetPlugin::<loading::Settlements>::new(&[
         "settlements",
@@ -138,10 +182,12 @@ fn main() {
     .add_plugin(camera::CameraPlugin)
     .add_plugin(map::MapPlugin)
     .add_plugin(settlement::SettlementPlugin)
+    .add_plugin(building::BuildingPlugin)
     .add_plugin(game_time::GameTimePlugin)
     .add_system(player::handle_travel)
     .add_system(population::population_production)
-    .add_system(average_prices)
+    .add_system(price_calculator::average_prices)
     .add_startup_system(ui_config::color_mode)
+    .add_startup_system(init_game_version)
     .run();
 }

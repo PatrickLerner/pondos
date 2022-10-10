@@ -1,204 +1,235 @@
+# vi: ft=yaml
+
 - name: Chersonesus
+  type: city
   position:
     x: 41
     y: 29
   populations:
-    - Beekeeper
+    - Hemp Worker
+    - Hemp Worker
+    - Hemp Worker
     - Beekeeper
     - Fisher
     - Fisher
-    - Hunter
-    - Hunter
-    - Lumberjack
-    - Merchant
-    - Merchant
-    - Miner
+    - Potter
 
-- name: Theodosie
+- name: Theodosia
+  type: city
   position:
     x: 48
     y: 27
   populations:
+    - Mead Brewer
+    - Mead Brewer
     - Beekeeper
     - Beekeeper
-    - Blacksmith
-    - Blacksmith
+    - Beekeeper
     - Fisher
     - Fisher
-    - Hunter
-    - Hunter
-    - Lumberjack
-    - Merchant
-    - Miner
-    - Shepherd
+    - Butcher
 
-- name: Pityos
-  position:
-    x: 82
-    y: 28
-  populations:
-    - Brickmaker
-    - Farmer
-    - Fisher
-    - Hunter
-    - Pitch Worker
-    - Salt Worker
-
-- name: Byzance
-  position:
-    x: 24
-    y: 62
-  populations:
-    - Blacksmith
-    - Brewer
-    - Brewer
-    - Farmer
-    - Farmer
-    - Fisher
-    - Fisher
-    - Fisher
-    - Merchant
-    - Merchant
-    - Merchant
-    - Merchant
-    - Shepherd
-    - Winemaker
-    - Tailor
-    - Tailor
-
-- name: Apollonia
-  position:
-    x: 16
-    y: 53
-  populations:
-    - Brewer
-    - Cheesemaker
-    - Clothmaker
-    - Farmer
-    - Farmer
-    - Fisher
-    - Fisher
-    - Hunter
-    - Merchant
-    - Tailor
-    - Winemaker
-
-- name: Kallatis
-  position:
-    x: 20
-    y: 36
-  populations:
-    - Blacksmith
-    - Clothmaker
-    - Farmer
-    - Farmer
-    - Farmer
-    - Fisher
-    - Hemp Worker
-    - Lumberjack
-    - Lumberjack
-    - Winemaker
-
-- name: Tanais
+- name: (Emporium) Tanais
+  type: outpost
   position:
     x: 62
     y: 4
   populations:
-    - Blacksmith
-    - Farmer
-    - Fisher
-    - Fisher
-    - Hunter
-    - Hunter
-    - Hunter
-    - Hunter
-    - Miner
-    - Miner
-    - Pitch Worker
-    - Salt Worker
-
-- name: Nikonion
-  position:
-    x: 24
-    y: 21
-  populations:
-    - Blacksmith
-    - Clothmaker
-    - Farmer
-    - Farmer
-    - Fisher
-    - Hemp Worker
-    - Hunter
-    - Hunter
-    - Hunter
     - Lumberjack
-    - Lumberjack
-
-- name: Kerkinitis
-  position:
-    x: 37
-    y: 24
-  populations:
-    - Beekeeper
-    - Beekeeper
-    - Beekeeper
-    - Brewer
-    - Fisher
-    - Fisher
-    - Fisher
-    - Fisher
+    - Shepherd
+    - Shepherd
     - Hunter
     - Hunter
-    - Miner
+    - Hunter
+    - Hunter
+    - Slavers
 
 - name: Hermonassa
+  type: city
   position:
     x: 55
     y: 21
   populations:
-    - Cheesemaker
+    - Merchant
+    - Beer Brewer
+    - Beer Brewer
+    - Mead Brewer
+    - Farmer
     - Fisher
-    - Fisher
-    - Fisher
-    - Miner
-    - Pitch Worker
-    - Salt Worker
 
-- name: Gorgippia
+- name: Pityos
+  type: city
   position:
-    x: 61
-    y: 23
+    x: 82
+    y: 28
   populations:
     - Fisher
     - Fisher
-    - Hunter
-    - Pitch Worker
+    - Fisher
+    - Cheesemaker
+    - Cheesemaker
+    - Salt Worker
+    - Salt Worker
     - Salt Worker
 
 - name: Phasis
+  type: city
+  position:
+    x: 88
+    y: 35
+  populations:
+    - Blacksmith
+    - Fisher
+    - Miner
+    - Miner
+    - Miner
+    - Salt Worker
+    - Salt Worker
+
+- name: Athenae
+  type: city
   position:
     x: 86
     y: 40
   populations:
-    - Blacksmith
+    - Fisher
     - Fisher
     - Fisher
     - Miner
     - Miner
-    - Salt Worker
     - Spice Grower
 
+- name: Trapezus
+  type: city
+  position:
+    x: 83
+    y: 44
+  populations:
+    - Brickmaker
+    - Brickmaker
+    - Brickmaker
+    - Fisher
+    - Fisher
+    - Spice Grower
+    - Potter
+    - Potter
+    - Olive Farmer
+
 - name: Sinope
+  type: city
   position:
     x: 60
     y: 47
   populations:
-    - Brewer
+    - Merchant
+    - Merchant
+    - Tailor
+    - Tailor
+    - Blacksmith
+    - Blacksmith
+    - Clothmaker
+    - Clothmaker
+
+- name: Kitoron
+  type: city
+  position:
+    x: 49
+    y: 49
+  populations:
+    - Hemp Worker
+    - Hemp Worker
+    - Beer Brewer
+    - Beer Brewer
+    - Brickmaker
+    - Farmer
+    - Potter
+
+- name: Heraklia
+  type: city
+  position:
+    x: 40
+    y: 55
+  buildings:
+    - Shipyard
+  populations:
+    - Pitch Worker
+    - Pitch Worker
+    - Lumberjack
+    - Lumberjack
+    - Lumberjack
+    - Farmer
+    - Farmer
+    - Clothmaker
+    - Tanner
+
+- name: Byzance
+  type: city
+  buildings:
+    - Shipyard
+  position:
+    x: 24
+    y: 62
+  populations:
+    - Butcher
+    - Blacksmith
+    - Merchant
+    - Merchant
+    - Merchant
+    - Tailor
+    - Tailor
+    - Farmer
+    - Farmer
+    - Winemaker
+    - Winemaker
+    - Olive Farmer
+
+- name: Odissos
+  type: city
+  position:
+    x: 16
+    y: 53
+  populations:
+    - Merchant
+    - Beer Brewer
+    - Beer Brewer
+    - Winemaker
+    - Farmer
+    - Butcher
+    - Tanner
+    - Olive Farmer
+
+- name: Istria
+  type: city
+  position:
+    x: 20
+    y: 36
+  buildings:
+    - Shipyard
+  populations:
+    - Tanner
+    - Lumberjack
+    - Lumberjack
+    - Farmer
+    - Farmer
+    - Farmer
+    - Pitch Worker
+    - Pitch Worker
     - Cheesemaker
+    - Cheesemaker
+
+- name: (Emporium) Olbia
+  type: outpost
+  position:
+    x: 26
+    y: 20
+  populations:
+    - Shepherd
+    - Shepherd
     - Fisher
-    - Lumberjack
-    - Lumberjack
-    - Lumberjack
-    - Shepherd
-    - Shepherd
-    - Shepherd
+    - Farmer
+    - Farmer
+    - Hemp Worker
+    - Hunter
+    - Hunter
+    - Slavers
+    - Slavers

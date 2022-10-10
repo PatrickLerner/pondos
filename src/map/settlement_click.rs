@@ -1,7 +1,8 @@
 use super::CursorPos;
 use crate::{
+    game_state::{GameState, SettlementState},
+    player::Player,
     settlement::{SelectedSettlement, Settlement},
-    GameState, Player,
 };
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
@@ -25,9 +26,11 @@ pub fn settlement_click(
                     *selected_settlement = Some(entity.into());
                     if player.location == Some(entity) {
                         log::info!("Open settlement {}", settlement.name);
-                        game_state.push(GameState::Settlement).unwrap();
+                        game_state
+                            .push(GameState::Settlement(SettlementState::Overview))
+                            .unwrap();
                     } else {
-                        game_state.push(GameState::TravelToSettlement).unwrap();
+                        game_state.push(GameState::Travel).unwrap();
                     }
                 }
             }

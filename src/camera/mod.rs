@@ -4,10 +4,14 @@ use bevy::{
 };
 use bevy_egui::EguiContext;
 
+use crate::map::MapSize;
+
 #[derive(Component)]
 pub struct GameCamera {
     pub position: Vec2,
     pub scroll: f32,
+    pub pan_min: Vec2,
+    pub pan_max: Vec2,
 }
 
 impl Default for GameCamera {
@@ -15,23 +19,39 @@ impl Default for GameCamera {
         GameCamera {
             position: Vec2::ZERO,
             scroll: 1.0,
+            pan_min: Vec2::ZERO,
+            pan_max: Vec2::ZERO,
         }
     }
 }
 
-const MIN_ZOOM: f32 = 0.5;
-const MAX_ZOOM: f32 = 3.0;
+const MIN_ZOOM: f32 = 0.25;
+const MIN_MAX_ZOOM: f32 = 1.0;
 const KEYBOARD_SPEED: f32 = 10.0;
 
 pub fn pan_orbit_camera(
-    mut ev_motion: EventReader<MouseMotion>,
-    mut ev_scroll: EventReader<MouseWheel>,
-    input_mouse: Res<Input<MouseButton>>,
+    mouse_events: (
+        EventReader<MouseMotion>,
+        EventReader<MouseWheel>,
+        Res<Input<MouseButton>>,
+    ),
     keyboard_input: Res<Input<KeyCode>>,
     mut game_camera: ResMut<GameCamera>,
     mut camera: Query<&mut Transform, With<Camera>>,
     mut egui_context: ResMut<EguiContext>,
+    windows: Res<Windows>,
+    map_size: Res<MapSize>,
 ) {
+    let (mut ev_motion, mut ev_scroll, input_mouse) = mouse_events;
+
+    let map_pixel_size = map_size.pixel_size();
+    let window = windows.primary();
+    let max_zoom_x = map_pixel_size.x / window.width();
+    let max_zoom_y = map_pixel_size.y / window.height();
+
+    let max_zoom = f32::max(max_zoom_x, max_zoom_y);
+    let max_zoom = f32::max(MIN_MAX_ZOOM, max_zoom);
+
     let pan_button = MouseButton::Left;
     let mut pan = Vec2::ZERO;
     let mut scroll = 0.0;
@@ -74,15 +94,24 @@ pub fn pan_orbit_camera(
 
     game_camera.position.x -= pan.x * game_camera.scroll;
     game_camera.position.y += pan.y * game_camera.scroll;
+
+    game_camera.position = game_camera
+        .position
+        .clamp(game_camera.pan_min, game_camera.pan_max);
+
     game_camera.scroll -= scroll / 300.0;
-    game_camera.scroll = game_camera.scroll.max(MIN_ZOOM).min(MAX_ZOOM);
+    game_camera.scroll = game_camera.scroll.clamp(MIN_ZOOM, max_zoom);
 
     transform.translation = game_camera.position.extend(0.0);
     transform.scale = Vec3::new(game_camera.scroll, game_camera.scroll, game_camera.scroll);
 }
 
 pub fn spawn_camera(mut commands: Commands) {
-    commands.spawn_bundle(Camera2dBundle::default());
+    commands.spawn_bundle(Camera2dBundle {
+        // move way out of the way where map gets rendered during loading
+        transform: Transform::from_xyz(-1000., -1000., 0.0),
+        ..default()
+    });
 }
 
 pub struct CameraPlugin;
