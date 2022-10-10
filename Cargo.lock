@@ -2612,7 +2612,7 @@ dependencies = [
 
 [[package]]
 name = "pondos"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "bevy",
  "bevy_asset_loader",
@@ -2623,7 +2623,7 @@ dependencies = [
  "clap",
  "dotenv",
  "embed-resource",
- "image 0.24.4",
+ "image 0.23.14",
  "log",
  "rand",
  "serde",
