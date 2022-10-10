@@ -26,7 +26,7 @@ bevy = { version = "0.8", default-features = false, features = ["bevy_asset", "b
 bevy_kira_audio = { version = "0.12" }
 bevy_asset_loader = { version = "0.12" }
 rand = { version = "0.8.3" }
-bevy_ecs_tilemap = "0.7"
+bevy_ecs_tilemap = "0.8"
 bevy_egui = "0.16"
 log = "0.4"
 dotenv = "0.15"
