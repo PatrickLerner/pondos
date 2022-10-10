@@ -161,7 +161,7 @@ pub fn load_map(
                             });
                         }
 
-                        ground_tile_storage.set(&position, Some(tile_entity));
+                        ground_tile_storage.set(&position, tile_entity);
                     }
 
                     if !map_tile_type.ground() {
@@ -181,7 +181,7 @@ pub fn load_map(
                             .insert(map_tile_type)
                             .id();
 
-                        features_tile_storage.set(&position, Some(tile_entity));
+                        features_tile_storage.set(&position, tile_entity);
                     }
                 }
             }
@@ -192,9 +192,11 @@ pub fn load_map(
                     grid_size: tile_size.into(),
                     size: map_size.into(),
                     storage: ground_tile_storage,
-                    texture: TilemapTexture(texture_handle.clone()),
+                    texture: TilemapTexture::Single(texture_handle.clone()),
                     tile_size,
-                    mesh_type: TilemapMeshType::Square,
+                    map_type: TilemapType::Square {
+                        diagonal_neighbors: false,
+                    },
                     transform: Transform::from_xyz(0.0, 0.0, Z_GROUND),
                     ..Default::default()
                 });
@@ -205,9 +207,11 @@ pub fn load_map(
                     grid_size: tile_size.into(),
                     size: map_size.into(),
                     storage: features_tile_storage,
-                    texture: TilemapTexture(texture_handle),
+                    texture: TilemapTexture::Single(texture_handle),
                     tile_size,
-                    mesh_type: TilemapMeshType::Square,
+                    map_type: TilemapType::Square {
+                        diagonal_neighbors: false,
+                    },
                     transform: Transform::from_xyz(0.0, 0.0, Z_FEATURES),
                     ..Default::default()
                 });

@@ -50,8 +50,8 @@ pub fn update_player_position(
         },
         texture_atlas: texture_atlas_handle.clone(),
         transform: Transform::from_xyz(
-            (player.position.x + 0.5) * TILEMAP_SIZE,
-            (map_size.height as f32 - 1.0 - player.position.y + 0.5 + 1.0) * TILEMAP_SIZE,
+            player.position.x * TILEMAP_SIZE,
+            (map_size.height as f32 - 1.0 - player.position.y + 1.0) * TILEMAP_SIZE,
             Z_MARKER,
         ),
         ..default()

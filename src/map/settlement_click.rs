@@ -1,4 +1,4 @@
-use super::CursorPos;
+use super::{constants::TILEMAP_SIZE, CursorPos};
 use crate::{
     game_state::{GameState, SettlementState},
     player::Player,
@@ -18,8 +18,8 @@ pub fn settlement_click(
 ) {
     if input_mouse.just_pressed(MouseButton::Left) {
         for tilemap in tilemap_query.iter() {
-            let x = (cursor_pos.0.x / 16.0).floor() as u32;
-            let y = (cursor_pos.0.y / 16.0).floor() as u32;
+            let x = (cursor_pos.0.x / TILEMAP_SIZE + 0.5).floor() as u32;
+            let y = (cursor_pos.0.y / TILEMAP_SIZE + 0.5).floor() as u32;
 
             if let Some(entity) = tilemap.get(&TilePos { x, y }) {
                 if let Ok(settlement) = settlements.get(entity) {
