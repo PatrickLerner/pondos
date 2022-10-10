@@ -5,7 +5,7 @@
 ![License](https://img.shields.io/github/license/PatrickLerner/pondos?color=blue)
 [![pondos.app](https://img.shields.io/website?down_color=lightgrey&down_message=offline&label=web%20version&up_color=blue&up_message=online&url=https%3A%2F%2Fpondos.app%2F)](https://pondos.app/)
 
-Pondos is a small game wherein you play a trader, which travels between
+Pondos is a small game wherein you play a trader, who travels between
 ancient Greek city states in the Black Sea area, trying to carve out
 a living.
 
