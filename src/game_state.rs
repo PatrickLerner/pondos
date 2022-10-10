@@ -11,4 +11,5 @@ pub enum SettlementState {
     Overview,
     Trade,
     Shipyard,
+    Temple,
 }

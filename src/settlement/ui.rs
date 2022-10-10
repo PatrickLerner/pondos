@@ -60,10 +60,24 @@ pub fn buildings_ui(
     }
 
     for building in settlement.buildings.iter() {
-        match building.building_type {
+        match &building.building_type {
+            BuildingType::Temple(temple) => {
+                if large_button(ui, 100., &format!("Temple of {}", temple.deity)).clicked() {
+                    if let Some(entity) = building.entity {
+                        *selected_building = Some(SelectedBuilding(entity));
+                    }
+
+                    game_state
+                        .set(GameState::Settlement(SettlementState::Temple))
+                        .unwrap();
+                }
+            }
             BuildingType::Shipyard => {
                 if large_button(ui, 100., "Shipyard").clicked() {
-                    *selected_building = Some(SelectedBuilding(building.entity));
+                    if let Some(entity) = building.entity {
+                        *selected_building = Some(SelectedBuilding(entity));
+                    }
+
                     game_state
                         .set(GameState::Settlement(SettlementState::Shipyard))
                         .unwrap();

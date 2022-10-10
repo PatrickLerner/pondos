@@ -5,6 +5,9 @@
   position:
     x: 41
     y: 29
+  buildings:
+    - type: Temple
+      deity: Artemis
   populations:
     - Hemp Worker
     - Hemp Worker
@@ -150,7 +153,7 @@
     x: 40
     y: 55
   buildings:
-    - Shipyard
+    - type: Shipyard
   populations:
     - Pitch Worker
     - Pitch Worker
@@ -165,7 +168,7 @@
 - name: Byzance
   type: city
   buildings:
-    - Shipyard
+    - type: Shipyard
   position:
     x: 24
     y: 62
@@ -204,7 +207,7 @@
     x: 20
     y: 36
   buildings:
-    - Shipyard
+    - type: Shipyard
   populations:
     - Tanner
     - Lumberjack
