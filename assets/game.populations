@@ -1,3 +1,5 @@
+# vi: ft=yaml
+
 - name: Hunter
   production:
     - resource: Meat

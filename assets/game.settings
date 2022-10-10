@@ -1,3 +1,5 @@
+# vi: ft=yaml
+
 min_silver:
   Population: 5
   Merchant: 10

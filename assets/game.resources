@@ -1,3 +1,5 @@
+# vi: ft=yaml
+
 - name: Beer
   base_price: 7
   demand:
