@@ -1,4 +1,3 @@
-use super::game_state::GameState;
 use bevy::prelude::*;
 use bevy_egui::{
     egui::{self, Align2},
@@ -124,6 +123,6 @@ impl Plugin for GameTimePlugin {
     fn build(&self, app: &mut App) {
         app.add_system(advance_time)
             .add_system(log_time)
-            .add_system_set(SystemSet::on_update(GameState::Map).with_system(season_ui));
+            .add_system(season_ui);
     }
 }

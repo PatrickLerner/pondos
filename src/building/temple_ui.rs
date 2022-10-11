@@ -48,7 +48,7 @@ pub fn temple_ui(
                         }
 
                         for (name, price) in
-                            vec![("small", 100), ("medium", 500), ("large", 1000)].into_iter()
+                            vec![("small", 10), ("medium", 50), ("large", 10)].into_iter()
                         {
                             let enabled = player.silver >= price;
                             let button = ui.add_sized(
@@ -82,7 +82,7 @@ pub fn temple_ui(
                         }
 
                         for (name, price) in
-                            vec![("small", 100), ("medium", 500), ("large", 1000)].into_iter()
+                            vec![("small", 10), ("medium", 50), ("large", 100)].into_iter()
                         {
                             let enabled = player.silver >= price;
                             let button = ui.add_sized(
@@ -109,21 +109,21 @@ pub fn temple_ui(
                         if temple.poor_donations_made > 0 {
                             ui.add_space(5.);
                             ui.label(format!(
-                                "Donations to local poor people made: {} {}",
+                                "Donations to feed local people made: {} {}",
                                 temple.poor_donations_made, COIN_NAME
                             ));
                             ui.add_space(5.);
                         }
 
                         for (name, price) in
-                            vec![("small", 100), ("medium", 500), ("large", 1000)].into_iter()
+                            vec![("small", 10), ("medium", 50), ("large", 100)].into_iter()
                         {
                             let enabled = player.silver >= price;
                             let button = ui.add_sized(
                                 [width, 30.],
                                 egui::Button::new(
                                     RichText::new(format!(
-                                        "Donate a {} sum to local poor people ({} {})",
+                                        "Donate a {} sum to feed local people ({} {})",
                                         name, price, COIN_NAME
                                     ))
                                     .color(enabled_color(enabled)),
