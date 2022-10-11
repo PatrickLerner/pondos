@@ -9,6 +9,10 @@ Pondos is a small game wherein you play a trader, who travels between
 ancient Greek city states in the Black Sea area, trying to carve out
 a living.
 
+## Play Online
+
+- https://pondos.app/
+
 ## Development Info
 
 ### Running on wasm
