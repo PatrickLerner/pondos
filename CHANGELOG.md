@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0
+
+- Added temples
+- Updated icons
+- Made all windows closable with keyboard
+- Automatically distribute resources by computer-controlled merchants
+- Added info about money and convoy to map screen
+
 ## 0.3.0
 
 - Added more resources

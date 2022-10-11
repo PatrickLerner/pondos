@@ -11,6 +11,7 @@ mod building;
 mod camera;
 mod debug_populations;
 mod debug_settlements;
+mod deities;
 mod game_state;
 mod game_time;
 mod info_ui;
@@ -110,6 +111,7 @@ fn main() {
     .add_plugin(YamlAssetPlugin::<loading::Populations>::new(&[
         "populations",
     ]))
+    .add_plugin(YamlAssetPlugin::<loading::Deities>::new(&["deities"]))
     .add_plugin(YamlAssetPlugin::<Settings>::new(&["settings"]))
     .add_plugin(TilemapPlugin)
     .add_plugin(EguiPlugin)
