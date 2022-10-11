@@ -1,7 +1,6 @@
+use crate::game_time::GameTimeAdvanceEvent;
 use bevy::prelude::*;
 use std::collections::HashMap;
-
-use crate::game_time::GameTimeAdvanceEvent;
 
 #[derive(Clone, Copy, Debug)]
 #[allow(clippy::enum_variant_names)]
@@ -36,9 +35,9 @@ impl TransportType {
 
     pub fn price(&self) -> u32 {
         match self {
-            TransportType::SmallShip => 3000,
-            TransportType::MediumShip => 6000,
-            TransportType::LargeShip => 10000,
+            TransportType::SmallShip => 2000,
+            TransportType::MediumShip => 4000,
+            TransportType::LargeShip => 7500,
         }
     }
 }

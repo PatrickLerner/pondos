@@ -15,6 +15,9 @@ pub fn cap_resources(
     if let Some(resources) = resources {
         if let Some(settings) = settings {
             for event in events.iter() {
+                if event.time.is_initialized() {
+                    log::debug!("capping max resources");
+                }
                 for mut settlement in settlements.iter_mut() {
                     settlement.resource_cap_tick(&event.time, &resources, &settings);
                 }

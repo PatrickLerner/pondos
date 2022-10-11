@@ -1,6 +1,6 @@
 [package]
 name = "pondos"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 publish = false
 authors = ["Patrick Lerner <ptlerner@gmail.com>"]
@@ -25,7 +25,7 @@ dev = [
 bevy = { version = "0.8", default-features = false, features = ["bevy_asset", "bevy_winit", "render", "png", "x11"] }
 bevy_kira_audio = { version = "0.12" }
 bevy_asset_loader = { version = "0.12" }
-rand = { version = "0.8.3" }
+rand = "0.8"
 bevy_ecs_tilemap = "0.8"
 bevy_egui = "0.16"
 log = "0.4"

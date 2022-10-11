@@ -1,9 +1,8 @@
-use super::{SelectedBuilding, Shipyard};
 use crate::{
-    create_window,
+    building::Shipyard,
     game_state::{GameState, SettlementState},
     player::{Player, TransportType},
-    ui_config::{enabled_color, large_button},
+    ui::{create_window, enabled_color, large_button, SelectedBuilding},
     COIN_NAME,
 };
 use bevy::prelude::*;

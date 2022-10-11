@@ -1,8 +1,11 @@
-use super::{
-    ui::{buildings_ui, population_info, production_ui, resource_info},
-    CloseSettlementUIEvent, SelectedSettlement, Settlement,
+use crate::{
+    game_state::GameState,
+    settlement::{
+        ui::{buildings_ui, population_info, production_ui, resource_info},
+        Settlement,
+    },
+    ui::{create_window_with_mobile, CloseSettlementUIEvent, SelectedBuilding, SelectedSettlement},
 };
-use crate::{building::SelectedBuilding, create_window_with_mobile, game_state::GameState};
 use bevy::prelude::*;
 use bevy_egui::{
     egui::{self, Align},
@@ -55,7 +58,6 @@ pub fn settlement_ui(
                                     &mut game_state,
                                     &mut selected_building,
                                 );
-                                ui.add_space(5.);
                                 population_info(ui, settlement);
                             },
                         );

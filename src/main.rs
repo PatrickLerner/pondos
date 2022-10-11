@@ -5,13 +5,16 @@ use bevy_egui::EguiPlugin;
 use clap::Command;
 use dotenv::dotenv;
 use serde::Deserialize;
+use settlement::SettlementLabel;
 
 mod building;
 mod camera;
 mod debug_populations;
 mod debug_settlements;
+mod deities;
 mod game_state;
 mod game_time;
+mod info_ui;
 mod loading;
 mod map;
 mod player;
@@ -19,8 +22,9 @@ mod population;
 mod price_calculator;
 mod resources;
 mod settlement;
+mod trader;
 mod types;
-mod ui_config;
+mod ui;
 
 const COIN_NAME: &str = "Silver";
 
@@ -52,74 +56,6 @@ fn cli() -> Command {
                     ),
                 ),
         )
-}
-
-const NAME: &str = env!("CARGO_PKG_NAME");
-const VERSION: &str = env!("CARGO_PKG_VERSION");
-fn init_game_version(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn().insert_bundle(
-        TextBundle::from_section(
-            format!("{} v{}", NAME, VERSION),
-            TextStyle {
-                font: asset_server.load("fonts/FiraMono-Medium.ttf"),
-                font_size: 14.0,
-                color: Color::WHITE,
-            },
-        )
-        .with_style(Style {
-            align_self: AlignSelf::FlexEnd,
-            position_type: PositionType::Absolute,
-            position: UiRect {
-                bottom: Val::Px(5.0),
-                right: Val::Px(15.0),
-                ..default()
-            },
-            ..default()
-        }),
-    );
-}
-
-const WINDOW_PADDING_X: f32 = 40.;
-const WINDOW_PADDING_Y: f32 = 80.;
-const MAX_WIDTH: f32 = 720.;
-const MAX_HEIGHT: f32 = 720.;
-const MOBILE_BREAK_POINT: f32 = 400.;
-
-pub fn create_window<'a>(
-    ctx: &bevy_egui::egui::Context,
-    windows: &'a Windows,
-    name: &str,
-    open: &mut bool,
-    add_contents: impl FnOnce(&mut bevy_egui::egui::Ui),
-) {
-    create_window_with_mobile(ctx, windows, name, open, |ui, _| add_contents(ui))
-}
-
-pub fn create_window_with_mobile<'a>(
-    ctx: &bevy_egui::egui::Context,
-    windows: &'a Windows,
-    name: &str,
-    open: &mut bool,
-    add_contents: impl FnOnce(&mut bevy_egui::egui::Ui, bool),
-) {
-    let window = windows.get_primary().unwrap();
-    let win_max_width = window.width() - WINDOW_PADDING_X;
-    let width = f32::min(win_max_width, MAX_WIDTH);
-    let win_max_height = window.height() - WINDOW_PADDING_Y;
-    let height = f32::min(win_max_height, MAX_HEIGHT);
-
-    bevy_egui::egui::Window::new(name)
-        .anchor(bevy_egui::egui::Align2::CENTER_CENTER, (0., 0.))
-        .resizable(false)
-        .collapsible(false)
-        .open(open)
-        .show(ctx, |ui| {
-            ui.set_width(width);
-            ui.set_height(height);
-
-            let mobile = win_max_width <= MOBILE_BREAK_POINT;
-            add_contents(ui, mobile);
-        });
 }
 
 fn main() {
@@ -161,12 +97,12 @@ fn main() {
     .add_event::<player::PlayerTravelEvent>()
     .add_event::<game_time::GameTimeAdvancedEvent>()
     .add_event::<game_time::GameTimeAdvanceEvent>()
-    .add_event::<settlement::CloseSettlementUIEvent>()
+    .add_event::<ui::CloseSettlementUIEvent>()
     .add_state(game_state::GameState::Loading)
     .insert_resource(ImageSettings::default_nearest())
     .init_resource::<game_time::GameTime>()
-    .init_resource::<Option<settlement::SelectedSettlement>>()
-    .init_resource::<Option<building::SelectedBuilding>>()
+    .init_resource::<Option<ui::SelectedSettlement>>()
+    .init_resource::<Option<ui::SelectedBuilding>>()
     .add_plugins(DefaultPlugins)
     .add_plugin(YamlAssetPlugin::<loading::Settlements>::new(&[
         "settlements",
@@ -175,6 +111,7 @@ fn main() {
     .add_plugin(YamlAssetPlugin::<loading::Populations>::new(&[
         "populations",
     ]))
+    .add_plugin(YamlAssetPlugin::<loading::Deities>::new(&["deities"]))
     .add_plugin(YamlAssetPlugin::<Settings>::new(&["settings"]))
     .add_plugin(TilemapPlugin)
     .add_plugin(EguiPlugin)
@@ -187,7 +124,10 @@ fn main() {
     .add_system(player::handle_travel)
     .add_system(population::population_production)
     .add_system(price_calculator::average_prices)
-    .add_startup_system(ui_config::color_mode)
-    .add_startup_system(init_game_version)
+    .add_system(settlement::cap_resources::cap_resources.label(SettlementLabel::CapResources))
+    .add_system(trader::trade_merchant.after(SettlementLabel::CapResources))
+    .add_system(info_ui::info_ui)
+    .add_startup_system(ui::color_mode)
+    .add_startup_system(info_ui::show_game_version)
     .run();
 }

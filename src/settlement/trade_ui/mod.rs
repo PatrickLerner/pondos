@@ -1,11 +1,10 @@
-use super::{SelectedSettlement, Settlement};
+use super::Settlement;
 use crate::{
-    create_window,
     game_state::{GameState, SettlementState},
     player::Player,
     price_calculator::{AveragePrices, PriceCalculator},
     resources::Resource,
-    ui_config::large_button,
+    ui::{create_window, large_button, SelectedSettlement},
     COIN_NAME,
 };
 use bevy::prelude::*;
@@ -59,14 +58,14 @@ pub fn trade_ui(
                                 ui.label("");
                                 ui.label(
                                     RichText::new("Convoy")
-                                        .text_style(crate::ui_config::panel_heading())
+                                        .text_style(crate::ui::panel_heading())
                                         .strong(),
                                 );
                                 ui.label("");
                                 ui.label("");
                                 ui.label(
                                     RichText::new(&settlement.name)
-                                        .text_style(crate::ui_config::panel_heading())
+                                        .text_style(crate::ui::panel_heading())
                                         .strong(),
                                 );
                                 ui.label("");

@@ -186,6 +186,7 @@
   max:
     Population: -0.5
     Farmer: 5
+    Beer Brewer: -1
 
 - name: Cheese
   base_price: 10

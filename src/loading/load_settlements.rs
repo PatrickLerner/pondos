@@ -1,6 +1,6 @@
 use super::{FeaturesTilemap, MapImage, Settlements};
 use crate::{
-    building::{BuildingType, Shipyard},
+    building::{BuildingType, Shipyard, Temple},
     map::{types::MapTileType, MapSize},
     settlement::SettlementType,
 };
@@ -31,13 +31,16 @@ pub fn load_settlements(
                         settlement.populations.sort();
 
                         for building in settlement.buildings.iter_mut() {
-                            let building_component = match building.building_type {
-                                BuildingType::Shipyard => Shipyard::default(),
+                            let mut entity = commands.spawn();
+                            let entity = match &building.building_type {
+                                BuildingType::Shipyard => entity.insert(Shipyard::default()).id(),
+                                BuildingType::Temple(info) => {
+                                    let temple: Temple = info.clone().into();
+                                    entity.insert(temple).id()
+                                }
                             };
 
-                            let entity = commands.spawn().insert(building_component).id();
-
-                            building.entity = entity;
+                            building.entity = Some(entity);
                         }
 
                         let map_tile_type = match settlement.settlement_type {

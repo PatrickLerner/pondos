@@ -1,12 +1,13 @@
 use crate::{
-    game_state::GameState, game_time::GameTime, player::Player, population::Population,
-    resources::Resource, settlement::Settlement, Settings,
+    deities::Deity, game_state::GameState, game_time::GameTime, player::Player,
+    population::Population, resources::Resource, settlement::Settlement, Settings,
 };
 use bevy::{prelude::*, reflect::TypeUuid};
 use bevy_ecs_tilemap::prelude::*;
 use serde::Deserialize;
 
 mod initialize_game_time;
+mod load_deities;
 mod load_map;
 mod load_player;
 mod load_populations;
@@ -29,6 +30,10 @@ pub struct Resources(Vec<Resource>);
 #[uuid = "e7ac1c59-c2ac-4a77-9ace-532038a44758"]
 pub struct Populations(Vec<Population>);
 
+#[derive(Debug, Deserialize, TypeUuid)]
+#[uuid = "713da916-235c-4b20-912b-daccf93f99d1"]
+pub struct Deities(Vec<Deity>);
+
 pub struct MapImage(Handle<Image>);
 pub struct FeaturesTilemap((Entity, TilemapId));
 
@@ -39,12 +44,14 @@ pub fn setup(mut commands: Commands, server: Res<AssetServer>) {
     let resources: Handle<Resources> = server.load("game.resources");
     let populations: Handle<Populations> = server.load("game.populations");
     let settings: Handle<Settings> = server.load("game.settings");
+    let deities: Handle<Deities> = server.load("game.deities");
 
     log::debug!("requesting assets");
     commands.insert_resource(map_image);
     commands.insert_resource(settlements);
     commands.insert_resource(resources);
     commands.insert_resource(populations);
+    commands.insert_resource(deities);
     commands.insert_resource(settings);
 }
 
@@ -54,6 +61,7 @@ pub fn transition(
     res: (
         Option<Res<Handle<Settlements>>>,
         Option<Res<Handle<Populations>>>,
+        Option<Res<Handle<Deities>>>,
         Option<Res<MapImage>>,
         Option<Res<Handle<Resources>>>,
         Option<Res<Handle<Settings>>>,
@@ -64,6 +72,7 @@ pub fn transition(
     let (
         settlement_handle,
         populations_handle,
+        deities_handle,
         map_image_handle,
         resources_handle,
         settings_handle,
@@ -72,6 +81,7 @@ pub fn transition(
 
     if settlement_handle.is_none()
         && populations_handle.is_none()
+        && deities_handle.is_none()
         && map_image_handle.is_none()
         && resources_handle.is_none()
         && settings_handle.is_none()
@@ -95,6 +105,7 @@ impl Plugin for LoadingPlugin {
                     .with_system(load_settlements::load_settlements)
                     .with_system(load_populations::load_populations)
                     .with_system(load_resources::load_resources)
+                    .with_system(load_deities::load_deities)
                     .with_system(load_settings::load_settings)
                     .with_system(initialize_game_time::initialize_game_time)
                     .with_system(load_player::load_player),
