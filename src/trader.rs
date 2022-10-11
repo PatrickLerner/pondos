@@ -13,7 +13,7 @@ const BASE_ITEMS: usize = 2;
 const ITEMS_PER_MERCHANT: usize = 3;
 
 fn surplus_for_settlement(
-    resources: &Vec<Resource>,
+    resources: &[Resource],
     average_prices: &AveragePrices,
     settlement: &Settlement,
 ) -> Vec<String> {
@@ -90,7 +90,7 @@ pub fn trade_merchant(
 
         // take from common market
         for (entity, settlement) in settlements.iter() {
-            let count = item_count_for_settlement(&settlement);
+            let count = item_count_for_settlement(settlement);
 
             for _ in 0..count {
                 picks.push(entity);

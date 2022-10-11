@@ -1,9 +1,11 @@
 use bevy::{prelude::*, reflect::TypeUuid, render::texture::ImageSettings};
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_ecs_tilemap::prelude::*;
-use bevy_egui::EguiPlugin;
+use bevy_egui::egui;
+use bevy_egui::{egui::Align2, EguiContext, EguiPlugin};
 use clap::Command;
 use dotenv::dotenv;
+use player::Player;
 use serde::Deserialize;
 use settlement::SettlementLabel;
 
@@ -81,6 +83,48 @@ fn init_game_version(mut commands: Commands, asset_server: Res<AssetServer>) {
     );
 }
 
+pub fn info(
+    mut egui_context: ResMut<EguiContext>,
+    player: Option<ResMut<Player>>,
+    mut convoy_open: Local<bool>,
+    #[cfg(debug_assertions)] mut dev_open: Local<bool>,
+) {
+    #[allow(unused_mut)]
+    if let Some(mut player) = player {
+        egui::Window::new("Info")
+            .resizable(false)
+            .collapsible(false)
+            .anchor(Align2::LEFT_TOP, (14., 14.))
+            .show(egui_context.ctx_mut(), |ui| {
+                ui.horizontal(|ui| {
+                    ui.label(format!("{} {}", player.silver, COIN_NAME));
+                    if ui
+                        .small_button(format!("Convoy ({})", player.convoy.len()))
+                        .clicked()
+                    {
+                        *convoy_open = !*convoy_open;
+                    }
+
+                    #[cfg(debug_assertions)]
+                    if ui.small_button("DEV").clicked() {
+                        *dev_open = !*dev_open;
+                    }
+                });
+
+                if *convoy_open {
+                    for transport in &player.convoy {
+                        ui.label(format!(" - {}", transport));
+                    }
+                }
+
+                #[cfg(debug_assertions)]
+                if *dev_open && ui.small_button("Add Money").clicked() {
+                    player.silver += 100;
+                }
+            });
+    }
+}
+
 fn main() {
     dotenv().ok();
 
@@ -148,6 +192,7 @@ fn main() {
     .add_system(price_calculator::average_prices)
     .add_system(settlement::cap_resources::cap_resources.label(SettlementLabel::CapResources))
     .add_system(trader::trade_merchant.after(SettlementLabel::CapResources))
+    .add_system(info)
     .add_startup_system(ui::color_mode)
     .add_startup_system(init_game_version)
     .run();
