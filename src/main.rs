@@ -1,11 +1,9 @@
 use bevy::{prelude::*, reflect::TypeUuid, render::texture::ImageSettings};
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_ecs_tilemap::prelude::*;
-use bevy_egui::egui;
-use bevy_egui::{egui::Align2, EguiContext, EguiPlugin};
+use bevy_egui::EguiPlugin;
 use clap::Command;
 use dotenv::dotenv;
-use player::Player;
 use serde::Deserialize;
 use settlement::SettlementLabel;
 
@@ -15,6 +13,7 @@ mod debug_populations;
 mod debug_settlements;
 mod game_state;
 mod game_time;
+mod info_ui;
 mod loading;
 mod map;
 mod player;
@@ -56,73 +55,6 @@ fn cli() -> Command {
                     ),
                 ),
         )
-}
-
-const NAME: &str = env!("CARGO_PKG_NAME");
-const VERSION: &str = env!("CARGO_PKG_VERSION");
-fn init_game_version(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn().insert_bundle(
-        TextBundle::from_section(
-            format!("{} v{}", NAME, VERSION),
-            TextStyle {
-                font: asset_server.load("fonts/FiraMono-Medium.ttf"),
-                font_size: 14.0,
-                color: Color::WHITE,
-            },
-        )
-        .with_style(Style {
-            align_self: AlignSelf::FlexEnd,
-            position_type: PositionType::Absolute,
-            position: UiRect {
-                bottom: Val::Px(5.0),
-                right: Val::Px(15.0),
-                ..default()
-            },
-            ..default()
-        }),
-    );
-}
-
-pub fn info(
-    mut egui_context: ResMut<EguiContext>,
-    player: Option<ResMut<Player>>,
-    mut convoy_open: Local<bool>,
-    #[cfg(debug_assertions)] mut dev_open: Local<bool>,
-) {
-    #[allow(unused_mut)]
-    if let Some(mut player) = player {
-        egui::Window::new("Info")
-            .resizable(false)
-            .collapsible(false)
-            .anchor(Align2::LEFT_TOP, (14., 14.))
-            .show(egui_context.ctx_mut(), |ui| {
-                ui.horizontal(|ui| {
-                    ui.label(format!("{} {}", player.silver, COIN_NAME));
-                    if ui
-                        .small_button(format!("Convoy ({})", player.convoy.len()))
-                        .clicked()
-                    {
-                        *convoy_open = !*convoy_open;
-                    }
-
-                    #[cfg(debug_assertions)]
-                    if ui.small_button("DEV").clicked() {
-                        *dev_open = !*dev_open;
-                    }
-                });
-
-                if *convoy_open {
-                    for transport in &player.convoy {
-                        ui.label(format!(" - {}", transport));
-                    }
-                }
-
-                #[cfg(debug_assertions)]
-                if *dev_open && ui.small_button("Add Money").clicked() {
-                    player.silver += 100;
-                }
-            });
-    }
 }
 
 fn main() {
@@ -192,8 +124,8 @@ fn main() {
     .add_system(price_calculator::average_prices)
     .add_system(settlement::cap_resources::cap_resources.label(SettlementLabel::CapResources))
     .add_system(trader::trade_merchant.after(SettlementLabel::CapResources))
-    .add_system(info)
+    .add_system(info_ui::info_ui)
     .add_startup_system(ui::color_mode)
-    .add_startup_system(init_game_version)
+    .add_startup_system(info_ui::show_game_version)
     .run();
 }
