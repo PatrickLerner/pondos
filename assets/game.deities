@@ -2,3 +2,18 @@
 
 - name: Artemis
   gender: female
+
+- name: Cybele
+  gender: female
+
+- name: Hecate
+  gender: female
+
+- name: Dionysus
+  gender: male
+
+- name: Poseidon
+  gender: male
+
+- name: Hermes
+  gender: male

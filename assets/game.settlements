@@ -15,7 +15,9 @@
     - Beekeeper
     - Fisher
     - Fisher
-    - Potter
+    - Farmer
+    - Mead Brewer
+    - Mead Brewer
 
 - name: Theodosia
   type: city
@@ -23,13 +25,14 @@
     x: 48
     y: 27
   populations:
-    - Mead Brewer
-    - Mead Brewer
     - Beekeeper
     - Beekeeper
     - Beekeeper
     - Fisher
     - Fisher
+    - Farmer
+    - Farmer
+    - Farmer
     - Butcher
 
 - name: (Emporium) Tanais
@@ -52,11 +55,15 @@
   position:
     x: 55
     y: 21
+  buildings:
+    - type: Temple
+      deity: Hermes
   populations:
     - Merchant
     - Beer Brewer
     - Beer Brewer
     - Mead Brewer
+    - Farmer
     - Farmer
     - Fisher
 
@@ -65,6 +72,9 @@
   position:
     x: 82
     y: 28
+  buildings:
+    - type: Temple
+      deity: Poseidon
   populations:
     - Fisher
     - Fisher
@@ -107,6 +117,9 @@
   position:
     x: 83
     y: 44
+  buildings:
+    - type: Temple
+      deity: Cybele
   populations:
     - Brickmaker
     - Brickmaker
@@ -132,6 +145,7 @@
     - Blacksmith
     - Clothmaker
     - Clothmaker
+    - Potter
 
 - name: Kitoron
   type: city
@@ -169,6 +183,8 @@
   type: city
   buildings:
     - type: Shipyard
+    - type: Temple
+      deity: Hecate
   position:
     x: 24
     y: 62
@@ -208,6 +224,8 @@
     y: 36
   buildings:
     - type: Shipyard
+    - type: Temple
+      deity: Dionysus
   populations:
     - Tanner
     - Lumberjack

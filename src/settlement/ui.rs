@@ -1,8 +1,8 @@
-use super::Settlement;
 use crate::{
-    building::{BuildingType, SelectedBuilding},
+    building::BuildingType,
     game_state::{GameState, SettlementState},
-    ui_config::large_button,
+    settlement::Settlement,
+    ui::{large_button, SelectedBuilding},
     COIN_NAME,
 };
 use bevy::prelude::*;
@@ -42,6 +42,29 @@ pub fn resource_info(ui: &mut Ui, settlement: &Settlement) {
     }
 
     ui.label(format!(" - {}: {}", COIN_NAME, settlement.silver));
+}
+
+pub fn list_buildings_ui(ui: &mut Ui, settlement: &Settlement) {
+    if settlement.buildings.is_empty() {
+        return;
+    }
+
+    ui.heading("Buildings");
+    ui.add_space(5.);
+
+    for building in settlement.buildings.iter() {
+        ui.label(format!(
+            " - {}",
+            match &building.building_type {
+                BuildingType::Temple(temple) => {
+                    format!("Temple of {}", temple.deity)
+                }
+                BuildingType::Shipyard => {
+                    "Shipyard".to_owned()
+                }
+            }
+        ));
+    }
 }
 
 pub fn buildings_ui(

@@ -1,13 +1,13 @@
-use super::{SelectedBuilding, Temple};
 use crate::{
-    create_window,
+    building::Temple,
     game_state::{GameState, SettlementState},
     player::Player,
-    ui_config::large_button,
+    ui::{create_window, enabled_color, large_button, SelectedBuilding},
+    COIN_NAME,
 };
 use bevy::prelude::*;
 use bevy_egui::{
-    egui::{self, Align},
+    egui::{self, Align, RichText},
     EguiContext,
 };
 
@@ -37,6 +37,105 @@ pub fn temple_ui(
                                 .unwrap()
                         }
                     });
+
+                    let width = ui.available_width();
+
+                    {
+                        if temple.offers_made > 0 {
+                            ui.add_space(5.);
+                            ui.label(format!("Offers made: {} {}", temple.offers_made, COIN_NAME));
+                            ui.add_space(5.);
+                        }
+
+                        for (name, price) in
+                            vec![("small", 100), ("medium", 500), ("large", 1000)].into_iter()
+                        {
+                            let enabled = player.silver >= price;
+                            let button = ui.add_sized(
+                                [width, 30.],
+                                egui::Button::new(
+                                    RichText::new(format!(
+                                        "Conduct a {} offering ({} {})",
+                                        name, price, COIN_NAME
+                                    ))
+                                    .color(enabled_color(enabled)),
+                                ),
+                            );
+
+                            if button.clicked() && enabled {
+                                player.silver -= price;
+                                temple.offers_made += price;
+                            }
+                        }
+                    }
+
+                    ui.add_space(10.);
+
+                    {
+                        if temple.temple_donations_made > 0 {
+                            ui.add_space(5.);
+                            ui.label(format!(
+                                "Donations to temple made: {} {}",
+                                temple.temple_donations_made, COIN_NAME
+                            ));
+                            ui.add_space(5.);
+                        }
+
+                        for (name, price) in
+                            vec![("small", 100), ("medium", 500), ("large", 1000)].into_iter()
+                        {
+                            let enabled = player.silver >= price;
+                            let button = ui.add_sized(
+                                [width, 30.],
+                                egui::Button::new(
+                                    RichText::new(format!(
+                                        "Donate a {} sum to the temple ({} {})",
+                                        name, price, COIN_NAME
+                                    ))
+                                    .color(enabled_color(enabled)),
+                                ),
+                            );
+
+                            if button.clicked() && enabled {
+                                player.silver -= price;
+                                temple.temple_donations_made += price;
+                            }
+                        }
+                    }
+
+                    ui.add_space(10.);
+
+                    {
+                        if temple.poor_donations_made > 0 {
+                            ui.add_space(5.);
+                            ui.label(format!(
+                                "Donations to local poor people made: {} {}",
+                                temple.poor_donations_made, COIN_NAME
+                            ));
+                            ui.add_space(5.);
+                        }
+
+                        for (name, price) in
+                            vec![("small", 100), ("medium", 500), ("large", 1000)].into_iter()
+                        {
+                            let enabled = player.silver >= price;
+                            let button = ui.add_sized(
+                                [width, 30.],
+                                egui::Button::new(
+                                    RichText::new(format!(
+                                        "Donate a {} sum to local poor people ({} {})",
+                                        name, price, COIN_NAME
+                                    ))
+                                    .color(enabled_color(enabled)),
+                                ),
+                            );
+
+                            if button.clicked() && enabled {
+                                player.silver -= price;
+                                temple.poor_donations_made += price;
+                            }
+                        }
+                    }
                 },
             );
 

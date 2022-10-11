@@ -27,6 +27,9 @@ impl From<BuildingType> for Building {
 #[derive(Component, Debug, Default)]
 pub struct Temple {
     pub info: TempleInfo,
+    pub offers_made: u32,
+    pub temple_donations_made: u32,
+    pub poor_donations_made: u32,
 }
 
 impl From<TempleInfo> for Temple {
@@ -78,23 +81,22 @@ fn shipyard_construction(
     }
 }
 
-#[derive(Debug, PartialEq, Eq)]
-pub struct SelectedBuilding(pub Entity);
-
 pub struct BuildingPlugin;
 
 impl Plugin for BuildingPlugin {
     fn build(&self, app: &mut App) {
         app.add_system(shipyard_construction)
             .add_system_set(
-                // TODO: close by escape
                 SystemSet::on_update(GameState::Settlement(SettlementState::Shipyard))
-                    .with_system(shipyard_ui::shipyard_ui),
+                    .with_system(shipyard_ui::shipyard_ui)
+                    .with_system(crate::ui::close_by_keyboard)
+                    .with_system(crate::ui::close_event_handler),
             )
             .add_system_set(
-                // TODO: close by escape
                 SystemSet::on_update(GameState::Settlement(SettlementState::Temple))
-                    .with_system(temple_ui::temple_ui),
+                    .with_system(temple_ui::temple_ui)
+                    .with_system(crate::ui::close_by_keyboard)
+                    .with_system(crate::ui::close_event_handler),
             );
     }
 }

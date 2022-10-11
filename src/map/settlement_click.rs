@@ -2,7 +2,8 @@ use super::{constants::TILEMAP_SIZE, CursorPos};
 use crate::{
     game_state::{GameState, SettlementState},
     player::Player,
-    settlement::{SelectedSettlement, Settlement},
+    settlement::Settlement,
+    ui::SelectedSettlement,
 };
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;

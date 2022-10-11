@@ -7,9 +7,7 @@ use bevy::prelude::*;
 use serde::Deserialize;
 use std::collections::HashMap;
 
-mod cap_resources;
-mod close_by_keyboard;
-mod close_event_handler;
+pub mod cap_resources;
 mod settlement_ui;
 mod trade_ui;
 mod travel_ui;
@@ -77,38 +75,32 @@ pub struct Position {
     pub y: u32,
 }
 
-pub struct CloseSettlementUIEvent;
-
-#[derive(Debug, PartialEq, Eq)]
-pub struct SelectedSettlement(Entity);
-
-impl From<Entity> for SelectedSettlement {
-    fn from(entity: Entity) -> SelectedSettlement {
-        SelectedSettlement(entity)
-    }
+#[derive(Debug, Clone, PartialEq, Eq, Hash, SystemLabel)]
+pub enum SettlementLabel {
+    CapResources,
 }
 
 pub struct SettlementPlugin;
 
 impl Plugin for SettlementPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system(cap_resources::cap_resources)
-            .add_system_set(
-                SystemSet::on_update(GameState::Settlement(SettlementState::Overview))
-                    .with_system(settlement_ui::settlement_ui)
-                    .with_system(close_by_keyboard::close_by_keyboard)
-                    .with_system(close_event_handler::close_event_handler),
-            )
-            .add_system_set(
-                SystemSet::on_update(GameState::Travel)
-                    .with_system(travel_ui::travel_ui)
-                    .with_system(close_by_keyboard::close_by_keyboard)
-                    .with_system(close_event_handler::close_event_handler),
-            )
-            .add_system_set(
-                // TODO: close by escape
-                SystemSet::on_update(GameState::Settlement(SettlementState::Trade))
-                    .with_system(trade_ui::trade_ui),
-            );
+        app.add_system_set(
+            SystemSet::on_update(GameState::Settlement(SettlementState::Overview))
+                .with_system(settlement_ui::settlement_ui)
+                .with_system(crate::ui::close_by_keyboard)
+                .with_system(crate::ui::close_event_handler),
+        )
+        .add_system_set(
+            SystemSet::on_update(GameState::Travel)
+                .with_system(travel_ui::travel_ui)
+                .with_system(crate::ui::close_by_keyboard)
+                .with_system(crate::ui::close_event_handler),
+        )
+        .add_system_set(
+            SystemSet::on_update(GameState::Settlement(SettlementState::Trade))
+                .with_system(trade_ui::trade_ui)
+                .with_system(crate::ui::close_by_keyboard)
+                .with_system(crate::ui::close_event_handler),
+        );
     }
 }

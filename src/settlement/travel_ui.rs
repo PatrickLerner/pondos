@@ -1,8 +1,11 @@
-use super::{ui::production_ui, CloseSettlementUIEvent, SelectedSettlement, Settlement};
+use super::{
+    ui::{list_buildings_ui, production_ui},
+    Settlement,
+};
 use crate::{
     game_state::{GameState, SettlementState},
     player::PlayerTravelEvent,
-    ui_config::large_button,
+    ui::{large_button, CloseSettlementUIEvent, SelectedSettlement},
 };
 use bevy::prelude::*;
 use bevy_egui::{
@@ -30,6 +33,10 @@ pub fn travel_ui(
             .show(egui_context.ctx_mut(), |ui| {
                 ui.add_space(10.);
                 production_ui(ui, settlement);
+                if !settlement.buildings.is_empty() {
+                    ui.add_space(5.);
+                    list_buildings_ui(ui, settlement);
+                }
                 ui.add_space(10.);
 
                 ui.columns(2, |columns| {

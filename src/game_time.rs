@@ -27,7 +27,7 @@ impl Default for GameTime {
     fn default() -> Self {
         Self {
             // we tick for a few years to generate resources on loading
-            year: -5,
+            year: -1,
             season: 0,
         }
     }

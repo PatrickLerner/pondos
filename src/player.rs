@@ -1,7 +1,6 @@
+use crate::game_time::GameTimeAdvanceEvent;
 use bevy::prelude::*;
 use std::collections::HashMap;
-
-use crate::game_time::GameTimeAdvanceEvent;
 
 #[derive(Clone, Copy, Debug)]
 #[allow(clippy::enum_variant_names)]
