@@ -1,6 +1,7 @@
 use crate::{game_state::RunningState, player::PlayerTravelEvent, ui::large_button};
 use bevy::prelude::*;
 use bevy_egui::{egui::Frame, EguiContext};
+use rand::{seq::SliceRandom, thread_rng, Rng};
 use serde::Deserialize;
 use std::collections::{HashMap, HashSet};
 
@@ -24,6 +25,7 @@ pub struct GameEvent {
     pub title: String,
     pub image: String,
     pub trigger: Option<GameEventTrigger>,
+    pub chance: Option<f32>,
     pub text: String,
     pub actions: Vec<GameEventAction>,
 }
@@ -48,11 +50,31 @@ pub fn event_trigger_handler(
     let mut added_events = false;
 
     for trigger in triggers.iter() {
-        for (id, event) in events.iter() {
-            if event.trigger == Some(trigger.trigger) {
-                current_events.0.insert(id.to_owned());
-                added_events = true;
+        let mut events: Vec<&GameEvent> = events
+            .iter()
+            .filter_map(|(_, event)| {
+                if event.trigger == Some(trigger.trigger) {
+                    Some(event)
+                } else {
+                    None
+                }
+            })
+            .collect();
+
+        events.shuffle(&mut thread_rng());
+
+        let mut random = thread_rng();
+        for event in events.iter() {
+            if let Some(chance) = event.chance {
+                if random.gen_range(0.0..1.0) > chance {
+                    continue;
+                }
             }
+
+            log::info!("trigger game event {}", event.id);
+            current_events.0.insert(event.id.to_owned());
+            added_events = true;
+            break;
         }
     }
 

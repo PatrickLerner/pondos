@@ -1,20 +1,20 @@
 # vi: ft=yaml
 
 # Storm
+#
+# Todo Outcomes?
+#
+# - Shipwreck
+# - Loss of goods
+# - Survival
+# - Death
+#
 - id: storm
   trigger: travel
+  chance: 0.05
   title: Storm
-  text: There is a storm.
+  text: >
+    You are woken up during the early morning hours by the violent shaking of your vessel. Above, stormy clouds have risen, and a wild wind whips up the waves around the boat. You lower the sails and keep your hand on the rudder, trying your best to steer the boat.
   image: storm
   actions:
-    - label: Okay
-
-    - label: React
-      trigger_event: storm.react
-
-- id: storm.react
-  title: Storm
-  text: You reacted
-  image: storm
-  actions:
-    - label: Okay
+    - label: Poseidon, let me survive this!
