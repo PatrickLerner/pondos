@@ -7,6 +7,12 @@ pub enum GameState {
 }
 
 #[derive(Debug, Clone, Eq, PartialEq, Hash)]
+pub enum RunningState {
+    Running,
+    Paused,
+}
+
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub enum SettlementState {
     Overview,
     Trade,

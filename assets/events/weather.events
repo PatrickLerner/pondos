@@ -1,0 +1,20 @@
+# vi: ft=yaml
+
+# Storm
+- id: storm
+  trigger: travel
+  title: Storm
+  text: There is a storm.
+  image: storm
+  actions:
+    - label: Okay
+
+    - label: React
+      trigger_event: storm.react
+
+- id: storm.react
+  title: Storm
+  text: You reacted
+  image: storm
+  actions:
+    - label: Okay

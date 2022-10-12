@@ -1,9 +1,10 @@
 use crate::{
     building::Building,
-    game_state::{GameState, SettlementState},
+    game_state::{GameState, RunningState, SettlementState},
     COIN_NAME,
 };
 use bevy::prelude::*;
+use iyes_loopless::{condition::ConditionSystemSet, prelude::*};
 use serde::Deserialize;
 use std::collections::HashMap;
 
@@ -82,25 +83,30 @@ pub enum SettlementLabel {
 
 pub struct SettlementPlugin;
 
+fn build_set(game_state: GameState) -> ConditionSystemSet {
+    ConditionSet::new()
+        .run_in_bevy_state(game_state)
+        .run_in_bevy_state(RunningState::Running)
+        .with_system(crate::ui::close_by_keyboard)
+        .with_system(crate::ui::close_event_handler)
+}
+
 impl Plugin for SettlementPlugin {
     fn build(&self, app: &mut App) {
         app.add_system_set(
-            SystemSet::on_update(GameState::Settlement(SettlementState::Overview))
+            build_set(GameState::Settlement(SettlementState::Overview))
                 .with_system(settlement_ui::settlement_ui)
-                .with_system(crate::ui::close_by_keyboard)
-                .with_system(crate::ui::close_event_handler),
+                .into(),
         )
         .add_system_set(
-            SystemSet::on_update(GameState::Travel)
+            build_set(GameState::Travel)
                 .with_system(travel_ui::travel_ui)
-                .with_system(crate::ui::close_by_keyboard)
-                .with_system(crate::ui::close_event_handler),
+                .into(),
         )
         .add_system_set(
-            SystemSet::on_update(GameState::Settlement(SettlementState::Trade))
+            build_set(GameState::Settlement(SettlementState::Trade))
                 .with_system(trade_ui::trade_ui)
-                .with_system(crate::ui::close_by_keyboard)
-                .with_system(crate::ui::close_event_handler),
+                .into(),
         );
     }
 }

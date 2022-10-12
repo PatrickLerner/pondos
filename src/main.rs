@@ -12,6 +12,7 @@ mod camera;
 mod debug_populations;
 mod debug_settlements;
 mod deities;
+mod game_events;
 mod game_state;
 mod game_time;
 mod info_ui;
@@ -99,7 +100,9 @@ fn main() {
     .add_event::<game_time::GameTimeAdvanceEvent>()
     .add_event::<ui::CloseSettlementUIEvent>()
     .add_state(game_state::GameState::Loading)
+    .add_state(game_state::RunningState::Running)
     .insert_resource(ImageSettings::default_nearest())
+    .init_resource::<game_events::CurrentGameEvents>()
     .init_resource::<game_time::GameTime>()
     .init_resource::<Option<ui::SelectedSettlement>>()
     .init_resource::<Option<ui::SelectedBuilding>>()
@@ -112,11 +115,13 @@ fn main() {
         "populations",
     ]))
     .add_plugin(YamlAssetPlugin::<loading::Deities>::new(&["deities"]))
+    .add_plugin(YamlAssetPlugin::<loading::GameEvents>::new(&["events"]))
     .add_plugin(YamlAssetPlugin::<Settings>::new(&["settings"]))
     .add_plugin(TilemapPlugin)
     .add_plugin(EguiPlugin)
     .add_plugin(loading::LoadingPlugin)
     .add_plugin(camera::CameraPlugin)
+    .add_plugin(game_events::GameEventsPlugin)
     .add_plugin(map::MapPlugin)
     .add_plugin(settlement::SettlementPlugin)
     .add_plugin(building::BuildingPlugin)

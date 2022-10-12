@@ -83,7 +83,7 @@ pub fn shipyard_ui(
                             |ui| {
                                 ui.add(egui::widgets::Image::new(
                                     ship_textures.transport_type_image(transport_type),
-                                    [200.0, 250.0],
+                                    [250.0, 200.0],
                                 ));
                                 ui.heading(format!("{}", transport_type));
                                 ui.add_space(5.);
@@ -107,6 +107,7 @@ pub fn shipyard_ui(
                             },
                         );
                     } else {
+                        ui.add_space(25.);
                         ui.columns(3, |columns| {
                             for (index, transport_type) in vec![
                                 TransportType::SmallShip,
@@ -126,7 +127,7 @@ pub fn shipyard_ui(
                                     |ui| {
                                         ui.add(egui::widgets::Image::new(
                                             ship_textures.transport_type_image(transport_type),
-                                            [100.0, 125.0],
+                                            [100.0, 80.0],
                                         ));
                                         ui.heading(format!("{}", transport_type));
                                         ui.label(format!(
