@@ -1,5 +1,5 @@
 use crate::{
-    deities::Deity, game_events::GameEvent, game_state::GameState, game_time::GameTime,
+    deities::Deity, game_events::GameEvent, game_state::LoadingState, game_time::GameTime,
     player::Player, population::Population, resources::Resource, settlement::Settlement, Settings,
 };
 use bevy::{prelude::*, reflect::TypeUuid};
@@ -50,7 +50,6 @@ pub fn setup(mut commands: Commands, server: Res<AssetServer>) {
     let populations: Handle<Populations> = server.load("game.populations");
     let settings: Handle<Settings> = server.load("game.settings");
     let deities: Handle<Deities> = server.load("game.deities");
-    let events: Handle<GameEvents> = server.load("events/weather.events");
 
     log::debug!("requesting assets");
     commands.insert_resource(map_image);
@@ -59,12 +58,11 @@ pub fn setup(mut commands: Commands, server: Res<AssetServer>) {
     commands.insert_resource(populations);
     commands.insert_resource(deities);
     commands.insert_resource(settings);
-    commands.insert_resource(events);
 }
 
 #[allow(clippy::type_complexity)]
 pub fn transition(
-    mut game_state: ResMut<State<GameState>>,
+    mut loading_state: ResMut<State<LoadingState>>,
     res: (
         Option<Res<Handle<Settlements>>>,
         Option<Res<Handle<Populations>>>,
@@ -72,7 +70,7 @@ pub fn transition(
         Option<Res<MapImage>>,
         Option<Res<Handle<Resources>>>,
         Option<Res<Handle<Settings>>>,
-        Option<Res<Handle<GameEvents>>>,
+        Option<Res<Vec<Handle<GameEvents>>>>,
         Res<GameTime>,
     ),
     player: Option<Res<Player>>,
@@ -99,7 +97,7 @@ pub fn transition(
         && game_time.is_initialized()
     {
         log::info!("all resources fully loaded");
-        game_state.set(GameState::Map).unwrap();
+        loading_state.set(LoadingState::Loaded).unwrap();
     }
 }
 
@@ -107,9 +105,9 @@ pub struct LoadingPlugin;
 
 impl Plugin for LoadingPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system_set(SystemSet::on_enter(GameState::Loading).with_system(setup))
+        app.add_system_set(SystemSet::on_enter(LoadingState::Loading).with_system(setup))
             .add_system_set(
-                SystemSet::on_update(GameState::Loading)
+                SystemSet::on_update(LoadingState::Loading)
                     .with_system(transition)
                     .with_system(load_map::load_map)
                     .with_system(load_settlements::load_settlements)

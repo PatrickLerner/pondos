@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use bevy::{prelude::*, reflect::TypeUuid, render::texture::ImageSettings};
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_ecs_tilemap::prelude::*;
@@ -39,6 +41,7 @@ pub struct Settings {
     start_silver: u32,
     max_multipliers: types::SeasonalAmount<f32>,
     cap_percentage: f32,
+    events: HashSet<String>,
 }
 
 fn cli() -> Command {
@@ -99,7 +102,9 @@ fn main() {
     .add_event::<game_time::GameTimeAdvancedEvent>()
     .add_event::<game_time::GameTimeAdvanceEvent>()
     .add_event::<ui::CloseSettlementUIEvent>()
-    .add_state(game_state::GameState::Loading)
+    .add_event::<settlement::VisitSettlementEvent>()
+    .add_state(game_state::GameState::Map)
+    .add_state(game_state::LoadingState::Loading)
     .add_state(game_state::RunningState::Running)
     .insert_resource(ImageSettings::default_nearest())
     .init_resource::<game_events::CurrentGameEvents>()

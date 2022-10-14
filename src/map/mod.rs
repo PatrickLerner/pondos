@@ -1,7 +1,8 @@
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
+use iyes_loopless::prelude::ConditionSet;
 
-use crate::game_time::GameTimeAdvancedEvent;
+use crate::{game_state::LoadingState, game_time::GameTimeAdvancedEvent};
 
 use self::{constants::TILEMAP_SIZE, types::MapTileType};
 
@@ -87,9 +88,12 @@ impl Plugin for MapPlugin {
             .add_system(update_tiles)
             .add_system_set(SystemSet::on_exit(GameState::Map).with_system(on_exit::on_exit))
             .add_system_set(
-                SystemSet::on_update(GameState::Map)
+                ConditionSet::new()
+                    .run_in_bevy_state(GameState::Map)
+                    .run_in_bevy_state(LoadingState::Loaded)
                     .with_system(pan_orbit_camera)
-                    .with_system(settlement_click::settlement_click),
+                    .with_system(settlement_click::settlement_click)
+                    .into(),
             );
     }
 }

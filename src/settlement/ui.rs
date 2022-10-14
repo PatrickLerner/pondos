@@ -78,7 +78,7 @@ pub fn buildings_ui(
 
     if large_button(ui, 100., "Market").clicked() {
         game_state
-            .set(GameState::Settlement(SettlementState::Trade))
+            .overwrite_set(GameState::Settlement(SettlementState::Trade))
             .unwrap();
     }
 
@@ -91,7 +91,7 @@ pub fn buildings_ui(
                     }
 
                     game_state
-                        .set(GameState::Settlement(SettlementState::Temple))
+                        .overwrite_set(GameState::Settlement(SettlementState::Temple))
                         .unwrap();
                 }
             }
@@ -102,7 +102,7 @@ pub fn buildings_ui(
                     }
 
                     game_state
-                        .set(GameState::Settlement(SettlementState::Shipyard))
+                        .overwrite_set(GameState::Settlement(SettlementState::Shipyard))
                         .unwrap();
                 }
             }

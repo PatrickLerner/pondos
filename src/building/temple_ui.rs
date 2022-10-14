@@ -53,7 +53,7 @@ pub fn temple_ui(
                     ui.with_layout(egui::Layout::right_to_left(Align::Min), |ui| {
                         if large_button(ui, 100., "Back to Overview").clicked() {
                             game_state
-                                .set(GameState::Settlement(SettlementState::Overview))
+                                .overwrite_set(GameState::Settlement(SettlementState::Overview))
                                 .unwrap()
                         }
                     });

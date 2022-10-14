@@ -1,0 +1,166 @@
+# vi: ft=yaml
+
+- id: settlement.chersonesus
+  trigger: settlement
+  trigger_scope: Chersonesus
+  limit: 1
+  title: Chersonesus
+  text: >
+    TBD
+  image: chersonesus
+  actions:
+    - label: Enter the city
+
+- id: settlement.theodosia
+  trigger: settlement
+  trigger_scope: Theodosia
+  limit: 1
+  title: Theodosia
+  text: >
+    TBD
+  image: theodosia
+  actions:
+    - label: Enter the city
+
+- id: settlement.tanais
+  trigger: settlement
+  trigger_scope: (Emporium) Tanais
+  limit: 1
+  title: Emporium Tanais
+  text: >
+    TBD
+  image: tanais
+  actions:
+    - label: Enter the city
+
+- id: settlement.hermonassa
+  trigger: settlement
+  trigger_scope: Hermonassa
+  limit: 1
+  title: Hermonassa
+  text: >
+    TBD
+  image: hermonassa
+  actions:
+    - label: Enter the city
+
+- id: settlement.pityos
+  trigger: settlement
+  trigger_scope: Pityos
+  limit: 1
+  title: Pityos
+  text: >
+    TBD
+  image: pityos
+  actions:
+    - label: Enter the city
+
+- id: settlement.phasis
+  trigger: settlement
+  trigger_scope: Phasis
+  limit: 1
+  title: Phasis
+  text: >
+    TBD
+  image: phasis
+  actions:
+    - label: Enter the city
+
+- id: settlement.athenae
+  trigger: settlement
+  trigger_scope: Athenae
+  limit: 1
+  title: Athenae
+  text: >
+    TBD
+  image: athenae
+  actions:
+    - label: Enter the city
+
+- id: settlement.trapezus
+  trigger: settlement
+  trigger_scope: Trapezus
+  limit: 1
+  title: Trapezus
+  text: >
+    TBD
+  image: trapezus
+  actions:
+    - label: Enter the city
+
+- id: settlement.sinope
+  trigger: settlement
+  trigger_scope: Sinope
+  limit: 1
+  title: Sinope
+  text: >
+    TBD
+  image: sinope
+  actions:
+    - label: Enter the city
+
+- id: settlement.kitoron
+  trigger: settlement
+  trigger_scope: Kitoron
+  limit: 1
+  title: Kitoron
+  text: >
+    TBD
+  image: kitoron
+  actions:
+    - label: Enter the city
+
+- id: settlement.heraklia
+  trigger: settlement
+  trigger_scope: Heraklia
+  limit: 1
+  title: Heraklia
+  text: >
+    TBD
+  image: heraklia
+  actions:
+    - label: Enter the city
+
+- id: settlement.byzance
+  trigger: settlement
+  trigger_scope: Byzance
+  limit: 1
+  title: Byzance
+  text: >
+    TBD
+  image: byzance
+  actions:
+    - label: Enter the city
+
+- id: settlement.odissos
+  trigger: settlement
+  trigger_scope: Odissos
+  limit: 1
+  title: Odissos
+  text: >
+    TBD
+  image: odissos
+  actions:
+    - label: Enter the city
+
+- id: settlement.istria
+  trigger: settlement
+  trigger_scope: Istria
+  limit: 1
+  title: Istria
+  text: >
+    TBD
+  image: istria
+  actions:
+    - label: Enter the city
+
+- id: settlement.olbia
+  trigger: settlement
+  trigger_scope: (Emporium) Olbia
+  limit: 1
+  title: Olbia
+  text: >
+    TBD
+  image: Olbia
+  actions:
+    - label: Enter the city

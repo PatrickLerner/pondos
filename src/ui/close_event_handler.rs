@@ -11,6 +11,6 @@ pub fn close_event_handler(
     for _ in events.iter() {
         *selected_settlement = None;
         *selected_building = None;
-        game_state.pop().unwrap();
+        game_state.overwrite_set(GameState::Map).unwrap();
     }
 }

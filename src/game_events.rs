@@ -1,4 +1,9 @@
-use crate::{game_state::RunningState, player::PlayerTravelEvent, ui::large_button};
+use crate::{
+    game_state::RunningState,
+    player::PlayerTravelEvent,
+    settlement::{Settlement, VisitSettlementEvent},
+    ui::large_button,
+};
 use bevy::prelude::*;
 use bevy_egui::{egui::Frame, EguiContext};
 use rand::{seq::SliceRandom, thread_rng, Rng};
@@ -16,6 +21,7 @@ pub struct GameEventAction {
 #[serde(deny_unknown_fields, rename_all = "lowercase")]
 pub enum GameEventTrigger {
     Travel,
+    Settlement,
 }
 
 #[derive(Debug, Deserialize)]
@@ -25,6 +31,8 @@ pub struct GameEvent {
     pub title: String,
     pub image: String,
     pub trigger: Option<GameEventTrigger>,
+    pub trigger_scope: Option<String>,
+    pub limit: Option<u32>,
     pub chance: Option<f32>,
     pub text: String,
     pub actions: Vec<GameEventAction>,
@@ -33,8 +41,10 @@ pub struct GameEvent {
 #[derive(Default)]
 pub struct CurrentGameEvents(pub HashSet<String>);
 
+#[derive(Debug)]
 pub struct TriggerEvent {
     pub trigger: GameEventTrigger,
+    pub scope: Option<String>,
 }
 
 pub fn event_trigger_handler(
@@ -53,7 +63,7 @@ pub fn event_trigger_handler(
         let mut events: Vec<&GameEvent> = events
             .iter()
             .filter_map(|(_, event)| {
-                if event.trigger == Some(trigger.trigger) {
+                if event.trigger == Some(trigger.trigger) && event.trigger_scope == trigger.scope {
                     Some(event)
                 } else {
                     None
@@ -62,6 +72,13 @@ pub fn event_trigger_handler(
             .collect();
 
         events.shuffle(&mut thread_rng());
+
+        log::debug!(
+            "Trigger {:?} ({:?}) - {} events for consideration",
+            trigger.trigger,
+            trigger.scope,
+            events.len()
+        );
 
         let mut random = thread_rng();
         for event in events.iter() {
@@ -79,7 +96,8 @@ pub fn event_trigger_handler(
     }
 
     if added_events {
-        running_state.set(RunningState::Paused).unwrap();
+        log::debug!("pausing game due to events");
+        running_state.overwrite_set(RunningState::Paused).unwrap();
     }
 }
 
@@ -90,6 +108,22 @@ pub fn event_travel(
     for _ in events.iter() {
         triggers.send(TriggerEvent {
             trigger: GameEventTrigger::Travel,
+            scope: None,
+        });
+    }
+}
+
+fn event_visit_settlement(
+    mut events: EventReader<VisitSettlementEvent>,
+    mut triggers: EventWriter<TriggerEvent>,
+    settlements: Query<&Settlement>,
+) {
+    for event in events.iter() {
+        let settlement = settlements.get(event.settlement).unwrap();
+
+        triggers.send(TriggerEvent {
+            trigger: GameEventTrigger::Settlement,
+            scope: Some(settlement.name.to_owned()),
         });
     }
 }
@@ -118,6 +152,7 @@ pub fn event_display(
     let window = windows.primary();
 
     if current_events.0.is_empty() {
+        log::debug!("resuming game due to no events");
         running_state.set(RunningState::Running).unwrap();
     }
 
@@ -182,6 +217,7 @@ impl Plugin for GameEventsPlugin {
         app.add_event::<TriggerEvent>()
             .add_system_set(SystemSet::on_update(RunningState::Paused).with_system(event_display))
             .add_system(event_trigger_handler)
-            .add_system(event_travel);
+            .add_system(event_travel)
+            .add_system(event_visit_settlement);
     }
 }

@@ -1,9 +1,8 @@
 use super::{
     ui::{list_buildings_ui, production_ui},
-    Settlement,
+    Settlement, VisitSettlementEvent,
 };
 use crate::{
-    game_state::{GameState, SettlementState},
     player::PlayerTravelEvent,
     ui::{large_button, CloseSettlementUIEvent, SelectedSettlement},
 };
@@ -19,7 +18,7 @@ pub fn travel_ui(
     settlements: Query<&Settlement>,
     mut events: EventWriter<CloseSettlementUIEvent>,
     mut handle_travel: EventWriter<PlayerTravelEvent>,
-    mut game_state: ResMut<State<GameState>>,
+    mut visit_events: EventWriter<VisitSettlementEvent>,
 ) {
     if let Some(entity) = selected_settlement.as_ref() {
         let settlement = settlements
@@ -50,9 +49,9 @@ pub fn travel_ui(
                             settlement.position.x,
                             settlement.position.y,
                         ));
-                        game_state
-                            .set(GameState::Settlement(SettlementState::Overview))
-                            .unwrap();
+                        visit_events.send(VisitSettlementEvent {
+                            settlement: entity.0,
+                        })
                     }
                 });
             });

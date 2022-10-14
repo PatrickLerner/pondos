@@ -1,8 +1,8 @@
 use super::{constants::TILEMAP_SIZE, CursorPos};
 use crate::{
-    game_state::{GameState, SettlementState},
+    game_state::GameState,
     player::Player,
-    settlement::Settlement,
+    settlement::{Settlement, VisitSettlementEvent},
     ui::SelectedSettlement,
 };
 use bevy::prelude::*;
@@ -16,6 +16,7 @@ pub fn settlement_click(
     mut selected_settlement: ResMut<Option<SelectedSettlement>>,
     mut game_state: ResMut<State<GameState>>,
     player: Res<Player>,
+    mut visit_events: EventWriter<VisitSettlementEvent>,
 ) {
     if input_mouse.just_pressed(MouseButton::Left) {
         for tilemap in tilemap_query.iter() {
@@ -23,13 +24,10 @@ pub fn settlement_click(
             let y = (cursor_pos.0.y / TILEMAP_SIZE + 0.5).floor() as u32;
 
             if let Some(entity) = tilemap.get(&TilePos { x, y }) {
-                if let Ok(settlement) = settlements.get(entity) {
+                if settlements.get(entity).is_ok() {
                     *selected_settlement = Some(entity.into());
                     if player.location == Some(entity) {
-                        log::info!("Open settlement {}", settlement.name);
-                        game_state
-                            .push(GameState::Settlement(SettlementState::Overview))
-                            .unwrap();
+                        visit_events.send(VisitSettlementEvent { settlement: entity })
                     } else {
                         game_state.push(GameState::Travel).unwrap();
                     }
