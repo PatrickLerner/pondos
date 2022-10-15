@@ -13,11 +13,15 @@ pub fn settlement_click(
     input_mouse: Res<Input<MouseButton>>,
     tilemap_query: Query<&TileStorage>,
     settlements: Query<&Settlement>,
-    mut selected_settlement: ResMut<Option<SelectedSettlement>>,
-    mut game_state: ResMut<State<GameState>>,
-    player: Res<Player>,
     mut visit_events: EventWriter<VisitSettlementEvent>,
+    resources: (
+        Res<Player>,
+        ResMut<State<GameState>>,
+        ResMut<Option<SelectedSettlement>>,
+    ),
 ) {
+    let (player, mut game_state, mut selected_settlement) = resources;
+
     if input_mouse.just_pressed(MouseButton::Left) {
         for tilemap in tilemap_query.iter() {
             let x = (cursor_pos.0.x / TILEMAP_SIZE + 0.5).floor() as u32;

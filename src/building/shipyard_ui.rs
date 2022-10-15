@@ -30,15 +30,18 @@ impl ShipTextures {
 }
 
 pub fn shipyard_ui(
-    mut egui_context: ResMut<EguiContext>,
-    selected_building: Res<Option<SelectedBuilding>>,
     mut shipyards: Query<&mut Shipyard>,
-    mut game_state: ResMut<State<GameState>>,
-    windows: Res<Windows>,
-    mut player: ResMut<Player>,
-    asset_server: Res<AssetServer>,
     mut ship_textures: Local<Option<ShipTextures>>,
+    ui_resources: (Res<AssetServer>, Res<Windows>, ResMut<EguiContext>),
+    resources: (
+        ResMut<Player>,
+        ResMut<State<GameState>>,
+        Res<Option<SelectedBuilding>>,
+    ),
 ) {
+    let (asset_server, windows, mut egui_context) = ui_resources;
+    let (mut player, mut game_state, selected_building) = resources;
+
     if ship_textures.is_none() {
         let small = asset_server.load("images/ship_small.png");
         let medium = asset_server.load("images/ship_medium.png");

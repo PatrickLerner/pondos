@@ -18,15 +18,18 @@ pub struct TempleTextures {
 }
 
 pub fn temple_ui(
-    mut egui_context: ResMut<EguiContext>,
-    selected_building: Res<Option<SelectedBuilding>>,
     mut temples: Query<&mut Temple>,
-    mut game_state: ResMut<State<GameState>>,
-    windows: Res<Windows>,
-    mut player: ResMut<Player>,
-    asset_server: Res<AssetServer>,
     mut temple_textures: Local<Option<TempleTextures>>,
+    ui_resources: (Res<AssetServer>, Res<Windows>, ResMut<EguiContext>),
+    resources: (
+        ResMut<Player>,
+        ResMut<State<GameState>>,
+        Res<Option<SelectedBuilding>>,
+    ),
 ) {
+    let (asset_server, windows, mut egui_context) = ui_resources;
+    let (mut player, mut game_state, selected_building) = resources;
+
     if temple_textures.is_none() {
         let image = asset_server.load("images/temple.png");
 
