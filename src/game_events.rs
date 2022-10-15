@@ -160,7 +160,8 @@ pub fn event_display(
         }
         let image = textures.textures.get(&event.image).unwrap();
 
-        let size = (500., 300.);
+        let h = 30. * event.actions.len() as f32;
+        let size = (500., 280. + h);
         bevy_egui::egui::Window::new(&event.title)
             .collapsible(false)
             .default_pos((
@@ -194,6 +195,8 @@ pub fn event_display(
                     bevy_egui::egui::ScrollArea::vertical()
                         .id_source("content")
                         .show(ui, |ui| {
+                            ui.set_width(w - 20.);
+
                             ui.label(&event.text);
                         });
                 });
