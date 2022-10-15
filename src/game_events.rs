@@ -19,9 +19,19 @@ pub struct GameEventAction {
 
 #[derive(Debug, Deserialize, PartialEq, Eq, Clone, Copy)]
 #[serde(deny_unknown_fields, rename_all = "lowercase")]
-pub enum GameEventTrigger {
+pub enum GameEventTriggerEventName {
     Travel,
     Settlement,
+}
+
+#[derive(Debug, Deserialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct GameEventTriggerCondition {
+    pub event: GameEventTriggerEventName,
+    pub scope: Option<String>,
+    #[serde(default)]
+    pub once: bool,
+    pub chance: Option<f32>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -30,27 +40,27 @@ pub struct GameEvent {
     pub id: String,
     pub title: String,
     pub image: String,
-    pub trigger: Option<GameEventTrigger>,
-    pub trigger_scope: Option<String>,
-    pub limit: Option<u32>,
-    pub chance: Option<f32>,
+    pub trigger: Option<GameEventTriggerCondition>,
     pub text: String,
     pub actions: Vec<GameEventAction>,
 }
 
 #[derive(Default)]
-pub struct CurrentGameEvents(pub HashSet<String>);
+pub struct GameEventsState {
+    pub current_events: HashSet<String>,
+    pub seen_events: HashSet<String>,
+}
 
 #[derive(Debug)]
 pub struct TriggerEvent {
-    pub trigger: GameEventTrigger,
+    pub event: GameEventTriggerEventName,
     pub scope: Option<String>,
 }
 
 pub fn event_trigger_handler(
     mut triggers: EventReader<TriggerEvent>,
     events: Option<Res<HashMap<String, GameEvent>>>,
-    mut current_events: ResMut<CurrentGameEvents>,
+    mut state: ResMut<GameEventsState>,
     mut running_state: ResMut<State<RunningState>>,
 ) {
     if events.is_none() {
@@ -60,31 +70,38 @@ pub fn event_trigger_handler(
     let mut added_events = false;
 
     for trigger in triggers.iter() {
+        let mut random = thread_rng();
         let mut events: Vec<&GameEvent> = events
             .iter()
             .filter_map(|(_, event)| {
-                if event.trigger == Some(trigger.trigger) && event.trigger_scope == trigger.scope {
-                    Some(event)
-                } else {
-                    None
+                if let Some(event_trigger) = &event.trigger {
+                    if event_trigger.once && state.seen_events.contains(&event.id) {
+                        return None;
+                    }
+
+                    if event_trigger.event != trigger.event || event_trigger.scope != trigger.scope
+                    {
+                        return None;
+                    }
+
+                    if let Some(chance) = event_trigger.chance {
+                        if random.gen_range(0.0..1.0) > chance {
+                            return None;
+                        }
+                    }
                 }
+
+                Some(event)
             })
             .collect();
 
         events.shuffle(&mut thread_rng());
 
-        let mut random = thread_rng();
-        for event in events.iter() {
-            if let Some(chance) = event.chance {
-                if random.gen_range(0.0..1.0) > chance {
-                    continue;
-                }
-            }
-
+        if let Some(event) = events.first() {
             log::info!("trigger game event {}", event.id);
-            current_events.0.insert(event.id.to_owned());
+            state.current_events.insert(event.id.to_owned());
+            state.seen_events.insert(event.id.to_owned());
             added_events = true;
-            break;
         }
     }
 
@@ -99,7 +116,7 @@ pub fn event_travel(
 ) {
     for _ in events.iter() {
         triggers.send(TriggerEvent {
-            trigger: GameEventTrigger::Travel,
+            event: GameEventTriggerEventName::Travel,
             scope: None,
         });
     }
@@ -114,7 +131,7 @@ fn event_visit_settlement(
         let settlement = settlements.get(event.settlement).unwrap();
 
         triggers.send(TriggerEvent {
-            trigger: GameEventTrigger::Settlement,
+            event: GameEventTriggerEventName::Settlement,
             scope: Some(settlement.name.to_owned()),
         });
     }
@@ -130,7 +147,7 @@ pub struct EventTextures {
 pub fn event_display(
     mut egui_context: ResMut<EguiContext>,
     events: Option<Res<HashMap<String, GameEvent>>>,
-    mut current_events: ResMut<CurrentGameEvents>,
+    mut state: ResMut<GameEventsState>,
     mut running_state: ResMut<State<RunningState>>,
     mut textures: Local<EventTextures>,
     windows: Res<Windows>,
@@ -143,11 +160,11 @@ pub fn event_display(
     let events = events.unwrap();
     let window = windows.primary();
 
-    if current_events.0.is_empty() {
+    if state.current_events.is_empty() {
         running_state.set(RunningState::Running).unwrap();
     }
 
-    for id in current_events.0.clone().iter() {
+    for id in state.current_events.clone().iter() {
         let event: &GameEvent = events.get(id).unwrap();
 
         if !textures.textures.contains_key(&event.image) {
@@ -179,9 +196,9 @@ pub fn event_display(
                         for action in &event.actions {
                             let w = ui.available_width();
                             if large_button(ui, w, &action.label).clicked() {
-                                current_events.0.remove(id);
+                                state.current_events.remove(id);
                                 if let Some(id) = &action.trigger_event {
-                                    current_events.0.insert(id.clone());
+                                    state.current_events.insert(id.clone());
                                 }
                             }
                         }
@@ -208,7 +225,8 @@ pub struct GameEventsPlugin;
 
 impl Plugin for GameEventsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<TriggerEvent>()
+        app.init_resource::<GameEventsState>()
+            .add_event::<TriggerEvent>()
             .add_system_set(SystemSet::on_update(RunningState::Paused).with_system(event_display))
             .add_system(event_trigger_handler)
             .add_system(event_travel)

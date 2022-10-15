@@ -10,8 +10,9 @@
 # - Death
 #
 - id: storm
-  trigger: travel
-  chance: 0.05
+  trigger:
+    event: travel
+    chance: 0.05
   title: Storm
   text: >
     You are woken up during the early morning hours by the violent shaking of your vessel. Above, stormy clouds have risen, and a wild wind whips up the waves around the boat. You lower the sails and keep your hand on the rudder, trying your best to steer the boat.
