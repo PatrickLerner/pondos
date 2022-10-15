@@ -36,7 +36,7 @@ pub fn shipyard_ui(
     resources: (
         ResMut<Player>,
         ResMut<State<GameState>>,
-        Res<Option<SelectedBuilding>>,
+        Option<Res<SelectedBuilding>>,
     ),
 ) {
     let (asset_server, windows, mut egui_context) = ui_resources;

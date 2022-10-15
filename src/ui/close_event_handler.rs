@@ -3,14 +3,13 @@ use crate::game_state::GameState;
 use bevy::prelude::*;
 
 pub fn close_event_handler(
+    mut commands: Commands,
     mut events: EventReader<CloseSettlementUIEvent>,
-    mut selected_settlement: ResMut<Option<SelectedSettlement>>,
-    mut selected_building: ResMut<Option<SelectedBuilding>>,
     mut game_state: ResMut<State<GameState>>,
 ) {
     for _ in events.iter() {
-        *selected_settlement = None;
-        *selected_building = None;
+        commands.remove_resource::<SelectedBuilding>();
+        commands.remove_resource::<SelectedSettlement>();
         game_state.overwrite_set(GameState::Map).unwrap();
     }
 }

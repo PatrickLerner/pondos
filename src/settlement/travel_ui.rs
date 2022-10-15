@@ -14,7 +14,7 @@ use bevy_egui::{
 
 pub fn travel_ui(
     mut egui_context: ResMut<EguiContext>,
-    selected_settlement: Res<Option<SelectedSettlement>>,
+    selected_settlement: Option<Res<SelectedSettlement>>,
     settlements: Query<&Settlement>,
     mut events: EventWriter<CloseSettlementUIEvent>,
     mut handle_travel: EventWriter<PlayerTravelEvent>,

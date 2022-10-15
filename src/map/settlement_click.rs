@@ -9,18 +9,15 @@ use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
 
 pub fn settlement_click(
+    mut commands: Commands,
     cursor_pos: Res<CursorPos>,
     input_mouse: Res<Input<MouseButton>>,
     tilemap_query: Query<&TileStorage>,
     settlements: Query<&Settlement>,
     mut visit_events: EventWriter<VisitSettlementEvent>,
-    resources: (
-        Res<Player>,
-        ResMut<State<GameState>>,
-        ResMut<Option<SelectedSettlement>>,
-    ),
+    resources: (Res<Player>, ResMut<State<GameState>>),
 ) {
-    let (player, mut game_state, mut selected_settlement) = resources;
+    let (player, mut game_state) = resources;
 
     if input_mouse.just_pressed(MouseButton::Left) {
         for tilemap in tilemap_query.iter() {
@@ -29,7 +26,7 @@ pub fn settlement_click(
 
             if let Some(entity) = tilemap.get(&TilePos { x, y }) {
                 if settlements.get(entity).is_ok() {
-                    *selected_settlement = Some(entity.into());
+                    commands.insert_resource(SelectedSettlement(entity));
                     if player.location == Some(entity) {
                         visit_events.send(VisitSettlementEvent { settlement: entity })
                     } else {
