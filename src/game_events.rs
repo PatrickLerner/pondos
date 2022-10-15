@@ -73,13 +73,6 @@ pub fn event_trigger_handler(
 
         events.shuffle(&mut thread_rng());
 
-        log::debug!(
-            "Trigger {:?} ({:?}) - {} events for consideration",
-            trigger.trigger,
-            trigger.scope,
-            events.len()
-        );
-
         let mut random = thread_rng();
         for event in events.iter() {
             if let Some(chance) = event.chance {
@@ -96,7 +89,6 @@ pub fn event_trigger_handler(
     }
 
     if added_events {
-        log::debug!("pausing game due to events");
         running_state.overwrite_set(RunningState::Paused).unwrap();
     }
 }
@@ -152,7 +144,6 @@ pub fn event_display(
     let window = windows.primary();
 
     if current_events.0.is_empty() {
-        log::debug!("resuming game due to no events");
         running_state.set(RunningState::Running).unwrap();
     }
 

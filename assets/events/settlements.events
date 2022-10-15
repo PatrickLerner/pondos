@@ -17,7 +17,7 @@
   limit: 1
   title: Theodosia
   text: >
-    TBD
+    Theodosia was founded by Greek colonists from Miletos, and is well regarded for its rich agricultural lands, on which its trade depends.
   image: theodosia
   actions:
     - label: Enter the city
@@ -28,7 +28,7 @@
   limit: 1
   title: Emporium Tanais
   text: >
-    TBD
+    Tanais - a small, but prosperous trading hub with a mixed population of Greeks, Sarmatians, and Maeotians near the mouth of the Tanais River, established by the Greeks of the Bosporan Kingdom. It serves as a local trade center between the steppe nomads and the Greeks.
   image: tanais
   actions:
     - label: Enter the city
@@ -39,7 +39,7 @@
   limit: 1
   title: Hermonassa
   text: >
-    TBD
+    Hermonassa - a beautiful settlement on the straight leading into the Maeotis Swampland to the north. Founded by Ionians, it serves as one of the central cities of the Bosporan Kingdom. It is a famous export harbor, and its economy is based on agriculture, fishing, and trade.
   image: hermonassa
   actions:
     - label: Enter the city
@@ -61,7 +61,7 @@
   limit: 1
   title: Phasis
   text: >
-    TBD
+    Phasis is a mix of a small settlement and an emporion, a trading place. Founded by the Milesians, it has since become a place where Greek settlers and native barbarians coexist peacefully together.
   image: phasis
   actions:
     - label: Enter the city
@@ -72,7 +72,7 @@
   limit: 1
   title: Athenae
   text: >
-    TBD
+    Athenae is a port city with a Greek temple of Athena located in Pontus, the south-eastern coast of the sea. While the presence of the temple and the naming might mislead one to believe it was founded by settlers from Athens, in actuality it is named after their ruler, a certain woman by the name of Athenaea.
   image: athenae
   actions:
     - label: Enter the city

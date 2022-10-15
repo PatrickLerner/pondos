@@ -104,6 +104,9 @@
   position:
     x: 86
     y: 40
+  buildings:
+    - type: Temple
+      deity: Athena
   populations:
     - Fisher
     - Fisher
