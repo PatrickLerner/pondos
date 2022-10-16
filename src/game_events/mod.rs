@@ -1,9 +1,9 @@
 use crate::game_state::RunningState;
 use bevy::prelude::*;
 use serde::Deserialize;
-use std::collections::HashMap;
 use std::collections::HashSet;
 
+mod add_event_to_current_event;
 mod event_display;
 mod event_effect_handler;
 mod event_travel;
@@ -82,35 +82,6 @@ pub struct AddEventToCurrentEvent {
     pub id: String,
 }
 
-pub fn add_event_to_current_event(
-    mut event_triggers: EventReader<AddEventToCurrentEvent>,
-    events: Option<Res<HashMap<String, GameEvent>>>,
-    mut state: ResMut<GameEventsState>,
-    mut effects: EventWriter<TriggerEventEffect>,
-    mut running_state: ResMut<State<RunningState>>,
-) {
-    for event_trigger in event_triggers.iter() {
-        if let Some(events) = &events {
-            let event = events.get(&event_trigger.id).unwrap();
-            log::info!("trigger game event {}", event_trigger.id);
-
-            state.current_events.insert(event.id.to_owned());
-            state.seen_events.insert(event.id.to_owned());
-            for effect in event.effects.clone() {
-                effects.send(TriggerEventEffect { effect });
-            }
-        }
-    }
-
-    if state.current_events.is_empty() && *running_state.current() != RunningState::Running {
-        running_state.overwrite_set(RunningState::Running).unwrap();
-    }
-
-    if !state.current_events.is_empty() && *running_state.current() != RunningState::Paused {
-        running_state.overwrite_set(RunningState::Paused).unwrap();
-    }
-}
-
 pub struct GameEventsPlugin;
 
 impl Plugin for GameEventsPlugin {
@@ -124,7 +95,7 @@ impl Plugin for GameEventsPlugin {
                     .with_system(event_display::event_display),
             )
             .add_system(event_trigger_handler::event_trigger_handler)
-            .add_system(add_event_to_current_event)
+            .add_system(add_event_to_current_event::add_event_to_current_event)
             .add_system(event_effect_handler::event_effect_handler)
             .add_system(event_travel::event_travel)
             .add_system(event_visit_settlement::event_visit_settlement);
