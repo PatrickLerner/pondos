@@ -1,5 +1,5 @@
 use crate::{
-    game_events::{GameEvent, GameEventsState, TriggerEvent},
+    game_events::{GameEvent, GameEventsState, TriggerEvent, TriggerEventEffect},
     game_state::RunningState,
 };
 use bevy::prelude::*;
@@ -11,6 +11,7 @@ pub fn event_trigger_handler(
     events: Option<Res<HashMap<String, GameEvent>>>,
     mut state: ResMut<GameEventsState>,
     mut running_state: ResMut<State<RunningState>>,
+    mut effects: EventWriter<TriggerEventEffect>,
 ) {
     if events.is_none() {
         return;
@@ -38,9 +39,11 @@ pub fn event_trigger_handler(
                             return None;
                         }
                     }
-                }
 
-                Some(event)
+                    Some(event)
+                } else {
+                    None
+                }
             })
             .collect();
 
@@ -50,6 +53,9 @@ pub fn event_trigger_handler(
             log::info!("trigger game event {}", event.id);
             state.current_events.insert(event.id.to_owned());
             state.seen_events.insert(event.id.to_owned());
+            for effect in event.effects.clone() {
+                effects.send(TriggerEventEffect { effect });
+            }
             added_events = true;
         }
     }
