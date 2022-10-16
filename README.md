@@ -9,7 +9,7 @@ Pondos is a small game wherein you play a trader, who travels between
 ancient Greek city states in the Black Sea area, trying to carve out
 a living.
 
-[![](https://raw.githubusercontent.com/PatrickLerner/pondos/raw/main/screenshots/pondos.webp)](https://pondos.app/)
+[![](https://raw.githubusercontent.com/PatrickLerner/pondos/main/screenshots/pondos.webp)](https://pondos.app/)
 
 ## Development Info
 
