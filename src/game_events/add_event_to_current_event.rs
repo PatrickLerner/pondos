@@ -12,13 +12,16 @@ pub fn add_event_to_current_event(
 ) {
     for event_trigger in event_triggers.iter() {
         if let Some(events) = &events {
-            let event = events.get(&event_trigger.id).unwrap();
-            log::info!("trigger game event {}", event_trigger.id);
+            if let Some(event) = events.get(&event_trigger.id) {
+                log::info!("trigger game event {}", event_trigger.id);
 
-            state.current_events.insert(event.id.to_owned());
-            state.seen_events.insert(event.id.to_owned());
-            for effect in event.effects.clone() {
-                effects.send(TriggerEventEffect { effect });
+                state.current_events.insert(event.id.to_owned());
+                state.seen_events.insert(event.id.to_owned());
+                for effect in event.effects.clone() {
+                    effects.send(TriggerEventEffect { effect });
+                }
+            } else {
+                log::error!("event {} triggered, but does not exist", event_trigger.id);
             }
         }
     }

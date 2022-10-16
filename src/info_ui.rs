@@ -1,17 +1,57 @@
-use crate::player::Player;
-use crate::COIN_NAME;
+use crate::{player::Player, COIN_NAME};
 use bevy::prelude::*;
-use bevy_egui::egui;
-use bevy_egui::{egui::Align2, EguiContext};
+use bevy_egui::{
+    egui::{self, Align2},
+    EguiContext,
+};
+
+#[cfg(debug_assertions)]
+#[derive(Default)]
+pub struct DevState {
+    open: bool,
+    event_open: bool,
+    event_name: String,
+}
 
 pub fn info_ui(
     mut egui_context: ResMut<EguiContext>,
     player: Option<ResMut<Player>>,
     mut convoy_open: Local<bool>,
-    #[cfg(debug_assertions)] mut dev_open: Local<bool>,
+    #[cfg(debug_assertions)] mut dev: Local<DevState>,
+    #[cfg(debug_assertions)] mut trigger_event: EventWriter<
+        crate::game_events::AddEventToCurrentEvent,
+    >,
 ) {
     #[allow(unused_mut)]
     if let Some(mut player) = player {
+        #[cfg(debug_assertions)]
+        if dev.event_open {
+            let mut triggered = false;
+            let mut open = dev.event_open;
+            egui::Window::new("Trigger Event")
+                .resizable(false)
+                .collapsible(false)
+                .open(&mut open)
+                .anchor(Align2::CENTER_CENTER, (0., 0.))
+                .show(egui_context.ctx_mut(), |ui| {
+                    ui.horizontal(|ui| {
+                        ui.label("Event id:");
+                        ui.text_edit_singleline(&mut dev.event_name);
+                        if ui.button("Launch").clicked() {
+                            trigger_event.send(crate::game_events::AddEventToCurrentEvent {
+                                id: dev.event_name.clone(),
+                            });
+                            triggered = true;
+                        }
+                    });
+                });
+
+            if !open || triggered {
+                dev.event_open = false;
+                dev.event_name = "".to_owned();
+            }
+        }
+
         egui::Window::new("Info")
             .resizable(false)
             .collapsible(false)
@@ -28,7 +68,7 @@ pub fn info_ui(
 
                     #[cfg(debug_assertions)]
                     if ui.small_button("DEV").clicked() {
-                        *dev_open = !*dev_open;
+                        dev.open = !dev.open;
                     }
                 });
 
@@ -47,12 +87,20 @@ pub fn info_ui(
                 }
 
                 #[cfg(debug_assertions)]
-                if *dev_open && ui.small_button("Add Money").clicked() {
-                    player.silver += match player.silver {
-                        0..=999 => 100,
-                        1000..=9999 => 1000,
-                        10000.. => 10000,
-                    };
+                if dev.open {
+                    ui.add_space(5.);
+                    if ui.small_button("Add Money").clicked() {
+                        player.silver += match player.silver {
+                            0..=999 => 100,
+                            1000..=9999 => 1000,
+                            10000.. => 10000,
+                        };
+                    }
+
+                    if ui.small_button("Trigger Event").clicked() {
+                        dev.event_open = !dev.event_open;
+                        dev.event_name = "".to_owned();
+                    }
                 }
             });
     }
