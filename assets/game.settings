@@ -14,3 +14,6 @@ max_multipliers:
   harvest: 1.5
   winter: 0.2
 cap_percentage: 0.35
+events:
+  - weather
+  - settlements

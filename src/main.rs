@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use bevy::{prelude::*, reflect::TypeUuid, render::texture::ImageSettings};
 use bevy_common_assets::yaml::YamlAssetPlugin;
 use bevy_ecs_tilemap::prelude::*;
@@ -12,6 +14,7 @@ mod camera;
 mod debug_populations;
 mod debug_settlements;
 mod deities;
+mod game_events;
 mod game_state;
 mod game_time;
 mod info_ui;
@@ -38,6 +41,7 @@ pub struct Settings {
     start_silver: u32,
     max_multipliers: types::SeasonalAmount<f32>,
     cap_percentage: f32,
+    events: HashSet<String>,
 }
 
 fn cli() -> Command {
@@ -98,11 +102,12 @@ fn main() {
     .add_event::<game_time::GameTimeAdvancedEvent>()
     .add_event::<game_time::GameTimeAdvanceEvent>()
     .add_event::<ui::CloseSettlementUIEvent>()
-    .add_state(game_state::GameState::Loading)
+    .add_event::<settlement::VisitSettlementEvent>()
+    .add_state(game_state::GameState::Map)
+    .add_state(game_state::LoadingState::Loading)
+    .add_state(game_state::RunningState::Running)
     .insert_resource(ImageSettings::default_nearest())
     .init_resource::<game_time::GameTime>()
-    .init_resource::<Option<ui::SelectedSettlement>>()
-    .init_resource::<Option<ui::SelectedBuilding>>()
     .add_plugins(DefaultPlugins)
     .add_plugin(YamlAssetPlugin::<loading::Settlements>::new(&[
         "settlements",
@@ -112,11 +117,13 @@ fn main() {
         "populations",
     ]))
     .add_plugin(YamlAssetPlugin::<loading::Deities>::new(&["deities"]))
+    .add_plugin(YamlAssetPlugin::<loading::GameEvents>::new(&["events"]))
     .add_plugin(YamlAssetPlugin::<Settings>::new(&["settings"]))
     .add_plugin(TilemapPlugin)
     .add_plugin(EguiPlugin)
     .add_plugin(loading::LoadingPlugin)
     .add_plugin(camera::CameraPlugin)
+    .add_plugin(game_events::GameEventsPlugin)
     .add_plugin(map::MapPlugin)
     .add_plugin(settlement::SettlementPlugin)
     .add_plugin(building::BuildingPlugin)

@@ -1,0 +1,181 @@
+# vi: ft=yaml
+
+- id: settlement.chersonesus
+  trigger:
+    event: settlement
+    scope: Chersonesus
+    once: true
+  title: Chersonesus
+  text: >
+    Chersonesus is a small town under the sphere of influence of the Bosporan Kingdom, bordering the territories inhabited by the native Scythians and Tauri.
+  image: chersonesus
+  actions:
+    - label: Enter the city
+
+- id: settlement.theodosia
+  trigger:
+    event: settlement
+    scope: Theodosia
+    once: true
+  title: Theodosia
+  text: >
+    Theodosia was founded by Greek colonists from Miletos, and is well regarded for its rich agricultural lands, on which its trade depends.
+  image: theodosia
+  actions:
+    - label: Enter the city
+
+- id: settlement.tanais
+  trigger:
+    event: settlement
+    scope: (Emporium) Tanais
+    once: true
+  title: Emporium Tanais
+  text: >
+    Tanais - a small, but prosperous trading hub with a mixed population of Greeks, Sarmatians, and Maeotians near the mouth of the Tanais River, established by the Greeks of the Bosporan Kingdom. It serves as a local trade center between the steppe nomads and the Greeks.
+  image: tanais
+  actions:
+    - label: Enter the city
+
+- id: settlement.hermonassa
+  trigger:
+    event: settlement
+    scope: Hermonassa
+    once: true
+  title: Hermonassa
+  text: >
+    Hermonassa - a beautiful settlement on the straight leading into the Maeotis Swampland to the north. Founded by Ionians, it serves as one of the central cities of the Bosporan Kingdom. It is a famous export harbor, and its economy is based on agriculture, fishing, and trade.
+  image: hermonassa
+  actions:
+    - label: Enter the city
+
+- id: settlement.pityus
+  trigger:
+    event: settlement
+    scope: Pityus
+    once: true
+  title: Pityus
+  text: >
+    Pityus is a somewhat large and wealthy Greek town, which specializes in the export of goods from the northern shores of the sea. Despite being noteworthy for its sea food and fish, it is most known for its veneration of the God Poseidon.
+  image: pityos
+  actions:
+    - label: Enter the city
+
+- id: settlement.phasis
+  trigger:
+    event: settlement
+    scope: Phasis
+    once: true
+  title: Phasis
+  text: >
+    Phasis is a mix of a small settlement and an emporion, a trading place. Founded by the Milesians, it has since become a place where Greek settlers and native barbarians coexist peacefully together.
+  image: phasis
+  actions:
+    - label: Enter the city
+
+- id: settlement.athenae
+  trigger:
+    event: settlement
+    scope: Athenae
+    once: true
+  title: Athenae
+  text: >
+    Athenae is a port city with a Greek temple of Athena located in Pontus, the south-eastern coast of the sea. While the presence of the temple and the naming might mislead one to believe it was founded by settlers from Athens, in actuality it is named after their ruler, a certain woman by the name of Athenaea.
+  image: athenae
+  actions:
+    - label: Enter the city
+
+- id: settlement.trapezus
+  trigger:
+    event: settlement
+    scope: Trapezus
+    once: true
+  title: Trapezus
+  text: >
+    What is today known as Trapezus was founded as a trading outpost by settlers from neighboring Sinope to facilitate trade with the nearby tribes, the Colchians, Chaldian and others. Nowadays, it is a small but lively exclave of Greek life, which continues to pay tribute to Sinope.
+  image: trapezus
+  actions:
+    - label: Enter the city
+
+- id: settlement.sinope
+  trigger:
+    event: settlement
+    scope: Sinope
+    once: true
+  title: Sinope
+  text: >
+    Sinope was founded as a colony by Ionians. But it has since then become a predominant power as it is strategically located among the trade routes on the southern Coast. It has become more independent for most of its history, developing its own culture. Its influence carries far nowadays and Sinope has founded its own trading posts, some of which have started to develop into becoming cities in their own right.
+  image: sinope
+  actions:
+    - label: Enter the city
+
+- id: settlement.cytorus
+  trigger:
+    event: settlement
+    scope: Cytorus
+    once: true
+  title: Cytorus
+  text: >
+    Cytorus was founded as an emporium or trade hub of Sinope. Its mythical founder of Cytorus was Cytiorus, son of Phrixus, after which the town was supposedly named. Today it remains a major source for boxwood in the area.
+  image: cytorus
+  actions:
+    - label: Enter the city
+
+- id: settlement.heraklia_pontica
+  trigger:
+    event: settlement
+    scope: Heraklea Pontica
+    once: true
+  title: Heraklea Pontica
+  text: >
+    Heraclea Pontica is a small Greek city-state at the mouth of the river Lycus. It was named after Heracles who is said to enter the underworld at a cave nearby. The colonists of the city subjugated the native barbarians, but agreed that none of them would be sold into slavery outside their homeland. Today the town prospers thanks to the rich, fertile lands and the sea-fisheries.
+  image: heraklea_pontica
+  actions:
+    - label: Enter the city
+
+- id: settlement.byzance
+  trigger:
+    event: settlement
+    scope: Byzance
+    once: true
+  title: Byzance
+  text: >
+    As the entrance to the northern sea, the origins of Byzance are shrouded in legend. Tradition says that Byzas of Megara (a city-state near Athens) founded the city when he sailed northeast across the Aegean Sea. It is mainly a large trading city due to its location. The city was taken by the Persian Empire by King Darius, but then besieged and taken back by Greek forces from Sparta a few decades ago.
+  image: byzance
+  actions:
+    - label: Enter the city
+
+- id: settlement.odessos
+  trigger:
+    event: settlement
+    scope: Odessos
+    once: true
+  title: Odessos
+  text: >
+    Odessos is one of the first ancient settlements on the eastern shore. It was established by Miletian Greeks first as a trading post, which developed into a settlement. Due to its location at the border of civilization it is a contact zone between the Greeks and the Thracian tribes of the hinterland.
+  image: odessos
+  actions:
+    - label: Enter the city
+
+- id: settlement.histria
+  trigger:
+    event: settlement
+    scope: Histria
+    once: true
+  title: Histria
+  text: >
+    Histria was established by Milesian settlers in order to facilitate trade with the native Getae. And indeed almost all trade with the tribes of the interior followed the foundation of Histria.
+  image: histria
+  actions:
+    - label: Enter the city
+
+- id: settlement.olbia
+  trigger:
+    event: settlement
+    scope: (Emporium) Olbia
+    once: true
+  title: Olbia
+  text: >
+    The Greek colony of Olbia is an outpost and build around a earlier native settlement in the area. It is one of the major trade ports where wares from the northern region are traded. It is known to produce distinctive cast bronze money during in both the form of circular tokens with Gorgon heads and unique coins in the shape of leaping dolphins. This form of money is said to have originated from sacrificial tokens used in the Temple of Apollo Delphinios.
+  image: Olbia
+  actions:
+    - label: Enter the city

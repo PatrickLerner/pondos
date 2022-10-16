@@ -17,3 +17,6 @@
 
 - name: Hermes
   gender: male
+
+- name: Athena
+  gender: female

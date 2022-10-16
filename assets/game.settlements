@@ -16,6 +16,7 @@
     - Fisher
     - Fisher
     - Farmer
+    - Olive Farmer
     - Mead Brewer
     - Mead Brewer
 
@@ -67,7 +68,7 @@
     - Farmer
     - Fisher
 
-- name: Pityos
+- name: Pityus
   type: city
   position:
     x: 82
@@ -76,6 +77,7 @@
     - type: Temple
       deity: Poseidon
   populations:
+    - Merchant
     - Fisher
     - Fisher
     - Fisher
@@ -104,6 +106,9 @@
   position:
     x: 86
     y: 40
+  buildings:
+    - type: Temple
+      deity: Athena
   populations:
     - Fisher
     - Fisher
@@ -113,13 +118,10 @@
     - Spice Grower
 
 - name: Trapezus
-  type: city
+  type: outpost
   position:
     x: 83
     y: 44
-  buildings:
-    - type: Temple
-      deity: Cybele
   populations:
     - Brickmaker
     - Brickmaker
@@ -136,9 +138,13 @@
   position:
     x: 60
     y: 47
+  buildings:
+    - type: Temple
+      deity: Cybele
   populations:
     - Merchant
     - Merchant
+    - Hemp Worker
     - Tailor
     - Tailor
     - Blacksmith
@@ -146,22 +152,23 @@
     - Clothmaker
     - Clothmaker
     - Potter
+    - Potter
 
-- name: Kitoron
-  type: city
+- name: Cytorus
+  type: outpost
   position:
     x: 49
     y: 49
   populations:
     - Hemp Worker
-    - Hemp Worker
-    - Beer Brewer
     - Beer Brewer
     - Brickmaker
     - Farmer
-    - Potter
+    - Lumberjack
+    - Lumberjack
+    - Lumberjack
 
-- name: Heraklia
+- name: Heraklea Pontica
   type: city
   position:
     x: 40
@@ -202,7 +209,7 @@
     - Winemaker
     - Olive Farmer
 
-- name: Odissos
+- name: Odessos
   type: city
   position:
     x: 16
@@ -217,7 +224,7 @@
     - Tanner
     - Olive Farmer
 
-- name: Istria
+- name: Histria
   type: city
   position:
     x: 20
@@ -237,12 +244,16 @@
     - Pitch Worker
     - Cheesemaker
     - Cheesemaker
+    - Potter
 
 - name: (Emporium) Olbia
   type: outpost
   position:
     x: 26
     y: 20
+  buildings:
+    - type: Temple
+      deity: Apollo
   populations:
     - Shepherd
     - Shepherd

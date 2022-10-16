@@ -1,8 +1,10 @@
 use bevy::prelude::*;
 use bevy_egui::{
-    egui::{self, Align2},
+    egui::{self, Align2, RichText},
     EguiContext,
 };
+
+use crate::{game_state::RunningState, ui::enabled_color};
 
 pub struct GameTimeAdvancedEvent {
     pub time: GameTime,
@@ -99,6 +101,7 @@ pub fn season_ui(
     mut egui_context: ResMut<EguiContext>,
     game_time: Res<GameTime>,
     mut events: EventWriter<GameTimeAdvanceEvent>,
+    running_state: Res<State<RunningState>>,
 ) {
     egui::Window::new("Time")
         .resizable(false)
@@ -107,7 +110,12 @@ pub fn season_ui(
         .show(egui_context.ctx_mut(), |ui| {
             ui.set_width(220.0);
             ui.horizontal(|ui| {
-                if ui.button("Wait").clicked() {
+                let enabled = running_state.current() == &RunningState::Running;
+                if ui
+                    .button(RichText::new("Wait").color(enabled_color(enabled)))
+                    .clicked()
+                    && enabled
+                {
                     events.send(GameTimeAdvanceEvent)
                 }
 

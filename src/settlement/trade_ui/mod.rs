@@ -19,7 +19,7 @@ use trade_row::TradeRow;
 
 pub fn trade_ui(
     mut egui_context: ResMut<EguiContext>,
-    selected_settlement: Res<Option<SelectedSettlement>>,
+    selected_settlement: Option<Res<SelectedSettlement>>,
     mut settlements: Query<&mut Settlement>,
     mut player: ResMut<Player>,
     mut game_state: ResMut<State<GameState>>,

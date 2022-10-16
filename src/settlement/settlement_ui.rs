@@ -4,7 +4,7 @@ use crate::{
         ui::{buildings_ui, population_info, production_ui, resource_info},
         Settlement,
     },
-    ui::{create_window_with_mobile, CloseSettlementUIEvent, SelectedBuilding, SelectedSettlement},
+    ui::{create_window_with_mobile, CloseSettlementUIEvent, SelectedSettlement},
 };
 use bevy::prelude::*;
 use bevy_egui::{
@@ -13,9 +13,9 @@ use bevy_egui::{
 };
 
 pub fn settlement_ui(
+    mut commands: Commands,
     mut egui_context: ResMut<EguiContext>,
-    selected_settlement: Res<Option<SelectedSettlement>>,
-    mut selected_building: ResMut<Option<SelectedBuilding>>,
+    selected_settlement: Option<Res<SelectedSettlement>>,
     settlements: Query<&Settlement>,
     mut events: EventWriter<CloseSettlementUIEvent>,
     mut game_state: ResMut<State<GameState>>,
@@ -38,7 +38,7 @@ pub fn settlement_ui(
                 if mobile {
                     ui.with_layout(egui::Layout::top_down_justified(Align::Min), |ui| {
                         egui::ScrollArea::both().id_source("info").show(ui, |ui| {
-                            buildings_ui(ui, settlement, &mut game_state, &mut selected_building);
+                            buildings_ui(ui, settlement, &mut game_state, &mut commands);
                             ui.add_space(5.);
                             population_info(ui, settlement);
                             ui.add_space(5.);
@@ -52,12 +52,7 @@ pub fn settlement_ui(
                         egui::ScrollArea::vertical().id_source("population").show(
                             &mut columns[0],
                             |ui| {
-                                buildings_ui(
-                                    ui,
-                                    settlement,
-                                    &mut game_state,
-                                    &mut selected_building,
-                                );
+                                buildings_ui(ui, settlement, &mut game_state, &mut commands);
                                 population_info(ui, settlement);
                             },
                         );

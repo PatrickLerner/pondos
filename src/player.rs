@@ -40,6 +40,14 @@ impl TransportType {
             TransportType::LargeShip => 7500,
         }
     }
+
+    pub fn construction_time(&self) -> u32 {
+        match self {
+            TransportType::SmallShip => 3,
+            TransportType::MediumShip => 4,
+            TransportType::LargeShip => 5,
+        }
+    }
 }
 
 const BASE_RESOURCE_SPACE: u32 = 5;

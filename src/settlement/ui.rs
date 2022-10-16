@@ -71,14 +71,14 @@ pub fn buildings_ui(
     ui: &mut Ui,
     settlement: &Settlement,
     game_state: &mut State<GameState>,
-    selected_building: &mut Option<SelectedBuilding>,
+    commands: &mut Commands,
 ) {
     ui.heading("Buildings");
     ui.add_space(5.);
 
     if large_button(ui, 100., "Market").clicked() {
         game_state
-            .set(GameState::Settlement(SettlementState::Trade))
+            .overwrite_set(GameState::Settlement(SettlementState::Trade))
             .unwrap();
     }
 
@@ -87,22 +87,22 @@ pub fn buildings_ui(
             BuildingType::Temple(temple) => {
                 if large_button(ui, 100., &format!("Temple of {}", temple.deity)).clicked() {
                     if let Some(entity) = building.entity {
-                        *selected_building = Some(SelectedBuilding(entity));
+                        commands.insert_resource(SelectedBuilding(entity))
                     }
 
                     game_state
-                        .set(GameState::Settlement(SettlementState::Temple))
+                        .overwrite_set(GameState::Settlement(SettlementState::Temple))
                         .unwrap();
                 }
             }
             BuildingType::Shipyard => {
                 if large_button(ui, 100., "Shipyard").clicked() {
                     if let Some(entity) = building.entity {
-                        *selected_building = Some(SelectedBuilding(entity));
+                        commands.insert_resource(SelectedBuilding(entity))
                     }
 
                     game_state
-                        .set(GameState::Settlement(SettlementState::Shipyard))
+                        .overwrite_set(GameState::Settlement(SettlementState::Shipyard))
                         .unwrap();
                 }
             }
