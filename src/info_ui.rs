@@ -34,7 +34,15 @@ pub fn info_ui(
 
                 if *convoy_open {
                     for transport in &player.convoy {
-                        ui.label(format!(" - {}", transport));
+                        ui.label(if transport.damage > 0 {
+                            format!(
+                                " - {} ({}%)",
+                                transport,
+                                (transport.health() * 100.).floor()
+                            )
+                        } else {
+                            format!(" - {}", transport)
+                        });
                     }
                 }
 

@@ -3,49 +3,68 @@ use bevy::prelude::*;
 use std::collections::HashMap;
 
 #[derive(Clone, Copy, Debug)]
-#[allow(clippy::enum_variant_names)]
-pub enum TransportType {
-    // Horse,
-    // Wagon,
-    SmallShip,
-    MediumShip,
-    LargeShip,
+pub struct Ship {
+    pub damage: u32,
+    pub size: ShipSize,
 }
 
-impl std::fmt::Display for TransportType {
+#[derive(Clone, Copy, Debug)]
+pub enum ShipSize {
+    Small,
+    Medium,
+    Large,
+}
+
+impl std::fmt::Display for Ship {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        match self {
-            TransportType::SmallShip => write!(f, "Small Ship"),
-            TransportType::MediumShip => write!(f, "Medium Ship"),
-            TransportType::LargeShip => write!(f, "Large Ship"),
+        match self.size {
+            ShipSize::Small => write!(f, "Small Ship"),
+            ShipSize::Medium => write!(f, "Medium Ship"),
+            ShipSize::Large => write!(f, "Large Ship"),
         }
     }
 }
 
-impl TransportType {
+impl Ship {
+    pub fn new(size: ShipSize) -> Self {
+        Self { size, damage: 0 }
+    }
+
+    pub fn health(&self) -> f32 {
+        let max = self.max_health() as f32;
+
+        (max - self.damage as f32) / max
+    }
+
+    pub fn max_health(&self) -> u32 {
+        match self.size {
+            ShipSize::Small => 20,
+            ShipSize::Medium => 50,
+            ShipSize::Large => 100,
+        }
+    }
+
     fn resource_space(&self) -> u32 {
-        match self {
-            // TransportType::Horse => 5,
-            // TransportType::Wagon => 10,
-            TransportType::SmallShip => 20,
-            TransportType::MediumShip => 50,
-            TransportType::LargeShip => 100,
+        match self.size {
+            ShipSize::Small => 20,
+            ShipSize::Medium => 50,
+            ShipSize::Large => 100,
         }
     }
 
     pub fn price(&self) -> u32 {
-        match self {
-            TransportType::SmallShip => 2000,
-            TransportType::MediumShip => 4000,
-            TransportType::LargeShip => 7500,
+        match self.size {
+            ShipSize::Small => 2000,
+            ShipSize::Medium => 4000,
+            ShipSize::Large => 7500,
         }
     }
 
     pub fn construction_time(&self) -> u32 {
-        match self {
-            TransportType::SmallShip => 3,
-            TransportType::MediumShip => 4,
-            TransportType::LargeShip => 5,
+        match self.size {
+            ShipSize::Small => 3,
+            ShipSize::Medium => 4,
+            ShipSize::Large => 5,
         }
     }
 }
@@ -61,7 +80,7 @@ pub struct Player {
     pub location_marker: Option<Entity>,
     pub location_marker_texture_atlas_handle: Option<Handle<TextureAtlas>>,
     pub location_marker_need_update: bool,
-    pub convoy: Vec<TransportType>,
+    pub convoy: Vec<Ship>,
 }
 
 impl Player {

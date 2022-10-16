@@ -1,7 +1,7 @@
 use crate::{
     game_state::{GameState, SettlementState},
     game_time::GameTimeAdvancedEvent,
-    player::TransportType,
+    player::ShipSize,
 };
 use bevy::prelude::*;
 use serde::{Deserialize, Deserializer};
@@ -45,7 +45,7 @@ pub struct TempleInfo {
 
 #[derive(Component, Debug, Default)]
 pub struct Shipyard {
-    construction: Option<TransportType>,
+    construction: Option<ShipSize>,
     construction_time: u32,
 }
 

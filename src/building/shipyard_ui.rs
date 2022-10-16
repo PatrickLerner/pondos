@@ -1,7 +1,7 @@
 use crate::{
     building::Shipyard,
     game_state::{GameState, SettlementState},
-    player::{Player, TransportType},
+    player::{Player, Ship, ShipSize},
     ui::{create_window, enabled_color, large_button, SelectedBuilding},
     COIN_NAME,
 };
@@ -20,11 +20,11 @@ pub struct ShipTextures {
 }
 
 impl ShipTextures {
-    fn transport_type_image(&self, transport_type: TransportType) -> egui::TextureId {
-        match transport_type {
-            TransportType::SmallShip => self.small,
-            TransportType::MediumShip => self.medium,
-            TransportType::LargeShip => self.large,
+    fn transport_type_image(&self, ship_size: ShipSize) -> egui::TextureId {
+        match ship_size {
+            ShipSize::Small => self.small,
+            ShipSize::Medium => self.medium,
+            ShipSize::Large => self.large,
         }
     }
 }
@@ -77,7 +77,7 @@ pub fn shipyard_ui(
                         }
                     });
 
-                    if let Some(transport_type) = shipyard.construction {
+                    if let Some(ship_size) = shipyard.construction {
                         ui.with_layout(
                             egui::Layout::from_main_dir_and_cross_align(
                                 egui::Direction::TopDown,
@@ -85,10 +85,10 @@ pub fn shipyard_ui(
                             ),
                             |ui| {
                                 ui.add(egui::widgets::Image::new(
-                                    ship_textures.transport_type_image(transport_type),
+                                    ship_textures.transport_type_image(ship_size),
                                     [250.0, 200.0],
                                 ));
-                                ui.heading(format!("{}", transport_type));
+                                ui.heading(format!("{}", Ship::new(ship_size)));
                                 ui.add_space(5.);
 
                                 if shipyard.construction_time == 0 {
@@ -97,7 +97,7 @@ pub fn shipyard_ui(
 
                                     if large_button(ui, 200., "Add to convoy").clicked() {
                                         shipyard.construction = None;
-                                        player.convoy.push(transport_type);
+                                        player.convoy.push(Ship::new(ship_size));
                                     }
                                 } else if shipyard.construction_time == 1 {
                                     ui.label("In construction for one more seasons");
@@ -112,15 +112,13 @@ pub fn shipyard_ui(
                     } else {
                         ui.add_space(25.);
                         ui.columns(3, |columns| {
-                            for (index, transport_type) in vec![
-                                TransportType::SmallShip,
-                                TransportType::MediumShip,
-                                TransportType::LargeShip,
-                            ]
-                            .into_iter()
-                            .enumerate()
+                            for (index, ship_size) in
+                                vec![ShipSize::Small, ShipSize::Medium, ShipSize::Large]
+                                    .into_iter()
+                                    .enumerate()
                             {
-                                let enabled = player.silver >= transport_type.price();
+                                let ship = Ship::new(ship_size);
+                                let enabled = player.silver >= ship.price();
 
                                 columns[index].with_layout(
                                     egui::Layout::from_main_dir_and_cross_align(
@@ -129,15 +127,11 @@ pub fn shipyard_ui(
                                     ),
                                     |ui| {
                                         ui.add(egui::widgets::Image::new(
-                                            ship_textures.transport_type_image(transport_type),
+                                            ship_textures.transport_type_image(ship_size),
                                             [100.0, 80.0],
                                         ));
-                                        ui.heading(format!("{}", transport_type));
-                                        ui.label(format!(
-                                            "{} {}",
-                                            transport_type.price(),
-                                            COIN_NAME
-                                        ));
+                                        ui.heading(format!("{}", ship));
+                                        ui.label(format!("{} {}", ship.price(), COIN_NAME));
                                     },
                                 );
 
@@ -150,9 +144,9 @@ pub fn shipyard_ui(
                                     ),
                                 );
                                 if button.clicked() && enabled {
-                                    player.silver -= transport_type.price();
-                                    shipyard.construction = Some(transport_type);
-                                    shipyard.construction_time = transport_type.construction_time();
+                                    player.silver -= ship.price();
+                                    shipyard.construction = Some(ship_size);
+                                    shipyard.construction_time = ship.construction_time();
                                 }
                             }
                         });

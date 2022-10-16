@@ -35,16 +35,16 @@
 - id: storm.heavy
   trigger:
     event: travel
-    chance: 0.05
+    chance: 0.025
   title: Heavy Storm
   text: >
     You are woken up during the early morning hours by the violent shaking of your vessel. Above, stormy clouds have risen, and a wild wind whips up the waves around the boat. You lower the sails and keep your hand on the rudder, trying your best to steer the boat.
   image: storm
   actions:
     - label: Poseidon, let me survive this!
-      trigger_event: storm.damaged_ship
+      trigger_event: storm.damaged_all_ships
 
-- id: storm.damaged_ship
+- id: storm.damaged_all_ships
   title: Heavy Storm
   text: >
     Your ship gets damaged.
