@@ -19,12 +19,6 @@ pub struct SelectedSettlement(pub Entity);
 #[derive(Debug, PartialEq, Eq)]
 pub struct SelectedBuilding(pub Entity);
 
-impl From<Entity> for SelectedSettlement {
-    fn from(entity: Entity) -> SelectedSettlement {
-        SelectedSettlement(entity)
-    }
-}
-
 #[inline]
 pub fn panel_heading() -> TextStyle {
     TextStyle::Name("PanelHeading".into())
