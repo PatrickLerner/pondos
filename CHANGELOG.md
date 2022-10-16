@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0
+
+- Added improved temple and shipyard ui
+- Added game events for travel and initial visit to settlement
+
 ## 0.4.0
 
 - Added temples
