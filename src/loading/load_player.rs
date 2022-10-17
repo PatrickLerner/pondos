@@ -20,15 +20,12 @@ pub fn load_player(
             .iter()
             .find(|(_, settlement)| settlement.name == settings.start_settlement)
         {
-            let mut ship = Ship::new(ShipSize::Small);
-            ship.damage = 5;
-
             let player = Player {
                 silver: settings.start_silver,
                 position: Vec2::new(settlement.position.x as f32, settlement.position.y as f32),
                 location: Some(entity),
                 location_marker_need_update: true,
-                convoy: vec![ship],
+                convoy: vec![Ship::new(ShipSize::Small)],
                 ..default()
             };
 

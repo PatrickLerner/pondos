@@ -111,7 +111,7 @@ pub fn shipyard_ui(
                                         shipyard.task = None;
                                         player.convoy.push(match task {
                                             ShipyardTask::Construction(size) => Ship::new(size),
-                                            ShipyardTask::Repair(ship) => ship.clone(),
+                                            ShipyardTask::Repair(ship) => ship,
                                         });
                                     }
                                 } else if shipyard.task_time_remaining == 1 {
