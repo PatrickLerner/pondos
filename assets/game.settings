@@ -6,7 +6,7 @@ min_silver:
 max_silver:
   Population: 70
   Merchant: 300
-start_settlement: Hermonassa
+start_settlement: Byzance # Hermonassa
 start_silver: 350
 max_multipliers:
   growth: 1.0

@@ -1,7 +1,7 @@
 use crate::{
     game_state::{GameState, SettlementState},
     game_time::GameTimeAdvancedEvent,
-    player::ShipSize,
+    player::{Ship, ShipSize},
 };
 use bevy::prelude::*;
 use serde::{Deserialize, Deserializer};
@@ -43,10 +43,16 @@ pub struct TempleInfo {
     pub deity: String,
 }
 
+#[derive(Debug, Clone)]
+pub enum ShipyardTask {
+    Construction(ShipSize),
+    Repair(Ship),
+}
+
 #[derive(Component, Debug, Default)]
 pub struct Shipyard {
-    construction: Option<ShipSize>,
-    construction_time: u32,
+    pub task: Option<ShipyardTask>,
+    pub task_time_remaining: u32,
 }
 
 #[derive(Deserialize, Debug)]
@@ -74,8 +80,8 @@ fn shipyard_construction(
 ) {
     for _ in events.iter() {
         for mut shipyard in shipyards.iter_mut() {
-            if shipyard.construction_time > 0 {
-                shipyard.construction_time -= 1;
+            if shipyard.task_time_remaining > 0 {
+                shipyard.task_time_remaining -= 1;
             }
         }
     }

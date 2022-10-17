@@ -37,6 +37,12 @@ impl Ship {
         health.max(0.)
     }
 
+    pub fn repair_price(&self) -> u32 {
+        let full_repair_price = self.price() as f32 * 0.8;
+
+        (full_repair_price * (1. - self.health())).ceil() as u32
+    }
+
     pub fn max_health(&self) -> u32 {
         match self.size {
             ShipSize::Small => 20,
@@ -45,7 +51,7 @@ impl Ship {
         }
     }
 
-    fn resource_space(&self) -> u32 {
+    pub fn resource_space(&self) -> u32 {
         match self.size {
             ShipSize::Small => 20,
             ShipSize::Medium => 50,
@@ -67,6 +73,12 @@ impl Ship {
             ShipSize::Medium => 4,
             ShipSize::Large => 5,
         }
+    }
+
+    pub fn repair_time(&self) -> u32 {
+        let full_repair_time = self.construction_time() as f32;
+
+        (full_repair_time * (1. - self.health())).ceil() as u32
     }
 }
 
