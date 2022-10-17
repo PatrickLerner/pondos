@@ -1,0 +1,11 @@
+# vi: ft=yaml
+
+- id: shipwreck
+  trigger:
+    event: shipwreck
+  title: Shipwreck
+  text: >
+    Your ship is at the bottom of the ocean.
+  image: shipwreck
+  actions:
+    - label: By the Gods!

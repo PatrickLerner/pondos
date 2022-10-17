@@ -1,4 +1,7 @@
-use crate::game_events::{AddEventToCurrentEvent, GameEvent, GameEventsState, TriggerEventEffect};
+use crate::game_events::{
+    AddEventToCurrentEvent, AddEventToCurrentEventPosition, GameEvent, GameEventsState,
+    TriggerEventEffect,
+};
 use crate::game_state::RunningState;
 use bevy::prelude::*;
 use std::collections::HashMap;
@@ -15,7 +18,14 @@ pub fn add_event_to_current_event(
             if let Some(event) = events.get(&event_trigger.id) {
                 log::info!("trigger game event {}", event_trigger.id);
 
-                state.current_events.insert(event.id.to_owned());
+                match event_trigger.position {
+                    AddEventToCurrentEventPosition::Front => {
+                        state.current_events.insert(0, event.id.to_owned())
+                    }
+                    AddEventToCurrentEventPosition::End => {
+                        state.current_events.push(event.id.to_owned())
+                    }
+                }
                 state.seen_events.insert(event.id.to_owned());
                 for effect in event.effects.clone() {
                     effects.send(TriggerEventEffect { effect });

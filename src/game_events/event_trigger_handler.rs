@@ -45,9 +45,7 @@ pub fn event_trigger_handler(
         events.shuffle(&mut thread_rng());
 
         if let Some(event) = events.first() {
-            add_event.send(AddEventToCurrentEvent {
-                id: event.id.clone(),
-            });
+            add_event.send(AddEventToCurrentEvent::new(event.id.clone()));
         }
     }
 }

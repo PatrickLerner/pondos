@@ -33,7 +33,8 @@ impl Ship {
     pub fn health(&self) -> f32 {
         let max = self.max_health() as f32;
 
-        (max - self.damage as f32) / max
+        let health = (max - self.damage as f32) / max;
+        health.max(0.)
     }
 
     pub fn max_health(&self) -> u32 {
@@ -120,6 +121,10 @@ impl PlayerTravelEvent {
     }
 }
 
+pub struct PlayerShipwreckEvent {
+    pub ship_index: usize,
+}
+
 pub fn handle_travel(
     mut events: EventReader<PlayerTravelEvent>,
     mut player: Option<ResMut<Player>>,
@@ -137,5 +142,62 @@ pub fn handle_travel(
                 advance_time_events.send(GameTimeAdvanceEvent);
             }
         }
+    }
+}
+
+pub fn shipwreck_check(
+    player: Option<Res<Player>>,
+    mut shipwreck_events: EventWriter<PlayerShipwreckEvent>,
+) {
+    if let Some(player) = player {
+        for (ship_index, ship) in player.convoy.iter().enumerate() {
+            if ship.health() == 0. {
+                shipwreck_events.send(PlayerShipwreckEvent { ship_index });
+            }
+        }
+    }
+}
+
+pub fn shipwreck_remove(
+    player: Option<ResMut<Player>>,
+    mut shipwreck_events: EventReader<PlayerShipwreckEvent>,
+) {
+    if shipwreck_events.is_empty() {
+        return;
+    }
+
+    if let Some(mut player) = player {
+        let remove_index: Vec<usize> = shipwreck_events
+            .iter()
+            .map(|event| event.ship_index)
+            .collect();
+
+        log::info!("{} ship(s) shipwrecked", remove_index.len());
+
+        player.convoy = player
+            .convoy
+            .clone()
+            .into_iter()
+            .enumerate()
+            .filter_map(|(index, ship)| {
+                if remove_index.contains(&index) {
+                    None
+                } else {
+                    Some(ship)
+                }
+            })
+            .collect();
+    }
+}
+
+pub struct PlayerPlugin;
+
+impl Plugin for PlayerPlugin {
+    fn build(&self, app: &mut App) {
+        app.add_event::<PlayerTravelEvent>()
+            .add_event::<PlayerShipwreckEvent>()
+            .add_system(shipwreck_check)
+            .add_system(shipwreck_remove)
+            .add_system(handle_travel);
     }
 }

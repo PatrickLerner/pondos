@@ -29,7 +29,7 @@ pub fn event_display(
     let events = events.unwrap();
     let window = windows.primary();
 
-    for id in state.current_events.clone().iter() {
+    if let Some(id) = state.current_events.first() {
         let event: &GameEvent = events.get(id).unwrap();
 
         if !textures.textures.contains_key(&event.image) {
@@ -61,9 +61,10 @@ pub fn event_display(
                         for action in &event.actions {
                             let w = ui.available_width();
                             if large_button(ui, w, &action.label).clicked() {
-                                state.current_events.remove(id);
+                                state.current_events.remove(0);
                                 if let Some(id) = &action.trigger_event.clone() {
-                                    add_event.send(AddEventToCurrentEvent { id: id.clone() });
+                                    add_event
+                                        .send(AddEventToCurrentEvent::new_to_front(id.clone()));
                                 }
                             }
                         }

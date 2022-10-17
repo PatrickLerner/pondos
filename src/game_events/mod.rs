@@ -6,6 +6,7 @@ use std::collections::HashSet;
 mod add_event_to_current_event;
 mod event_display;
 mod event_effect_handler;
+mod event_shipwreck;
 mod event_travel;
 mod event_trigger_handler;
 mod event_visit_settlement;
@@ -22,6 +23,7 @@ pub struct GameEventAction {
 pub enum GameEventTriggerEventName {
     Travel,
     Settlement,
+    Shipwreck,
 }
 
 #[derive(Debug, Deserialize, PartialEq)]
@@ -62,7 +64,7 @@ pub struct GameEvent {
 
 #[derive(Default)]
 pub struct GameEventsState {
-    pub current_events: HashSet<String>,
+    pub current_events: Vec<String>,
     pub seen_events: HashSet<String>,
 }
 
@@ -77,9 +79,32 @@ pub struct TriggerEventEffect {
     pub effect: GameEventEffect,
 }
 
+#[derive(Debug, Copy, Clone)]
+pub enum AddEventToCurrentEventPosition {
+    Front,
+    End,
+}
+
 #[derive(Debug)]
 pub struct AddEventToCurrentEvent {
     pub id: String,
+    pub position: AddEventToCurrentEventPosition,
+}
+
+impl AddEventToCurrentEvent {
+    pub fn new(id: String) -> Self {
+        Self {
+            id,
+            position: AddEventToCurrentEventPosition::End,
+        }
+    }
+
+    pub fn new_to_front(id: String) -> Self {
+        Self {
+            id,
+            position: AddEventToCurrentEventPosition::Front,
+        }
+    }
 }
 
 pub struct GameEventsPlugin;
@@ -98,6 +123,7 @@ impl Plugin for GameEventsPlugin {
             .add_system(add_event_to_current_event::add_event_to_current_event)
             .add_system(event_effect_handler::event_effect_handler)
             .add_system(event_travel::event_travel)
-            .add_system(event_visit_settlement::event_visit_settlement);
+            .add_system(event_visit_settlement::event_visit_settlement)
+            .add_system(event_shipwreck::event_shipwreck);
     }
 }

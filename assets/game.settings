@@ -17,3 +17,4 @@ cap_percentage: 0.35
 events:
   - weather
   - settlements
+  - shipwreck

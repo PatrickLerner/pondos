@@ -38,9 +38,9 @@ pub fn info_ui(
                         ui.label("Event id:");
                         ui.text_edit_singleline(&mut dev.event_name);
                         if ui.button("Launch").clicked() {
-                            trigger_event.send(crate::game_events::AddEventToCurrentEvent {
-                                id: dev.event_name.clone(),
-                            });
+                            trigger_event.send(crate::game_events::AddEventToCurrentEvent::new(
+                                dev.event_name.clone(),
+                            ));
                             triggered = true;
                         }
                     });
