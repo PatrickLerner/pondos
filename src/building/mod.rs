@@ -1,7 +1,7 @@
 use crate::{
     game_state::{GameState, SettlementState},
     game_time::GameTimeAdvancedEvent,
-    player::{Ship, ShipSize},
+    types::{Ship, ShipSize},
 };
 use bevy::prelude::*;
 use serde::{Deserialize, Deserializer};

@@ -1,4 +1,4 @@
-use crate::{player::Player, settlement::Settlement, ui::enabled_color};
+use crate::{settlement::Settlement, types::Player, ui::enabled_color};
 use bevy_egui::egui::{self, Align, RichText, Ui};
 
 pub struct TradeRow<'a> {

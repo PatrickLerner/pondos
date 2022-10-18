@@ -1,7 +1,7 @@
 use crate::{
     building::Shipyard,
     game_state::{GameState, SettlementState},
-    player::{Player, Ship, ShipSize},
+    types::{Player, Ship, ShipSize},
     ui::{create_window, enabled_color, large_button, SelectedBuilding},
     COIN_NAME,
 };

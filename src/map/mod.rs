@@ -1,12 +1,12 @@
+use crate::{
+    camera::pan_orbit_camera,
+    game_state::{GameState, LoadingState},
+    game_time::GameTimeAdvancedEvent,
+    map::{constants::TILEMAP_SIZE, types::MapTileType},
+};
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
 use iyes_loopless::prelude::ConditionSet;
-
-use crate::{game_state::LoadingState, game_time::GameTimeAdvancedEvent};
-
-use self::{constants::TILEMAP_SIZE, types::MapTileType};
-
-use super::{camera::pan_orbit_camera, game_state::GameState};
 
 mod on_exit;
 mod settlement_click;

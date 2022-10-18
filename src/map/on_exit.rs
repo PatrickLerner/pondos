@@ -1,4 +1,4 @@
-use crate::player::Player;
+use crate::types::Player;
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;
 

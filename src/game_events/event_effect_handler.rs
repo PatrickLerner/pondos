@@ -1,6 +1,6 @@
 use crate::{
     game_events::{GameEventEffect, TriggerEventEffect},
-    player::Player,
+    types::Player,
 };
 use bevy::prelude::*;
 use rand::{thread_rng, Rng};

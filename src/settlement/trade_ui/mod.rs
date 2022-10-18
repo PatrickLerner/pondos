@@ -1,9 +1,9 @@
 use super::Settlement;
 use crate::{
     game_state::{GameState, SettlementState},
-    player::Player,
     price_calculator::{AveragePrices, PriceCalculator},
     resources::Resource,
+    types::Player,
     ui::{create_window, large_button, SelectedSettlement},
     COIN_NAME,
 };

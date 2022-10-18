@@ -1,4 +1,4 @@
-use crate::{player::Player, COIN_NAME};
+use crate::{types::Player, COIN_NAME};
 use bevy::prelude::*;
 use bevy_egui::{
     egui::{self, Align2},
