@@ -3,7 +3,7 @@ use crate::{
         constants::{PLAYER_MARKER, TILEMAP_COLUMNS, TILEMAP_ROWS, TILEMAP_SIZE, Z_MARKER},
         MapSize,
     },
-    player::Player,
+    types::Player,
 };
 use bevy::prelude::*;
 

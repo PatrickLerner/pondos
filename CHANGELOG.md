@@ -4,6 +4,9 @@
 
 - Added improved temple and shipyard ui
 - Added game events for travel and initial visit to settlement
+- Added damage to ship during storm event
+- Allow repairing ships at Shipyard
+- Added debug menu to launch events
 
 ## 0.4.0
 

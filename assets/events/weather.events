@@ -9,7 +9,7 @@
 # - Survival
 # - Death
 #
-- id: storm
+- id: storm.light
   trigger:
     event: travel
     chance: 0.05
@@ -17,5 +17,32 @@
   text: >
     You are woken up during the early morning hours by the violent shaking of your vessel. Above, stormy clouds have risen, and a wild wind whips up the waves around the boat. You lower the sails and keep your hand on the rudder, trying your best to steer the boat.
   image: storm
+  effects:
+    - type: damage_any_ship
+      amount: 5
   actions:
     - label: Poseidon, let me survive this!
+      trigger_event: storm.damaged_ship
+
+- id: storm.heavy
+  trigger:
+    event: travel
+    chance: 0.025
+  title: Heavy Storm
+  text: >
+    Already during the early evening hours, you saw heavy clouds above. But no amount of trying circumvent the storm has helped, and you find yourself at the eye of a severe storm.
+  image: storm
+  actions:
+    - label: Poseidon, let me survive this!
+      trigger_event: storm.damaged_all_ships
+
+- id: storm.damaged_all_ships
+  title: Heavy Storm
+  text: >
+    The waves impact your ship and throw it from wave to wave violently for hours.
+  image: storm
+  effects:
+    - type: damage_all_ships
+      amount: 5
+  actions:
+    - label: By the gods!

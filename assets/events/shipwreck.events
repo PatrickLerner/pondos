@@ -1,0 +1,11 @@
+# vi: ft=yaml
+
+- id: shipwreck
+  trigger:
+    event: shipwreck
+  title: Shipwreck
+  text: >
+    Unfortunately, your ship could not sustain the amount of damage it suffered and shipwrecked off the coast.
+  image: shipwreck
+  actions:
+    - label: By the Gods!

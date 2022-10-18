@@ -1,7 +1,7 @@
 use crate::{
     building::Temple,
     game_state::{GameState, SettlementState},
-    player::Player,
+    types::Player,
     ui::{create_window, enabled_color, large_button, SelectedBuilding},
     COIN_NAME,
 };

@@ -1,8 +1,8 @@
-use super::{constants::TILEMAP_SIZE, CursorPos};
 use crate::{
     game_state::GameState,
-    player::Player,
+    map::{constants::TILEMAP_SIZE, CursorPos},
     settlement::{Settlement, VisitSettlementEvent},
+    types::Player,
     ui::SelectedSettlement,
 };
 use bevy::prelude::*;

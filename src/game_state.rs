@@ -11,7 +11,7 @@ pub enum GameState {
     Settlement(SettlementState),
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Hash)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash, Copy)]
 pub enum RunningState {
     Running,
     Paused,

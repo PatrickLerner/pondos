@@ -1,7 +1,4 @@
-use crate::{
-    game_events::{GameEvent, GameEventsState, TriggerEvent},
-    game_state::RunningState,
-};
+use crate::game_events::{AddEventToCurrentEvent, GameEvent, GameEventsState, TriggerEvent};
 use bevy::prelude::*;
 use rand::{seq::SliceRandom, thread_rng, Rng};
 use std::collections::HashMap;
@@ -9,14 +6,13 @@ use std::collections::HashMap;
 pub fn event_trigger_handler(
     mut triggers: EventReader<TriggerEvent>,
     events: Option<Res<HashMap<String, GameEvent>>>,
-    mut state: ResMut<GameEventsState>,
-    mut running_state: ResMut<State<RunningState>>,
+    state: Res<GameEventsState>,
+    mut add_event: EventWriter<AddEventToCurrentEvent>,
 ) {
     if events.is_none() {
         return;
     };
     let events = events.unwrap();
-    let mut added_events = false;
 
     for trigger in triggers.iter() {
         let mut random = thread_rng();
@@ -38,23 +34,18 @@ pub fn event_trigger_handler(
                             return None;
                         }
                     }
-                }
 
-                Some(event)
+                    Some(event)
+                } else {
+                    None
+                }
             })
             .collect();
 
         events.shuffle(&mut thread_rng());
 
         if let Some(event) = events.first() {
-            log::info!("trigger game event {}", event.id);
-            state.current_events.insert(event.id.to_owned());
-            state.seen_events.insert(event.id.to_owned());
-            added_events = true;
+            add_event.send(AddEventToCurrentEvent::new(event.id.clone()));
         }
-    }
-
-    if added_events {
-        running_state.overwrite_set(RunningState::Paused).unwrap();
     }
 }
