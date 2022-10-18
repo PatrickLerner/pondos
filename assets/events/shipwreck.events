@@ -5,7 +5,7 @@
     event: shipwreck
   title: Shipwreck
   text: >
-    Your ship is at the bottom of the ocean.
+    Unfortunately, your ship could not sustain the amount of damage it suffered and shipwrecked off the coast.
   image: shipwreck
   actions:
     - label: By the Gods!
