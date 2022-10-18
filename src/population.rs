@@ -1,13 +1,11 @@
-use std::collections::HashMap;
-
 use crate::{
     game_time::{GameTime, GameTimeAdvancedEvent},
-    settlement::Settlement,
-    types::SeasonalAmount,
+    types::{SeasonalAmount, Settlement},
     COIN_NAME,
 };
 use bevy::prelude::*;
 use serde::Deserialize;
+use std::collections::HashMap;
 
 pub fn population_production(
     mut settlements: Query<&mut Settlement>,

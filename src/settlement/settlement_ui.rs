@@ -1,9 +1,7 @@
 use crate::{
     game_state::GameState,
-    settlement::{
-        ui::{buildings_ui, population_info, production_ui, resource_info},
-        Settlement,
-    },
+    settlement::ui::{buildings_ui, population_info, production_ui, resource_info},
+    types::Settlement,
     ui::{create_window_with_mobile, CloseSettlementUIEvent, SelectedSettlement},
 };
 use bevy::prelude::*;

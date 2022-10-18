@@ -1,7 +1,7 @@
 use crate::{
     building::BuildingType,
     game_state::{GameState, SettlementState},
-    settlement::Settlement,
+    types::Settlement,
     ui::{large_button, SelectedBuilding},
     COIN_NAME,
 };

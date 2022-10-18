@@ -1,7 +1,6 @@
+use crate::{game_time::GameTimeAdvancedEvent, resources::Resource, types::Settlement};
 use bevy::prelude::*;
 use std::collections::HashMap;
-
-use crate::{game_time::GameTimeAdvancedEvent, resources::Resource, settlement::Settlement};
 
 pub struct PriceCalculator {
     pub base_price: u32,

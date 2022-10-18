@@ -1,4 +1,4 @@
-use crate::{population::Population, resources::Resource, settlement::Settlement, COIN_NAME};
+use crate::{population::Population, resources::Resource, types::Settlement, COIN_NAME};
 use std::{fs::File, io::BufReader};
 
 pub fn debug_populations() {

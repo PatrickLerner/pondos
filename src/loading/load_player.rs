@@ -1,6 +1,5 @@
 use crate::{
-    settlement::Settlement,
-    types::{Player, Ship, ShipSize},
+    types::{Player, Settlement, Ship, ShipSize},
     Settings,
 };
 use bevy::prelude::*;
