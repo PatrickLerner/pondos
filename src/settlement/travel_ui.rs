@@ -1,9 +1,10 @@
-use super::{
-    ui::{list_buildings_ui, production_ui},
-    Settlement, VisitSettlementEvent,
-};
 use crate::{
     player::PlayerTravelEvent,
+    settlement::{
+        ui::{list_buildings_ui, production_ui},
+        VisitSettlementEvent,
+    },
+    types::Settlement,
     ui::{large_button, CloseSettlementUIEvent, SelectedSettlement},
 };
 use bevy::prelude::*;

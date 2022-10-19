@@ -1,21 +1,20 @@
 use crate::{
-    game_events::{GameEventTriggerEventName, TriggerEvent},
+    game_state::{GameState, SettlementState},
     settlement::VisitSettlementEvent,
     types::Settlement,
 };
 use bevy::prelude::*;
 
-pub fn event_visit_settlement(
+pub fn visit_settlement_handler(
     mut events: EventReader<VisitSettlementEvent>,
-    mut triggers: EventWriter<TriggerEvent>,
+    mut game_state: ResMut<State<GameState>>,
     settlements: Query<&Settlement>,
 ) {
     for event in events.iter() {
         let settlement = settlements.get(event.settlement).unwrap();
-
-        triggers.send(TriggerEvent {
-            event: GameEventTriggerEventName::Settlement,
-            scope: Some(settlement.name.to_owned()),
-        });
+        log::info!("Open settlement {}", settlement.name);
+        game_state
+            .push(GameState::Settlement(SettlementState::Overview))
+            .unwrap();
     }
 }

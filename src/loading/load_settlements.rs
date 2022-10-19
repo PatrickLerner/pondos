@@ -2,7 +2,7 @@ use super::{FeaturesTilemap, MapImage, Settlements};
 use crate::{
     building::{BuildingType, Shipyard, Temple},
     map::{types::MapTileType, MapSize},
-    settlement::SettlementType,
+    types::SettlementType,
 };
 use bevy::prelude::*;
 use bevy_ecs_tilemap::prelude::*;

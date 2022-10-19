@@ -2,7 +2,7 @@ use crate::{
     game_time::GameTimeAdvancedEvent,
     price_calculator::{AveragePrices, PriceCalculator},
     resources::Resource,
-    settlement::Settlement,
+    types::Settlement,
 };
 use bevy::prelude::*;
 use rand::{seq::SliceRandom, thread_rng};
