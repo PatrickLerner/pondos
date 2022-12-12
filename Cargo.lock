@@ -1445,9 +1445,9 @@ dependencies = [
 
 [[package]]
 name = "embed-resource"
-version = "1.7.3"
+version = "1.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "936c1354206a875581696369aef920e12396e93bbd251c43a7a3f3fa85023a7d"
+checksum = "e62abb876c07e4754fae5c14cafa77937841f01740637e17d78dc04352f32a5e"
 dependencies = [
  "cc",
  "rustc_version",
